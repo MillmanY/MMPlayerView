@@ -1,0 +1,11 @@
+use_frameworks!
+
+target 'MMPlayerView_Example' do
+  pod 'MMPlayerView', :path => '../'
+
+  target 'MMPlayerView_Tests' do
+    inherit! :search_paths
+
+    
+  end
+end
