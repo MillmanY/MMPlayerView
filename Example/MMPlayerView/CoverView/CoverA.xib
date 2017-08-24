@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12120" systemVersion="16A323" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12088"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="CoverA" customModule="MMPlayerView_Example" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="300"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aGp-h6-xFS">
+                    <rect key="frame" x="152" y="115" width="70" height="70"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="70" id="1Hu-po-mqW"/>
+                        <constraint firstAttribute="height" constant="70" id="3E3-ib-sYM"/>
+                    </constraints>
+                    <state key="normal" image="ic_play_circle_filled"/>
+                    <connections>
+                        <action selector="btnAction" destination="iN0-l3-epB" eventType="touchUpInside" id="y95-rK-BPr"/>
+                    </connections>
+                </button>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cL1-gE-GwQ">
+                    <rect key="frame" x="0.0" y="260" width="375" height="40"/>
+                    <subviews>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00:00" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2UM-8g-Rje">
+                            <rect key="frame" x="0.0" y="0.0" width="80" height="40"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="80" id="s9u-I2-enP"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="7rs-Pf-Qte">
+                            <rect key="frame" x="78" y="0.0" width="219" height="41"/>
+                            <connections>
+                                <action selector="sliderValueChangeWithSlider:" destination="iN0-l3-epB" eventType="valueChanged" id="Az0-Yn-u2e"/>
+                            </connections>
+                        </slider>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00:00" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PU0-0h-Akc">
+                            <rect key="frame" x="295" y="0.0" width="80" height="40"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="80" id="sHy-3B-xBE"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                    </subviews>
+                    <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.24906357020547945" colorSpace="calibratedRGB"/>
+                    <constraints>
+                        <constraint firstItem="2UM-8g-Rje" firstAttribute="leading" secondItem="cL1-gE-GwQ" secondAttribute="leading" id="8VP-Iv-K5W"/>
+                        <constraint firstItem="2UM-8g-Rje" firstAttribute="top" secondItem="cL1-gE-GwQ" secondAttribute="top" id="A4m-mw-NHR"/>
+                        <constraint firstItem="PU0-0h-Akc" firstAttribute="leading" secondItem="7rs-Pf-Qte" secondAttribute="trailing" id="OZQ-Gg-ek9"/>
+                        <constraint firstItem="PU0-0h-Akc" firstAttribute="top" secondItem="cL1-gE-GwQ" secondAttribute="top" id="Y9h-Aj-vVh"/>
+                        <constraint firstAttribute="bottom" secondItem="2UM-8g-Rje" secondAttribute="bottom" id="ZWu-j5-azi"/>
+                        <constraint firstItem="7rs-Pf-Qte" firstAttribute="leading" secondItem="2UM-8g-Rje" secondAttribute="trailing" id="eKC-Ir-MsV"/>
+                        <constraint firstItem="7rs-Pf-Qte" firstAttribute="top" secondItem="cL1-gE-GwQ" secondAttribute="top" id="hNU-KL-XYu"/>
+                        <constraint firstAttribute="height" constant="40" id="iNX-hG-cOX"/>
+                        <constraint firstAttribute="trailing" secondItem="PU0-0h-Akc" secondAttribute="trailing" id="igA-p2-4va"/>
+                        <constraint firstAttribute="bottom" secondItem="PU0-0h-Akc" secondAttribute="bottom" id="oR0-cl-9yE"/>
+                        <constraint firstAttribute="bottom" secondItem="7rs-Pf-Qte" secondAttribute="bottom" id="yxY-X5-fac"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="aGp-h6-xFS" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="Bq3-YZ-YYi"/>
+                <constraint firstItem="aGp-h6-xFS" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="Uii-al-3GE"/>
+                <constraint firstItem="cL1-gE-GwQ" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="ZEm-sX-vTk"/>
+                <constraint firstAttribute="trailing" secondItem="cL1-gE-GwQ" secondAttribute="trailing" id="b6Q-Rm-dmh"/>
+                <constraint firstAttribute="bottom" secondItem="cL1-gE-GwQ" secondAttribute="bottom" id="sNY-4y-Vk4"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <connections>
+                <outlet property="btnPlay" destination="aGp-h6-xFS" id="CEw-yi-BaP"/>
+                <outlet property="labCurrent" destination="2UM-8g-Rje" id="Rtm-MD-shc"/>
+                <outlet property="labTotal" destination="PU0-0h-Akc" id="iiS-f4-foc"/>
+                <outlet property="playSlider" destination="7rs-Pf-Qte" id="MF8-I7-TWJ"/>
+            </connections>
+            <point key="canvasLocation" x="32.5" y="105"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="ic_play_circle_filled" width="36" height="36"/>
+    </resources>
+</document>

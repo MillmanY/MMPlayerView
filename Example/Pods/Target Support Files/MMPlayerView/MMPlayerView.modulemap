@@ -1,0 +1,6 @@
+framework module MMPlayerView {
+  umbrella header "MMPlayerView-umbrella.h"
+
+  export *
+  module * { export * }
+}

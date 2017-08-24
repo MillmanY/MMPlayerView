@@ -1,0 +1,16 @@
+PODS:
+  - MMPlayerView (0.1.0)
+
+DEPENDENCIES:
+  - MMPlayerView (from `../`)
+
+EXTERNAL SOURCES:
+  MMPlayerView:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  MMPlayerView: 3e820603aa191377fe06d9899d6b8eca67130349
+
+PODFILE CHECKSUM: 019c514400222c570b21c2cf70fdb898a488b506
+
+COCOAPODS: 1.2.1.rc.1
