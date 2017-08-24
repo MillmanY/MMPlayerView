@@ -13,11 +13,17 @@ class DetailViewController: UIViewController {
     fileprivate var playerLayer: MMPlayerLayer?
     @IBOutlet weak var textView: UITextView!
     @IBOutlet weak var playerContainer: UIView!
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        self.mmPlayerTransition.present.pass { (config) in
+            config.duration = 0.3
+
+        }
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.automaticallyAdjustsScrollViewInsets = false
-        (self.navigationController as? BaseNavigationController)?.setBackAction()
-        
+        self.automaticallyAdjustsScrollViewInsets = false        
         if let d = data {
             self.title = d.title
             textView.text = d.content
@@ -25,15 +31,12 @@ class DetailViewController: UIViewController {
         // Do any additional setup after loading the view.
     }
 
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        (self.navigationController as? BaseNavigationController)?.setNavBarClear()
+    @IBAction func dismiss() {
+        
+        (self.presentationController as? PassViewPresentatinController)?.shrinkView()
+//        self.dismiss(animated: true, completion: nil)
     }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        (self.navigationController as? BaseNavigationController)?.setOriginalColor()
-    }}
+}
 
 extension DetailViewController: MMPLayerToProtocol {
     var containerView: UIView {

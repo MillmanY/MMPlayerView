@@ -47,6 +47,7 @@ public class MMPresentAnimator: NSObject , UIViewControllerTransitioningDelegate
             case let c as PassViewPresentConfig:
                 let pass = PassViewPresentTransition(config: c, isPresent: isPresent)
                 pass.source = source
+                pass.source = source
                 return pass
             default: break
             }

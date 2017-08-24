@@ -10,9 +10,13 @@ import Foundation
 
 public protocol Config {
     var duration : TimeInterval { get set }
+    weak var passOriginalSuper: UIView? {set get}
+    weak var playLayer: MMPlayerLayer? { set get}
 }
 
 public protocol PresentConfig: Config {
+    var margin: CGFloat { set get }
+    weak var source: UIViewController? { set get }
 }
 
 public protocol NavConfig: Config {
@@ -50,7 +54,10 @@ extension NSObject: TransitionCompatible { }
 
 @objc public protocol MMPlayerFromProtocol {
     var passPlayer: MMPlayerLayer { get }
-    func completed()
+    func transitionWillStart()
+    func transitionCompleted()
+    
+    func presentedView(isShrinkVideo: Bool)
     @objc optional func backReplaceSuperView(original: UIView?) -> UIView?
 }
 
@@ -59,15 +66,15 @@ extension NSObject: TransitionCompatible { }
     func completed()
 }
 
-@objc public protocol PassViewFromProtocol {
-    var passView: UIView { get }
-    @objc optional func backReplaceSuperView(original: UIView?) -> UIView?
-    func completed(passView: UIView,superV: UIView?)
-}
-
-public protocol PassViewToProtocol {
-    var containerView: UIView { get }
-    func transitionWillStart(passView: UIView)
-    func transitionCompleted(passView: UIView)
-    //    func transitionWillStart()
-}
+//@objc public protocol PassViewFromProtocol {
+//    var passView: UIView { get }
+//    @objc optional func backReplaceSuperView(original: UIView?) -> UIView?
+//    func completed(passView: UIView,superV: UIView?)
+//}
+//
+//public protocol PassViewToProtocol {
+//    var containerView: UIView { get }
+//    func transitionWillStart(passView: UIView)
+//    func transitionCompleted(passView: UIView)
+//    //    func transitionWillStart()
+//}

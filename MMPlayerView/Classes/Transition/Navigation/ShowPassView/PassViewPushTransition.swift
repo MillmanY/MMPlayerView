@@ -32,6 +32,7 @@ public class PassViewPushTransition: BaseNavTransition, UIViewControllerAnimated
                 c.passOriginalSuper = passLayer.playView
                 c.playLayer = passLayer
             }
+            (self.source as? MMPlayerFromProtocol)?.transitionWillStart()
             let convertRect:CGRect = passLayer.superlayer?.convert(passLayer.superlayer!.frame, to: nil) ?? .zero
             let finalFrame = transitionContext.finalFrame(for: toVC)
             let originalColor = toVC.view.backgroundColor
@@ -52,10 +53,7 @@ public class PassViewPushTransition: BaseNavTransition, UIViewControllerAnimated
                 pass.translatesAutoresizingMaskIntoConstraints = false
                 transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
                 passLayer.playView = passContainer
-                
-                //
-//                let f = transitionContext.viewController(forKey: .from)!
-//                container.insertSubview(f.view, at: 0)
+                (self.source as? MMPlayerFromProtocol)?.transitionCompleted()
             })
         case .pop:
             let from = transitionContext.viewController(forKey: .from)
@@ -71,8 +69,9 @@ public class PassViewPushTransition: BaseNavTransition, UIViewControllerAnimated
                 print("Need Implement PassViewFromProtocol")
                 return
             }
+            pass.translatesAutoresizingMaskIntoConstraints = true
             let superV = source.backReplaceSuperView?(original: config.passOriginalSuper) ?? config.passOriginalSuper
-            let original:CGRect = pass.superview?.convert(pass.superview!.frame, to: nil) ?? .zero
+            let original:CGRect = pass.convert(pass.frame, to: nil)
 
             let convertRect:CGRect = (superV != nil ) ? superV!.convert(superV!.frame, to: nil) : .zero
             
@@ -81,7 +80,6 @@ public class PassViewPushTransition: BaseNavTransition, UIViewControllerAnimated
                 container.addSubview(pass)
             }
             container.layoutIfNeeded()
-            pass.translatesAutoresizingMaskIntoConstraints = true
             pass.frame = original
             UIView.animate(withDuration: self.config.duration, animations: {
                 from?.view.alpha = 0.0

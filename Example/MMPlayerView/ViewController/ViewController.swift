@@ -21,9 +21,6 @@ class ViewController: UIViewController {
     @IBOutlet weak var playerCollect: UICollectionView!
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.mmPlayerTransition.push.pass(setting: { (config) in
-            config.duration = 0.3
-        })
         playerCollect.contentInset = UIEdgeInsets.init(top: 0, left: 0, bottom:  200, right:0)
         DispatchQueue.main.async { [unowned self] in
             self.playerCollect.contentOffset = .zero
@@ -49,24 +46,36 @@ class ViewController: UIViewController {
         NotificationCenter.default.removeObserver(self)
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+    }
+    
     func updateCell(at indexPath: IndexPath) {
-        
+        if self.presentedViewController != nil {
+            return
+        }
         if let cell = playerCollect.cellForItem(at: indexPath) as? PlayerCell {
+            // set url prepare to load
             mmPlayerLayer.set(url: cell.data?.play_Url, state: { (status) in
                 
             })
+            // this thumb use when transition start and your video dosent start
             mmPlayerLayer.thumbImageView.image = cell.imgView.image
+            // set video where to play
             mmPlayerLayer.playView = cell.imgView
         }
     }
 
     func delayReload() {
+        if self.presentedViewController != nil {
+            return
+        }
+        // start loading video
         mmPlayerLayer.startLoading()
     }
     
-
     fileprivate func resetPlay() {
-        
+
         if let play = mmPlayerLayer.playView, let superV = play.superview {
             NSLayoutConstraint.deactivate(play.constraints)
             superV.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-0-[subview]-0-|", options: .directionLeadingToTrailing, metrics: nil, views: ["subview": play]))
@@ -75,16 +84,28 @@ class ViewController: UIViewController {
     }
 }
 
+// This protocol use to pass playerLayer to second UIViewcontroller
 extension ViewController: MMPlayerFromProtocol {
+    // when use table or collection will reuse cell and original playview will error , replace correct one
     func backReplaceSuperView(original: UIView?) -> UIView? {
         return original
     }
 
+    // add layer to temp view and pass to another controller
     var passPlayer: MMPlayerLayer {
         return self.mmPlayerLayer
     }
-    func completed() {
-        
+    // current playview is cell.image hide prevent ui error
+    func transitionWillStart() {
+        self.mmPlayerLayer.playView?.isHidden = true
+    }
+    // show cell.image
+    func transitionCompleted() {
+        self.mmPlayerLayer.playView?.isHidden = false
+    }
+    
+    func presentedView(isShrinkVideo: Bool) {
+        self.playerCollect.reloadData()
     }
 }
 
@@ -94,30 +115,26 @@ extension ViewController: UICollectionViewDelegateFlowLayout {
         return CGSize.init(width: m, height: m*0.75)
     }
     
-
-    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        let p = CGPoint.init(x: playerCollect.frame.width/2, y: playerCollect.contentOffset.y + playerCollect.frame.width/2)
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let p = CGPoint(x: playerCollect.frame.width/2, y: playerCollect.contentOffset.y + playerCollect.frame.width/2)
         if let path = playerCollect.indexPathForItem(at: p) {
             self.updateCell(at: path)
         }
-        NSObject.cancelPreviousPerformRequests(withTarget: self)
-        self.perform(#selector(delayReload), with: nil, afterDelay: 0.2)
-
     }
     
-    func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         NSObject.cancelPreviousPerformRequests(withTarget: self)
-        self.perform(#selector(delayReload), with: nil, afterDelay: 0.01)
-
+        self.perform(#selector(delayReload), with: nil, afterDelay: 0.3)
     }
+    
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         DispatchQueue.main.async { [unowned self] in
             self.updateCell(at: indexPath)
             self.delayReload()
             if let vc = UIStoryboard.init(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "DetailViewController") as? DetailViewController {
                 vc.data = DemoSource.shared.demoData[indexPath.row]
-
-                self.navigationController?.pushViewController(vc, animated: true)
+                self.present(vc, animated: true, completion: nil)
+//                self.navigationController?.pushViewController(vc, animated: true)
             }
         }
     }

@@ -50,7 +50,6 @@ public class MMProgress: UIView, IndicatorProtocol {
     
     open func setup() {
         useDefulat = true
-        defaultIndicator.isHidden = true
         defaultIndicator.activityIndicatorViewStyle = .whiteLarge
         self.addSubview(defaultIndicator)
     }

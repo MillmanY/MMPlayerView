@@ -16,6 +16,7 @@ public class BasePresentationController: UIPresentationController {
         
         self.init(presentedViewController: presentedViewController, presenting: presentingViewController)
         self.config = config
+        
     }
     
     public override func presentationTransitionWillBegin() {

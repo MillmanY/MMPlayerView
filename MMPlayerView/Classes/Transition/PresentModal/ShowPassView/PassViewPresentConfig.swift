@@ -9,10 +9,11 @@
 import UIKit
 
 public class PassViewPresentConfig: NSObject ,PresentConfig {
-    weak var passOriginalSuper: UIView?
-    weak var pass: UIView?
+    weak public var source: UIViewController?
+
+    weak public var passOriginalSuper: UIView?
+    weak public var playLayer: MMPlayerLayer?
+    public var margin: CGFloat = 10.0
     public var duration:TimeInterval = 0.3
-    public func addPass(playerLayer: MMPlayerLayer) {
-        
-    }
+
 }

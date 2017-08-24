@@ -33,7 +33,9 @@ public class MMPlayerLayer: AVPlayerLayer {
             indicator?.removeFromSuperview()
         } didSet {
             if let i = indicator {
-                self.playView?.addSubview(i)
+                i.isUserInteractionEnabled = true
+                self.addSublayer(i.layer)
+//                self.playView?.addSubview(i)
                 i.setup()
             }
         }
@@ -143,7 +145,6 @@ public class MMPlayerLayer: AVPlayerLayer {
                 self.coverView?.isHidden = true
             default:
                 self.coverView?.isHidden = false
-//                self.startLoading(isStart: false)
                 break
             }
         }
@@ -190,6 +191,10 @@ public class MMPlayerLayer: AVPlayerLayer {
                 }
             }
         }
+    }
+
+    public func setCoverView(enable: Bool) {
+        self.tapGesture.isEnabled = enable
     }
     
     public override init(layer: Any) {
@@ -358,8 +363,6 @@ public class MMPlayerLayer: AVPlayerLayer {
         if let k = keyPath {
             switch k {
             case "frame":
-//                let old = (change?[.oldKey] as? CGRect) ?? .zero
-
                 if let o = object as? UIView , o == playView {
                     self.frame = o.bounds
                     self.updateCoverConstraint()
@@ -370,7 +373,6 @@ public class MMPlayerLayer: AVPlayerLayer {
                 }
                 
             case "bounds":
-                //                let old = (change?[.oldKey] as? CGRect) ?? .zero
                 if let o = object as? UIView , o == playView {
                     self.frame = o.bounds
                     thumbImageView.frame = o.bounds
@@ -379,10 +381,6 @@ public class MMPlayerLayer: AVPlayerLayer {
                 }
 
             case "videoRect":
-//                if self.coverFitType == .fitToPlayerView {
-//                    return
-//                }
-                
                 let old = (change?[.oldKey] as? CGRect) ?? .zero
                 
                 if let new = change?[.newKey] as? CGRect ,old != new {
@@ -502,10 +500,8 @@ public class MMPlayerLayer: AVPlayerLayer {
     
     fileprivate func startLoading(isStart: Bool) {
         if isStart {
-            print("Start")
             self.indicator?.start()
         } else {
-            print("Stop")
             self.indicator?.stop()
         }
     }

@@ -12,47 +12,49 @@ class PassViewPresentTransition: BasePresentTransition, UIViewControllerAnimated
     public func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
         return config.duration
     }
-    
+
     public func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
         let container = transitionContext.containerView
         
-        container.frame = UIScreen.main.bounds
+        
         if self.isPresent {
             let toVC = transitionContext.viewController(forKey: .to)!
-            guard let pass = (self.source as? PassViewFromProtocol)?.passView else {
+            container.addSubview(toVC.view)
+            guard let passLayer = (self.source as? MMPlayerFromProtocol)?.passPlayer else {
                 print("Need Called setView")
                 return
             }
-            guard let passContainer = (toVC as? PassViewToProtocol)?.containerView else {
-                print("Need implement PassViewPresentedProtocol")
+            guard let passContainer = (toVC as? MMPLayerToProtocol)?.containerView else {
+                print("Need implement PassViewToProtocol")
                 return
             }
             if let c = self.config as? PassViewPresentConfig {
-                c.pass = pass
-                c.passOriginalSuper = pass.superview
-                pass.superview?.isHidden = true
+                c.passOriginalSuper = passLayer.playView
+                c.playLayer = passLayer
             }
-            pass.translatesAutoresizingMaskIntoConstraints = true
-
-            let convertRect:CGRect = pass.superview?.convert(pass.superview!.frame, to: nil) ?? .zero
-            let finalFrame = container.frame
-            //                transitionContext.finalFrame(for: toVC)
+            (self.source as? MMPlayerFromProtocol)?.transitionWillStart()
+            let convertRect:CGRect = passLayer.superlayer?.convert(passLayer.superlayer!.frame, to: nil) ?? .zero
+            let finalFrame = transitionContext.finalFrame(for: toVC)
             let originalColor = toVC.view.backgroundColor
+            passLayer.clearURLWhenChangeView = false
+            let pass = UIView()
+            passLayer.playView = pass
             toVC.view.backgroundColor = UIColor.clear
             toVC.view.frame = finalFrame
-            container.addSubview(toVC.view)
-            toVC.view.addSubview(pass)
-            toVC.view.layoutIfNeeded()
+            pass.removeFromSuperview()
+            container.addSubview(pass)
+            container.layoutIfNeeded()
             pass.frame = convertRect
-            (toVC as? PassViewToProtocol)?.transitionWillStart(passView: pass)
             UIView.animate(withDuration: self.config.duration, animations: {
                 pass.frame = passContainer.frame
             }, completion: { (finish) in
-                pass.translatesAutoresizingMaskIntoConstraints = false
-                passContainer.addSubview(pass)
+                pass.frame = passContainer.frame
                 toVC.view.backgroundColor = originalColor
-                (toVC as? PassViewToProtocol)?.transitionCompleted(passView: pass)
+                pass.translatesAutoresizingMaskIntoConstraints = false
                 transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
+                passLayer.playView = passContainer
+                pass.removeFromSuperview()
+                (self.source as? MMPlayerFromProtocol)?.transitionCompleted()
             })
         } else {
             
@@ -61,39 +63,38 @@ class PassViewPresentTransition: BasePresentTransition, UIViewControllerAnimated
                 return
             }
             
-            guard let pass = config.pass  else {
+            guard let pass = config.playLayer?.playView else {
                 return
             }
             
-            guard let source = (self.source as? PassViewFromProtocol) else {
-                print("Need Implement PassViewPresentingProtocol")
+            guard let source = (self.source as? MMPlayerFromProtocol) else {
+                print("Need Implement PassViewFromProtocol")
                 return
             }
-            
+            pass.translatesAutoresizingMaskIntoConstraints = true
             let superV = source.backReplaceSuperView?(original: config.passOriginalSuper) ?? config.passOriginalSuper
-            let original:CGRect = pass.superview?.convert(pass.superview!.frame, to: nil) ?? .zero
+            let original:CGRect = pass.convert(pass.frame, to: nil)
             
             let convertRect:CGRect = (superV != nil ) ? superV!.convert(superV!.frame, to: nil) : .zero
             
             if superV != nil {
+                pass.removeFromSuperview()
                 container.addSubview(pass)
             }
-            pass.translatesAutoresizingMaskIntoConstraints = true
             container.layoutIfNeeded()
             pass.frame = original
             UIView.animate(withDuration: self.config.duration, animations: {
                 from?.view.alpha = 0.0
                 pass.frame = convertRect
             }, completion: { (finish) in
+                config.playLayer?.playView = superV
                 pass.translatesAutoresizingMaskIntoConstraints = false
-                superV?.addSubview(pass)
-                source.completed(passView: pass, superV: superV)
                 superV?.isHidden = false
+                pass.removeFromSuperview()
                 from?.view.removeFromSuperview()
                 transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
-                
+                config.playLayer?.clearURLWhenChangeView = true
             })
-            
         }
     }
 }

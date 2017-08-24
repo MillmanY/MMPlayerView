@@ -9,7 +9,7 @@
 import UIKit
 
 public class PassViewPushConfig: NSObject ,NavConfig {
-    weak var passOriginalSuper: UIView?
-    weak var playLayer: MMPlayerLayer?
+    weak public var passOriginalSuper: UIView?
+    weak public var playLayer: MMPlayerLayer?
     public var duration:TimeInterval = 0.3
 }

@@ -19,6 +19,7 @@ class PlayerCell: UICollectionViewCell {
     @IBOutlet weak var labTitle: UILabel!
     override func prepareForReuse() {
         super.prepareForReuse()
+        self.imgView.isHidden = false
         data = nil
     }
 }
