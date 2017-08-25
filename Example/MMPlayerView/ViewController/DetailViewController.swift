@@ -41,28 +41,13 @@ class DetailViewController: UIViewController {
 }
 
 extension DetailViewController: MMPLayerToProtocol {
+    func transitionCompleted() {
+        
+    }
+
     var containerView: UIView {
         get {
             return playerContainer
         }
     }
-
-    
-    func completed() {
-        
-    }
-//    var containerView: UIView {
-//        return playerContainer
-//    }
-//    
-//    func transitionWillStart(passView: UIView) {
-//        self.playerLayer = passView.mmPlayerLayer()
-//    }
-//    func transitionCompleted(passView: UIView) {
-//        NSLayoutConstraint.deactivate(passView.constraints)
-//        
-//        playerContainer.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-0-[subview]-0-|", options: .directionLeadingToTrailing, metrics: nil, views: ["subview": passView]))
-//        playerContainer.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-0-[subview]-0-|", options: .directionLeadingToTrailing, metrics: nil, views: ["subview": passView]))
-//        
-//    }
 }

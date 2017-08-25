@@ -67,10 +67,11 @@ class PassViewPresentTransition: BasePresentTransition, UIViewControllerAnimated
                 return
             }
             
-            guard let source = (self.source as? MMPlayerFromProtocol) else {
+            guard let source = (self.source as? MMPlayerPrsentFromProtocol) else {
                 print("Need Implement PassViewFromProtocol")
                 return
             }
+            
             pass.translatesAutoresizingMaskIntoConstraints = true
             let superV = source.backReplaceSuperView?(original: config.passOriginalSuper) ?? config.passOriginalSuper
             let original:CGRect = pass.convert(pass.frame, to: nil)
@@ -87,13 +88,23 @@ class PassViewPresentTransition: BasePresentTransition, UIViewControllerAnimated
                 from?.view.alpha = 0.0
                 pass.frame = convertRect
             }, completion: { (finish) in
-                config.playLayer?.playView = superV
-                pass.translatesAutoresizingMaskIntoConstraints = false
-                superV?.isHidden = false
-                pass.removeFromSuperview()
-                from?.view.removeFromSuperview()
-                transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
+                if config.dismissGesture {
+                    config.playLayer?.playView = nil
+                    pass.removeFromSuperview()
+                    from?.view.removeFromSuperview()
+                    transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
+                    (self.source as? MMPlayerPrsentFromProtocol)?.dismissViewFromGesture()
+                } else {
+                    config.playLayer?.playView = superV
+                    pass.translatesAutoresizingMaskIntoConstraints = false
+                    superV?.isHidden = false
+                    pass.removeFromSuperview()
+                    from?.view.removeFromSuperview()
+                    
+                    transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
+                }
                 config.playLayer?.clearURLWhenChangeView = true
+
             })
         }
     }

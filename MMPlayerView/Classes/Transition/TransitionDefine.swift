@@ -16,6 +16,8 @@ public protocol Config {
 
 public protocol PresentConfig: Config {
     var margin: CGFloat { set get }
+    var shrinkSize: CGSize { set get }
+    var dismissGesture: Bool { get }
     weak var source: UIViewController? { set get }
 }
 
@@ -52,16 +54,20 @@ public struct MMTransition<T> {
 
 extension NSObject: TransitionCompatible { }
 
+@objc public protocol MMPlayerPrsentFromProtocol: MMPlayerFromProtocol {
+    
+    func presentedView(isShrinkVideo: Bool)
+    func dismissViewFromGesture()
+}
+
 @objc public protocol MMPlayerFromProtocol {
     var passPlayer: MMPlayerLayer { get }
     func transitionWillStart()
     func transitionCompleted()
-    
-    func presentedView(isShrinkVideo: Bool)
     @objc optional func backReplaceSuperView(original: UIView?) -> UIView?
 }
 
 @objc public protocol MMPLayerToProtocol {
     var containerView: UIView { get }
-    func completed()
+    func transitionCompleted()
 }

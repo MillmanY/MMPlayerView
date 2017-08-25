@@ -14,16 +14,6 @@ public class MMProgress: UIView, IndicatorProtocol {
         return UIActivityIndicatorView()
     }()
    
-    override public var frame: CGRect {
-        didSet {
-//            if frame == .zero {
-//                self.defaultIndicator.isHidden = true
-//            } else {
-//                self.defaultIndicator.isHidden = false
-//            }
-        }
-    }
-    
     convenience init() {
         self.init(frame: .zero)
         self.isUserInteractionEnabled = false

@@ -49,6 +49,7 @@ public class MMPlayerLayer: AVPlayerLayer {
         willSet {
             coverView?.removeFromSuperview()
             indicator?.removeFromSuperview()
+            self.removeFromSuperlayer()
             _playView?.removeGestureRecognizer(tapGesture)
             _playView?.safeRemove(observer: self, forKeyPath: "frame")
             _playView?.safeRemove(observer: self, forKeyPath: "bounds")
@@ -127,7 +128,6 @@ public class MMPlayerLayer: AVPlayerLayer {
     public var autoPlay = true
     public var currentPlayStatus: PlayViewPlayStatus = .unknown {
         didSet {
-            self.thumbImageView.isHidden = true
             if let block = self.playStatusBlock {
                 block(currentPlayStatus)
             }
@@ -140,10 +140,14 @@ public class MMPlayerLayer: AVPlayerLayer {
                 if self.autoPlay {
                     self.player?.play()
                 }
+            case .failed(err: _):
+                self.thumbImageView.isHidden = false
+                self.coverView?.isHidden = false
             case .unknown:
                 self.thumbImageView.isHidden = false
                 self.coverView?.isHidden = true
             default:
+                self.thumbImageView.isHidden = true
                 self.coverView?.isHidden = false
                 break
             }
@@ -223,6 +227,8 @@ public class MMPlayerLayer: AVPlayerLayer {
         } else {
             self.coverView?.isHidden = false
             self.coverView?.frame = vRect
+            self.indicator?.frame = vRect
+            thumbImageView.frame = vRect
         }
     }
     
@@ -367,17 +373,11 @@ public class MMPlayerLayer: AVPlayerLayer {
                 if let o = object as? UIView , o == playView {
                     self.frame = o.bounds
                     self.updateCoverConstraint()
-                    if self.coverFitType != .fitToVideoRect {
-                        thumbImageView.frame = o.bounds
-                        self.indicator?.frame = o.bounds
-                    }
                 }
                 
             case "bounds":
                 if let o = object as? UIView , o == playView {
                     self.frame = o.bounds
-                    thumbImageView.frame = o.bounds
-                    self.indicator?.frame = o.bounds
                     self.updateCoverConstraint()
                 }
 
@@ -385,8 +385,6 @@ public class MMPlayerLayer: AVPlayerLayer {
                 let old = (change?[.oldKey] as? CGRect) ?? .zero
                 
                 if let new = change?[.newKey] as? CGRect ,old != new {
-                    self.indicator?.frame = new
-                    thumbImageView.frame = new
                     self.updateCoverConstraint()
                 }
             case "Muted":
