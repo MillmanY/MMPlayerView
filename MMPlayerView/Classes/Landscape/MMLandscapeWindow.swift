@@ -11,39 +11,45 @@ import UIKit
 public class MMLandscapeWindow: UIWindow {
     
     public static let shared =  MMLandscapeWindow()
-    weak var playView: UIView?
-    weak var originalPlaySuperView: UIView?
+    weak var playerLayer: MMPlayerLayer?
+    weak var originalPlayView: UIView?
     weak var originalWindow:UIWindow?
+    lazy var tempView: UIView = {
+        return UIView()
+    }()
     var completed: (()->Void)?
     override init(frame: CGRect) {
         super.init(frame: frame)
     }
     
-    public func makeKey(root: UIViewController, playLayer: MMPlayerLayer, completed:@escaping (()-> Void)) {
+    public func makeKey(root: UIViewController, playLayer: MMPlayerLayer, completed: (()-> Void)?) {
         if self.isKeyWindow {
             return
         }
+        self.makeKeyAndVisible()
+//        guard let p = playLayer.playView else {
+//            return
+//        }
+//        playLayer.clearURLWhenChangeView = false
+        originalPlayView = playLayer.playView
+        print(originalPlayView)
         
-        guard let p = playLayer.playView else {
-            return
-        }
-        p.translatesAutoresizingMaskIntoConstraints = true
-        playView = p
-        originalPlaySuperView = playView?.superview
-        root.view.addSubview(p)
+        self.playerLayer = playLayer
+        playLayer.playView = root.view
+
         self.frame = UIScreen.main.bounds
         root.view.frame = UIScreen.main.bounds
         self.completed = completed
         self.rootViewController = root
-        self.makeKeyAndVisible()
         UIViewController.attemptRotationToDeviceOrientation()
     }
     
     public func makeDisable() {
         originalWindow?.makeKeyAndVisible()
+        tempView.removeFromSuperview()
+        originalPlayView = nil
+        playerLayer = nil
         self.completed = nil
-        playView = nil
-        originalPlaySuperView = nil
         self.rootViewController = nil
         originalWindow = nil
         self.isHidden = true
@@ -61,25 +67,25 @@ public class MMLandscapeWindow: UIWindow {
 
     override public func layoutSubviews() {
         super.layoutSubviews()
-        
-        guard let p = playView else {
+        if !self.isKeyWindow {
             return
         }
         
         switch UIDevice.current.orientation {
         case .landscapeRight, .landscapeLeft:
-            p.frame = self.bounds
+            break
         case .portrait:
-            let convertR = originalPlaySuperView?.frame ?? .zero
-            let frame = originalPlaySuperView?.convert(convertR, to: nil) ?? .zero
-            p.frame = frame
-            self.addSubview(p)
+            let convertR = originalPlayView?.superview?.frame ?? .zero
+            tempView.frame = originalPlayView?.superview?.convert(convertR, to: nil) ?? .zero
+            playerLayer?.playView = tempView
+            self.addSubview(tempView)
             self.rootViewController?.view.alpha = 0.0
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.4, execute: {
-                self.playView?.translatesAutoresizingMaskIntoConstraints = false
-                self.originalPlaySuperView?.addSubview(p)
-                self.completed?()
+                self.tempView.removeFromSuperview()
+                self.playerLayer?.playView = self.originalPlayView
+                self.playerLayer?.clearURLWhenChangeView = true
                 self.makeDisable()
+                self.completed?()
             })
         default:
             break

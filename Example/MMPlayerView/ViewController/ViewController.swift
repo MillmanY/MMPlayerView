@@ -34,9 +34,10 @@ class ViewController: UIViewController {
             switch UIDevice.current.orientation {
             case .landscapeLeft , .landscapeRight:
                 let full = UIStoryboard.init(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "FullScreenViewController") as! FullScreenViewController
-                MMLandscapeWindow.shared.makeKey(root: full, playLayer: self.mmPlayerLayer) { [unowned self] in
-                    self.resetPlay()
-                }
+                MMLandscapeWindow.shared.makeKey(root: full, playLayer: self.mmPlayerLayer, completed: { 
+//                    self.updateByContentOffset()
+//                    self.startLoading()
+                })
             default: break
             }
         }
@@ -49,15 +50,6 @@ class ViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-    }
-    
-    fileprivate func resetPlay() {
-
-        if let play = mmPlayerLayer.playView, let superV = play.superview {
-            NSLayoutConstraint.deactivate(play.constraints)
-            superV.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-0-[subview]-0-|", options: .directionLeadingToTrailing, metrics: nil, views: ["subview": play]))
-            superV.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-0-[subview]-0-|", options: .directionLeadingToTrailing, metrics: nil, views: ["subview": play]))
-        }
     }
 }
 
@@ -152,24 +144,23 @@ extension ViewController: UICollectionViewDelegateFlowLayout {
             // this thumb use when transition start and your video dosent start
             mmPlayerLayer.thumbImageView.image = cell.imgView.image
             // set video where to play
-            mmPlayerLayer.playView = cell.imgView
+            if !MMLandscapeWindow.shared.isKeyWindow {
+                mmPlayerLayer.playView = cell.imgView
+            }
 
             // set url prepare to load
-            if let title = cell.data?.title {
-                print("Play \(title)")
-            }
             mmPlayerLayer.set(url: cell.data?.play_Url, state: { (status) in
                 switch status {
-                case .ready:
-                    print("Ready")
-                case .unknown:
-                    print("unknown")
-                case .end:
-                    print("play End")
-                case .pause:
-                    print("Pause")
-                case .playing:
-                    print("Playing")
+//                case .ready:
+//                    print("Ready")
+//                case .unknown:
+//                    print("unknown")
+//                case .end:
+//                    print("play End")
+//                case .pause:
+//                    print("Pause")
+//                case .playing:
+//                    print("Playing")
                 case .failed(let err):
                     let alert = UIAlertController.init(title: "err", message: err.description, preferredStyle: .alert)
                     alert.addAction(UIAlertAction.init(title: "OK", style: .default, handler: nil))
