@@ -65,16 +65,3 @@ extension NSObject: TransitionCompatible { }
     var containerView: UIView { get }
     func completed()
 }
-
-//@objc public protocol PassViewFromProtocol {
-//    var passView: UIView { get }
-//    @objc optional func backReplaceSuperView(original: UIView?) -> UIView?
-//    func completed(passView: UIView,superV: UIView?)
-//}
-//
-//public protocol PassViewToProtocol {
-//    var containerView: UIView { get }
-//    func transitionWillStart(passView: UIView)
-//    func transitionCompleted(passView: UIView)
-//    //    func transitionWillStart()
-//}

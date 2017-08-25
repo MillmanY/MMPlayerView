@@ -30,11 +30,13 @@ class DetailViewController: UIViewController {
         }
         // Do any additional setup after loading the view.
     }
-
-    @IBAction func dismiss() {
-        
+    
+    @IBAction func shrinkVideoAction() {
         (self.presentationController as? PassViewPresentatinController)?.shrinkView()
-//        self.dismiss(animated: true, completion: nil)
+    }
+
+    @IBAction func dismiss() {        
+        self.dismiss(animated: true, completion: nil)
     }
 }
 

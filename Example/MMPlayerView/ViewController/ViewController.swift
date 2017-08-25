@@ -21,9 +21,10 @@ class ViewController: UIViewController {
     @IBOutlet weak var playerCollect: UICollectionView!
     override func viewDidLoad() {
         super.viewDidLoad()
-        playerCollect.contentInset = UIEdgeInsets.init(top: 0, left: 0, bottom:  200, right:0)
-        DispatchQueue.main.async { [unowned self] in
-            self.playerCollect.contentOffset = .zero
+        playerCollect.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 80, right:0)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            self.updateCell(at: IndexPath(row: 0, section: 0))
+            self.delayReload()
         }
     }
     
@@ -105,7 +106,11 @@ extension ViewController: MMPlayerFromProtocol {
     }
     
     func presentedView(isShrinkVideo: Bool) {
-        self.playerCollect.reloadData()
+        self.playerCollect.visibleCells.forEach {
+            if ($0 as? PlayerCell)?.imgView.isHidden == true && isShrinkVideo {
+                ($0 as? PlayerCell)?.imgView.isHidden = false
+            }
+        }
     }
 }
 

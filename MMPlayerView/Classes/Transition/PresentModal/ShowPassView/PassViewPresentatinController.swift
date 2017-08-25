@@ -35,23 +35,25 @@ public class PassViewPresentatinController: BasePresentationController {
     }
     
     public func shrinkView() {
+        self.config.playLayer?.setCoverView(enable: false)
         originalPlayView = self.config.playLayer?.playView
         var rect = self.containerView!.frame
         rect.size.width = 150
         rect.size.height = 100
         self.containerView?.addGestureRecognizer(gesture)
-        UIView.animate(withDuration: 0.3, animations: { 
+        let view = UIView()
+        let g = UITapGestureRecognizer.init(target: self, action: #selector(self.tapVideo(gesture:)))
+        view.addGestureRecognizer(g)
+        view.frame = rect
+        self.containerView?.addSubview(view)
+        self.config.playLayer?.playView = view
+        UIView.animate(withDuration: 0.3, animations: {
             self.containerView?.frame = rect
+            self.presentedView?.alpha = 0.0
         }) { [unowned self] (finish) in
-            let view = UIView()
-            let gesture = UITapGestureRecognizer.init(target: self, action: #selector(self.tapVideo(gesture:)))
-            view.addGestureRecognizer(gesture)
-            view.frame = self.containerView!.bounds
-            self.containerView?.addSubview(view)
-            self.config.playLayer?.playView = view
+
             (self.config.source as? MMPlayerFromProtocol)?.presentedView(isShrinkVideo: true)
             DispatchQueue.main.async {
-                self.config.playLayer?.setCoverView(enable: false)
                 self.updateEndFrame(velocity: .zero)
             }
         }
@@ -67,10 +69,10 @@ public class PassViewPresentatinController: BasePresentationController {
         case .changed:
             self.containerView?.center.x += point.x - lastPoint.x
             self.containerView?.center.y += point.y - lastPoint.y
-            break
-        default:
+        case .ended , .cancelled:
             self.updateEndFrame(velocity: vel)
             lastPoint = .zero
+        default:
             break
         }
     }
@@ -84,7 +86,7 @@ public class PassViewPresentatinController: BasePresentationController {
         var dismissVideo = false
         if center.x < halfSize.width && center.y < halfSize.height {
     
-            if velocity.x < 0 {
+            if velocity.x < 0 && rect.origin.x < 0 {
                 dismissVideo = true
                 rect.origin.x = -rect.size.width
             } else {
@@ -93,7 +95,7 @@ public class PassViewPresentatinController: BasePresentationController {
             
             rect.origin.y = margin
         } else if center.x > halfSize.width && center.y < halfSize.height {
-            if velocity.x > 0 {
+            if velocity.x > 0 && rect.maxX > size.width {
                 dismissVideo = true
                 rect.origin.x = size.width
             } else {
@@ -101,15 +103,15 @@ public class PassViewPresentatinController: BasePresentationController {
             }
             rect.origin.y = margin
         } else if center.x < halfSize.width && center.y > halfSize.height {
-            if velocity.x < 0 {
+            if velocity.x < 0 && rect.origin.x < 0 {
                 dismissVideo = true
                 rect.origin.x = -rect.size.width
             } else {
                 rect.origin.x = margin
             }
             rect.origin.y = size.height-rect.size.height-margin
-        } else {
-            if velocity.x > 0 {
+        } else if center.x > halfSize.width && center.y > halfSize.height{
+            if velocity.x > 0 && rect.maxX > size.width{
                 dismissVideo = true
                 rect.origin.x = size.width
             } else {
@@ -122,7 +124,8 @@ public class PassViewPresentatinController: BasePresentationController {
             self.containerView?.frame = rect
         }) { (_) in
             if dismissVideo {
-                self.config.playLayer?.coverView?.isHidden = false
+                self.config.playLayer?.setCoverView(enable: false)
+                (self.config.source as? MMPlayerFromProtocol)?.presentedView(isShrinkVideo: true)
                 self.presentedViewController.dismiss(animated: true, completion: nil)
             }
         }
@@ -134,8 +137,8 @@ public class PassViewPresentatinController: BasePresentationController {
         
         UIView.animate(withDuration: self.config.duration, animations: { 
             self.containerView?.frame = UIScreen.main.bounds
+            self.presentedView?.alpha = 1.0
         }) { (_) in
-            
             self.config.playLayer?.setCoverView(enable: true)
         }
     }

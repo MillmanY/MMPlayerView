@@ -166,7 +166,18 @@
                                 </constraints>
                                 <state key="normal" image="ic_keyboard_arrow_left"/>
                                 <connections>
-                                    <action selector="dismiss" destination="0i4-yP-5MV" eventType="touchUpInside" id="sJx-Ma-Fhc"/>
+                                    <action selector="dismiss" destination="0i4-yP-5MV" eventType="touchUpInside" id="YgL-Rp-Cbb"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="F7t-mi-cYv">
+                                <rect key="frame" x="323" y="20" width="36" height="36"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="36" id="cqn-Ki-Hjm"/>
+                                    <constraint firstAttribute="height" constant="36" id="nNJ-RE-Rfd"/>
+                                </constraints>
+                                <state key="normal" image="ic_airplay_white"/>
+                                <connections>
+                                    <action selector="shrinkVideoAction" destination="0i4-yP-5MV" eventType="touchUpInside" id="7IH-90-ccb"/>
                                 </connections>
                             </button>
                             <textView clipsSubviews="YES" contentMode="scaleToFill" editable="NO" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="r8d-5Y-NJU">
@@ -181,8 +192,10 @@
                             <constraint firstItem="DIh-0A-AkF" firstAttribute="top" secondItem="sz3-db-TLF" secondAttribute="bottom" constant="-20" id="Hak-3X-eHn"/>
                             <constraint firstItem="DIh-0A-AkF" firstAttribute="leading" secondItem="mbo-Nb-tWC" secondAttribute="leading" id="LNK-wk-7L0"/>
                             <constraint firstItem="7gq-JO-Va5" firstAttribute="top" secondItem="sz3-db-TLF" secondAttribute="bottom" id="N3N-qF-85G"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="F7t-mi-cYv" secondAttribute="trailing" id="RRN-1K-dpR"/>
                             <constraint firstItem="r8d-5Y-NJU" firstAttribute="leading" secondItem="mbo-Nb-tWC" secondAttribute="leading" id="cN5-Tb-m2j"/>
                             <constraint firstAttribute="trailing" secondItem="r8d-5Y-NJU" secondAttribute="trailing" id="cRq-8c-sl2"/>
+                            <constraint firstItem="F7t-mi-cYv" firstAttribute="centerY" secondItem="7gq-JO-Va5" secondAttribute="centerY" id="iM9-Um-yOA"/>
                             <constraint firstItem="r8d-5Y-NJU" firstAttribute="top" secondItem="DIh-0A-AkF" secondAttribute="bottom" id="j6Z-fy-lci"/>
                             <constraint firstItem="lfv-JN-1UU" firstAttribute="top" secondItem="r8d-5Y-NJU" secondAttribute="bottom" id="nrm-Uq-fN6"/>
                             <constraint firstAttribute="trailing" secondItem="DIh-0A-AkF" secondAttribute="trailing" id="rcm-vy-ILK"/>
@@ -269,6 +282,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="ic_airplay_white" width="36" height="36"/>
         <image name="ic_keyboard_arrow_left" width="36" height="36"/>
     </resources>
 </document>

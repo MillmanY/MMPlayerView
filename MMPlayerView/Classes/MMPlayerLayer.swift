@@ -194,6 +194,7 @@ public class MMPlayerLayer: AVPlayerLayer {
     }
 
     public func setCoverView(enable: Bool) {
+        self.coverView?.isHidden = !enable
         self.tapGesture.isEnabled = enable
     }
     
