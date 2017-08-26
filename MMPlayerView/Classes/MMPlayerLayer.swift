@@ -40,19 +40,17 @@ public class MMPlayerLayer: AVPlayerLayer {
     }
     weak fileprivate var _playView: UIView? {
         willSet {
+            
             coverView?.removeFromSuperview()
             indicator?.removeFromSuperview()
             self.removeFromSuperlayer()
             _playView?.removeGestureRecognizer(tapGesture)
-            _playView?.safeRemove(observer: self, forKeyPath: "frame")
-            _playView?.safeRemove(observer: self, forKeyPath: "bounds")
+            _playView?.havePlayer = false
         } didSet {
-            
-            _playView?.safeAdd(observer: self, forKeyPath: "frame", options: [.new,.initial], context: nil)
-            _playView?.safeAdd(observer: self, forKeyPath: "bounds", options: [.new,.initial], context: nil)
             _playView?.isUserInteractionEnabled = true
             _playView?.addGestureRecognizer(tapGesture)
             _playView?.layer.insertSublayer(self, at: 0)
+            _playView?.havePlayer = true
             self.uploadSubViewIdx()
         }
     }
@@ -67,6 +65,7 @@ public class MMPlayerLayer: AVPlayerLayer {
             i.setup()
         }
     }
+    
     
     public var progressType: ProgressType = .default {
         didSet {
@@ -159,7 +158,6 @@ public class MMPlayerLayer: AVPlayerLayer {
             guard let url = newValue else {
                 return
             }
-            self.addPlayerObserver()
             if let cacheItem = self.cahce.getItem(key: url) , cacheItem.status == .readyToPlay{
                 self.asset = (cacheItem.asset as? AVURLAsset)
                 self.player?.replaceCurrentItem(with: cacheItem)
@@ -198,8 +196,11 @@ public class MMPlayerLayer: AVPlayerLayer {
         }
     }
     
+    fileprivate var isInitLayer = false
     public override init(layer: Any) {
+        isInitLayer = true
         super.init(layer: layer)
+        (layer as? MMPlayerLayer)?.isInitLayer = false
     }
     
     required public init?(coder aDecoder: NSCoder) {
@@ -215,9 +216,10 @@ public class MMPlayerLayer: AVPlayerLayer {
         self.player = AVPlayer()
         self.backgroundColor = UIColor.black.cgColor
         self.progressType = .default
+        self.addPlayerObserver()
     }
     
-    fileprivate func updateCoverConstraint() {
+    func updateCoverConstraint() {
         let vRect = self.coverFitType == .fitToVideoRect ? videoRect : (playView?.bounds ?? .zero)
         if vRect.isEmpty {
             self.coverView?.isHidden = true
@@ -225,8 +227,8 @@ public class MMPlayerLayer: AVPlayerLayer {
             self.coverView?.isHidden = false
             self.coverView?.frame = vRect
             self.indicator?.frame = vRect
-            thumbImageView.frame = vRect
         }
+        thumbImageView.frame = (playView?.bounds ?? .zero)
     }
     
     public func delayHideCover() {
@@ -344,7 +346,7 @@ public class MMPlayerLayer: AVPlayerLayer {
         
     }
     
-    fileprivate func removeAllObserver() {
+    func removeAllObserver() {
         self.player?.replaceCurrentItem(with: nil)
         self.player?.pause()
         self.safeRemove(observer: self, forKeyPath: "videoRect")
@@ -366,18 +368,6 @@ public class MMPlayerLayer: AVPlayerLayer {
         
         if let k = keyPath {
             switch k {
-            case "frame":
-                if let o = object as? UIView , o == playView {
-                    self.frame = o.bounds
-                    self.updateCoverConstraint()
-                }
-                
-            case "bounds":
-                if let o = object as? UIView , o == playView {
-                    self.frame = o.bounds
-                    self.updateCoverConstraint()
-                }
-
             case "videoRect":
                 let old = (change?[.oldKey] as? CGRect) ?? .zero
                 
@@ -499,6 +489,11 @@ public class MMPlayerLayer: AVPlayerLayer {
             self.indicator?.start()
         } else {
             self.indicator?.stop()
+        }
+    }
+    deinit {
+        if !isInitLayer {
+            self.removeAllObserver()
         }
     }
 }

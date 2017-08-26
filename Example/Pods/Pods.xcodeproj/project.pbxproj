@@ -33,6 +33,7 @@
 		5E9A1B7D1F4D80E600746E5B /* PassViewPresentTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E9A1B681F4D80E600746E5B /* PassViewPresentTransition.swift */; };
 		5E9A1B7E1F4D80E600746E5B /* TransitionDefine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E9A1B691F4D80E600746E5B /* TransitionDefine.swift */; };
 		5EC40F441F4EA47100510EDF /* MMLandscapeWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC40F431F4EA47100510EDF /* MMLandscapeWindow.swift */; };
+		5EF39E251F517131005AFDA5 /* AppDelegate+Load.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EF39E241F517131005AFDA5 /* AppDelegate+Load.swift */; };
 		B58C38B3E73F2053DA8EC62ABE781AE9 /* Pods-MMPlayerView_Example-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = A9A5E4E17C085799445B4CE0DA05315E /* Pods-MMPlayerView_Example-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C9B301C26C25DDE32A0734824927C333 /* MMPlayerView-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 1273E7E377854BBD33F951FFB70186DD /* MMPlayerView-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		E8724CFBDF7A376FAB5CA2521F4910FE /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6604A7D69453B4569E4E4827FB9155A9 /* Foundation.framework */; };
@@ -84,6 +85,7 @@
 		5E9A1B681F4D80E600746E5B /* PassViewPresentTransition.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PassViewPresentTransition.swift; sourceTree = "<group>"; };
 		5E9A1B691F4D80E600746E5B /* TransitionDefine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransitionDefine.swift; sourceTree = "<group>"; };
 		5EC40F431F4EA47100510EDF /* MMLandscapeWindow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MMLandscapeWindow.swift; sourceTree = "<group>"; };
+		5EF39E241F517131005AFDA5 /* AppDelegate+Load.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AppDelegate+Load.swift"; sourceTree = "<group>"; };
 		639D550590747C95B9C1B9BDB67CBA3B /* Pods-MMPlayerView_Tests-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-MMPlayerView_Tests-umbrella.h"; sourceTree = "<group>"; };
 		64A114F4D3A0038075B9BF90DCE11884 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6604A7D69453B4569E4E4827FB9155A9 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.3.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
@@ -171,6 +173,7 @@
 		5E9A1B491F4D804400746E5B /* Extension */ = {
 			isa = PBXGroup;
 			children = (
+				5EF39E241F517131005AFDA5 /* AppDelegate+Load.swift */,
 				5E9A1B4A1F4D804400746E5B /* NSObject+safeObserver.swift */,
 				5E9A1B4B1F4D804400746E5B /* UIView+Load.swift */,
 				5E3E68ED1F4FF77900122F6C /* UIView+Shadow.swift */,
@@ -484,6 +487,7 @@
 				5E562DA11EF9556900025869 /* CoverViewProtocol.swift in Sources */,
 				179DFFF5A41590159B910EB208055F9F /* MMPlayerView-dummy.m in Sources */,
 				5E562DA21EF9556900025869 /* MMPlayerCache.swift in Sources */,
+				5EF39E251F517131005AFDA5 /* AppDelegate+Load.swift in Sources */,
 				5E562DA41EF9556900025869 /* MMPlayerView.swift in Sources */,
 				5E9A1B701F4D80E600746E5B /* PassViewPushConfig.swift in Sources */,
 				5E9A1B7D1F4D80E600746E5B /* PassViewPresentTransition.swift in Sources */,

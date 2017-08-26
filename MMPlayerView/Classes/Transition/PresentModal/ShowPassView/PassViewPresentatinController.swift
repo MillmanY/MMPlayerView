@@ -78,7 +78,7 @@ public class PassViewPresentatinController: BasePresentationController {
             if center.x < halfSize.width && center.y < halfSize.height {
                 self.setFrameWith(quadrant: .leftTop, dismissVideo: velocity.x < 0 && rect.origin.x < 0)
             } else if center.x > halfSize.width && center.y < halfSize.height {
-                self.setFrameWith(quadrant: .rightTop, dismissVideo: velocity.x < 0 && rect.origin.x < 0)
+                self.setFrameWith(quadrant: .rightTop, dismissVideo: velocity.x > 0 && rect.maxX > size.width)
             } else if center.x < halfSize.width && center.y > halfSize.height {
                 self.setFrameWith(quadrant: .leftBottom, dismissVideo: velocity.x < 0 && rect.origin.x < 0)
             } else if center.x > halfSize.width && center.y > halfSize.height{

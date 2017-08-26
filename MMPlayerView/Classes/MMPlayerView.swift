@@ -137,6 +137,6 @@ public class MMPlayerView: UIView {
     }
     
     deinit {
-        print("PlayerView deinit")
+        self.playerLayer.removeAllObserver()
     }
 }
