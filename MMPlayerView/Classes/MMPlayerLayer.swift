@@ -191,8 +191,10 @@ public class MMPlayerLayer: AVPlayerLayer {
     }
 
     public func setCoverView(enable: Bool) {
-        self.coverView?.isHidden = !enable
-        self.tapGesture.isEnabled = enable
+        DispatchQueue.main.async { [unowned self] in
+            self.coverView?.isHidden = !enable
+            self.tapGesture.isEnabled = enable
+        }
     }
     
     public override init(layer: Any) {
