@@ -21,6 +21,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var playerCollect: UICollectionView!
     override func viewDidLoad() {
         super.viewDidLoad()
+        playerCollect.addObserver(self, forKeyPath: "contentOffset", options: [.new], context: nil)
         playerCollect.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 80, right:0)
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             self.updateByContentOffset()
@@ -31,15 +32,7 @@ class ViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         NotificationCenter.default.addObserver(forName: .UIDeviceOrientationDidChange, object: nil, queue: nil) { [unowned self] (_) in
-            switch UIDevice.current.orientation {
-            case .landscapeLeft , .landscapeRight:
-                let full = UIStoryboard.init(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "FullScreenViewController") as! FullScreenViewController
-                MMLandscapeWindow.shared.makeKey(root: full, playLayer: self.mmPlayerLayer, completed: { 
-//                    self.updateByContentOffset()
-//                    self.startLoading()
-                })
-            default: break
-            }
+            self.landscapeAction()
         }
     }
     
@@ -51,11 +44,25 @@ class ViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
     }
+    
+    fileprivate func landscapeAction() {
+        // just landscape when last result was finish
+        if self.playerCollect.isDragging || self.playerCollect.isTracking {
+            return
+        }
+        if UIDevice.current.orientation.isLandscape {
+            let full = UIStoryboard.init(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "FullScreenViewController") as! FullScreenViewController
+            MMLandscapeWindow.shared.makeKey(root: full, playLayer: self.mmPlayerLayer, completed: {
+                //                    self.playerCollect.isScrollEnabled = true
+            })
+        }
+    }
 }
 
 // This protocol use to pass playerLayer to second UIViewcontroller
 extension ViewController: MMPlayerPrsentFromProtocol {
-    // when use table or collection will reuse cell and original playview will error , replace correct one
+    // when second controller pop or dismiss, this help to put player back to where you want
+    // original was player last view ex. it will be nil because of this view on reuse view
     func backReplaceSuperView(original: UIView?) -> UIView? {
         return original
     }
@@ -85,6 +92,17 @@ extension ViewController: MMPlayerPrsentFromProtocol {
             }
         }
     }
+    
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+        if keyPath == "contentOffset" {
+            self.updateByContentOffset()
+            NSObject.cancelPreviousPerformRequests(withTarget: self)
+            self.perform(#selector(startLoading), with: nil, afterDelay: 0.3)
+
+        } else {
+            super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
+        }
+    }
 }
 
 extension ViewController: UICollectionViewDelegateFlowLayout {
@@ -92,16 +110,6 @@ extension ViewController: UICollectionViewDelegateFlowLayout {
         let m = min(UIScreen.main.bounds.size.width, UIScreen.main.bounds.size.height)
         return CGSize.init(width: m, height: m*0.75)
     }
-    
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        self.updateByContentOffset()
-    }
-    
-    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        NSObject.cancelPreviousPerformRequests(withTarget: self)
-        self.perform(#selector(startLoading), with: nil, afterDelay: 0.3)
-    }
-    
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         DispatchQueue.main.async { [unowned self] in
             if self.presentedViewController != nil {
@@ -114,7 +122,9 @@ extension ViewController: UICollectionViewDelegateFlowLayout {
     
     fileprivate func updateByContentOffset() {
         let p = CGPoint(x: playerCollect.frame.width/2, y: playerCollect.contentOffset.y + playerCollect.frame.width/2)
-        if let path = playerCollect.indexPathForItem(at: p) {
+        
+        if let path = playerCollect.indexPathForItem(at: p),
+            self.presentedViewController == nil {
             self.updateCell(at: path)
         }
     }
@@ -137,9 +147,6 @@ extension ViewController: UICollectionViewDelegateFlowLayout {
     }
     
     fileprivate func updateCell(at indexPath: IndexPath) {
-        if self.presentedViewController != nil {
-            return
-        }
         if let cell = playerCollect.cellForItem(at: indexPath) as? PlayerCell {
             // this thumb use when transition start and your video dosent start
             mmPlayerLayer.thumbImageView.image = cell.imgView.image
@@ -147,23 +154,13 @@ extension ViewController: UICollectionViewDelegateFlowLayout {
             if !MMLandscapeWindow.shared.isKeyWindow {
                 mmPlayerLayer.playView = cell.imgView
             }
-
+            
             // set url prepare to load
             mmPlayerLayer.set(url: cell.data?.play_Url, state: { (status) in
                 switch status {
-//                case .ready:
-//                    print("Ready")
-//                case .unknown:
-//                    print("unknown")
-//                case .end:
-//                    print("play End")
-//                case .pause:
-//                    print("Pause")
-//                case .playing:
-//                    print("Playing")
                 case .failed(let err):
-                    let alert = UIAlertController.init(title: "err", message: err.description, preferredStyle: .alert)
-                    alert.addAction(UIAlertAction.init(title: "OK", style: .default, handler: nil))
+                    let alert = UIAlertController(title: "err", message: err.description, preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
                     self.present(alert, animated: true, completion: nil)
                 default: break
                 }
@@ -177,6 +174,7 @@ extension ViewController: UICollectionViewDelegateFlowLayout {
         }
         // start loading video
         mmPlayerLayer.startLoading()
+        self.landscapeAction()
     }
 }
 

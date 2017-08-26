@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12120" systemVersion="16A323" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="LPI-H3-zkH">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12120" systemVersion="16A323" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="28g-qc-fgW">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -10,24 +10,6 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Tab Bar Controller-->
-        <scene sceneID="jbv-VT-jsA">
-            <objects>
-                <tabBarController id="LPI-H3-zkH" sceneMemberID="viewController">
-                    <tabBar key="tabBar" contentMode="scaleToFill" id="xaf-J8-yzV">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="49"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                    </tabBar>
-                    <connections>
-                        <segue destination="28g-qc-fgW" kind="relationship" relationship="viewControllers" id="Vi9-Jn-vBW"/>
-                        <segue destination="bqQ-9U-qsE" kind="relationship" relationship="viewControllers" id="C0n-re-nFo"/>
-                    </connections>
-                </tabBarController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="wy2-DB-6Vl" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-2674" y="750"/>
-        </scene>
         <!--Base Navigation Controller-->
         <scene sceneID="VxW-v8-emP">
             <objects>
@@ -58,7 +40,7 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="RZU-9S-Yz7">
-                                <rect key="frame" x="0.0" y="64" width="375" height="554"/>
+                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="Wui-Ug-LtX">
                                     <size key="itemSize" width="365" height="250"/>
@@ -210,57 +192,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="OPY-9A-GNO" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-226" y="296"/>
-        </scene>
-        <!--Navigation Controller-->
-        <scene sceneID="hL8-KS-0qg">
-            <objects>
-                <navigationController id="bqQ-9U-qsE" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" systemItem="recents" id="2Ff-hx-63a"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="SZP-8C-Aj4">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <connections>
-                        <segue destination="qxE-ue-I2C" kind="relationship" relationship="rootViewController" id="bjX-Nb-47C"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="NsL-xi-fdS" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-1854" y="1050"/>
-        </scene>
-        <!--Single Video Demo-->
-        <scene sceneID="7KC-wC-3xE">
-            <objects>
-                <viewController id="qxE-ue-I2C" customClass="SingleVideoViewController" customModule="MMPlayerView_Example" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="Xv4-Nn-7Nf"/>
-                        <viewControllerLayoutGuide type="bottom" id="sdF-rR-yaE"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="pNN-WK-NrU">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gvY-d1-d0P" customClass="MMPlayerView" customModule="MMPlayerView">
-                                <rect key="frame" x="0.0" y="64" width="375" height="554"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                            </view>
-                        </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <constraints>
-                            <constraint firstItem="sdF-rR-yaE" firstAttribute="top" secondItem="gvY-d1-d0P" secondAttribute="bottom" id="Idv-Qj-4zj"/>
-                            <constraint firstItem="gvY-d1-d0P" firstAttribute="leading" secondItem="pNN-WK-NrU" secondAttribute="leading" id="Itz-t4-En5"/>
-                            <constraint firstAttribute="trailing" secondItem="gvY-d1-d0P" secondAttribute="trailing" id="RWn-B4-Kxg"/>
-                            <constraint firstItem="gvY-d1-d0P" firstAttribute="top" secondItem="Xv4-Nn-7Nf" secondAttribute="bottom" id="uBP-ne-wbz"/>
-                        </constraints>
-                    </view>
-                    <navigationItem key="navigationItem" title="Single Video Demo" id="Ewd-t4-sqg"/>
-                    <connections>
-                        <outlet property="playView" destination="gvY-d1-d0P" id="snq-RL-9AM"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="l2e-Zh-m3q" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-1175" y="1051"/>
         </scene>
         <!--Full Screen View Controller-->
         <scene sceneID="gcM-JA-4ZI">

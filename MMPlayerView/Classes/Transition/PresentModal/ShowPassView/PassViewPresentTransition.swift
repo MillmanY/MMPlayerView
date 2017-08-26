@@ -83,29 +83,33 @@ class PassViewPresentTransition: BasePresentTransition, UIViewControllerAnimated
                 container.addSubview(pass)
             }
             container.layoutIfNeeded()
+            
+            if config.dismissGesture {
+                config.playLayer?.playView = superV
+                config.playLayer?.layoutIfNeeded()
+                pass.removeFromSuperview()
+                from?.view.removeFromSuperview()
+                transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
+                (self.source as? MMPlayerPrsentFromProtocol)?.dismissViewFromGesture()
+                config.playLayer?.clearURLWhenChangeView = true
+                return
+            }
+            
             pass.frame = original
             UIView.animate(withDuration: self.config.duration, animations: {
                 from?.view.alpha = 0.0
                 pass.frame = convertRect
             }, completion: { (finish) in
-                if config.dismissGesture {
-                    config.playLayer?.playView = nil
-                    pass.removeFromSuperview()
-                    from?.view.removeFromSuperview()
-                    transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
-                    (self.source as? MMPlayerPrsentFromProtocol)?.dismissViewFromGesture()
-                } else {
-                    config.playLayer?.playView = superV
-                    pass.translatesAutoresizingMaskIntoConstraints = false
-                    superV?.isHidden = false
-                    pass.removeFromSuperview()
-                    from?.view.removeFromSuperview()
-                    
-                    transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
-                }
+                config.playLayer?.playView = superV
+                pass.translatesAutoresizingMaskIntoConstraints = false
+                superV?.isHidden = false
+                pass.removeFromSuperview()
+                from?.view.removeFromSuperview()
+                
+                transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
                 config.playLayer?.clearURLWhenChangeView = true
 
             })
         }
-    }
+    }    
 }

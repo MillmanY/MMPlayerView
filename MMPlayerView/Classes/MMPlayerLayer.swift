@@ -10,19 +10,18 @@ import UIKit
 import AVFoundation
 
 public class MMPlayerLayer: AVPlayerLayer {
-    
-//    fileprivate var playLayer: AVPlayerLayer = {
-//        let p = AVPlayerLayer()
-//        p.player = AVPlayer()
-//        return p
-//    }()
+    lazy var tapGesture: UITapGestureRecognizer = {
+        let g = UITapGestureRecognizer.init(target: self, action: #selector(MMPlayerLayer.touchAction(gesture:)))
+        
+        return g
+    }()
+
     fileprivate var isCoverShow = false
     fileprivate var timeObserver: Any?
     fileprivate var isBackgroundPause = false
     fileprivate var _cover: CoverViewProtocol?
     fileprivate var cahce = MMPlayerCache()
     fileprivate var playStatusBlock: ((_ status: PlayViewPlayStatus) ->Void)?
-
     fileprivate let assetKeysRequiredToPlay = [
         "duration",
         "playable",
@@ -35,16 +34,10 @@ public class MMPlayerLayer: AVPlayerLayer {
             if let i = indicator {
                 i.isUserInteractionEnabled = true
                 self.addSublayer(i.layer)
-//                self.playView?.addSubview(i)
                 i.setup()
             }
         }
     }
-    lazy var tapGesture: UITapGestureRecognizer = {
-        let g = UITapGestureRecognizer.init(target: self, action: #selector(MMPlayerLayer.touchAction(gesture:)))
-        
-        return g
-    }()
     weak fileprivate var _playView: UIView? {
         willSet {
             coverView?.removeFromSuperview()
@@ -217,6 +210,7 @@ public class MMPlayerLayer: AVPlayerLayer {
     
     fileprivate func setup() {
         self.player = AVPlayer()
+        self.backgroundColor = UIColor.black.cgColor
         self.progressType = .default
     }
     

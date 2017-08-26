@@ -18,7 +18,6 @@ class DetailViewController: UIViewController {
         super.init(coder: aDecoder)
         self.mmPlayerTransition.present.pass { (config) in
             config.duration = 0.3
-
         }
     }
     override func viewDidLoad() {

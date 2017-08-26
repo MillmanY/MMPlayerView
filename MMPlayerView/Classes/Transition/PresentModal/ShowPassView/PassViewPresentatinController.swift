@@ -111,9 +111,13 @@ public class PassViewPresentatinController: BasePresentationController {
 
         self.presentedView?.alpha = 0.0
         UIView.animate(withDuration: self.config.duration, animations: {
-            self.config.playLayer?.playView?.frame = rect
-        }) { (_) in
             if dismissVideo {
+                self.config.playLayer?.playView?.alpha = 0.0
+            }
+            self.config.playLayer?.playView?.frame = rect
+        }) { [unowned self] (_) in
+            if dismissVideo {
+    
                 (self.config as? PassViewPresentConfig)?._dismissGesture = true
                 self.config.playLayer?.setCoverView(enable: true)
                 self.presentedViewController.dismiss(animated: true, completion: nil)
@@ -137,5 +141,6 @@ public class PassViewPresentatinController: BasePresentationController {
             self.config.playLayer?.setCoverView(enable: true)
         }
     }
+    
 }
 

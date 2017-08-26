@@ -14,7 +14,6 @@
 		5E9A1B8A1F4D865E00746E5B /* PlayerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E9A1B831F4D865E00746E5B /* PlayerCell.swift */; };
 		5E9A1B8B1F4D865E00746E5B /* DemoSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E9A1B851F4D865E00746E5B /* DemoSource.swift */; };
 		5E9A1B8C1F4D865E00746E5B /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E9A1B871F4D865E00746E5B /* DetailViewController.swift */; };
-		5E9A1B8D1F4D865E00746E5B /* SingleVideoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E9A1B881F4D865E00746E5B /* SingleVideoViewController.swift */; };
 		5E9A1B8E1F4D865E00746E5B /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E9A1B891F4D865E00746E5B /* ViewController.swift */; };
 		5EB350761F4DC84E007C5098 /* BaseNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EB350751F4DC84E007C5098 /* BaseNavigationController.swift */; };
 		5EC40F461F4EA59300510EDF /* FullScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC40F451F4EA59300510EDF /* FullScreenViewController.swift */; };
@@ -47,7 +46,6 @@
 		5E9A1B831F4D865E00746E5B /* PlayerCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerCell.swift; sourceTree = "<group>"; };
 		5E9A1B851F4D865E00746E5B /* DemoSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DemoSource.swift; sourceTree = "<group>"; };
 		5E9A1B871F4D865E00746E5B /* DetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
-		5E9A1B881F4D865E00746E5B /* SingleVideoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SingleVideoViewController.swift; sourceTree = "<group>"; };
 		5E9A1B891F4D865E00746E5B /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		5EB350751F4DC84E007C5098 /* BaseNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseNavigationController.swift; sourceTree = "<group>"; };
 		5EC40F451F4EA59300510EDF /* FullScreenViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FullScreenViewController.swift; sourceTree = "<group>"; };
@@ -134,7 +132,6 @@
 			isa = PBXGroup;
 			children = (
 				5E9A1B871F4D865E00746E5B /* DetailViewController.swift */,
-				5E9A1B881F4D865E00746E5B /* SingleVideoViewController.swift */,
 				5E9A1B891F4D865E00746E5B /* ViewController.swift */,
 				5EB350751F4DC84E007C5098 /* BaseNavigationController.swift */,
 				5EC40F451F4EA59300510EDF /* FullScreenViewController.swift */,
@@ -427,7 +424,6 @@
 				607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */,
 				5EC40F461F4EA59300510EDF /* FullScreenViewController.swift in Sources */,
 				5E9A1B8E1F4D865E00746E5B /* ViewController.swift in Sources */,
-				5E9A1B8D1F4D865E00746E5B /* SingleVideoViewController.swift in Sources */,
 				5E105C411F4C78C000774714 /* CoverA.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
