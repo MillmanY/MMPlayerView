@@ -89,7 +89,8 @@ public class MMPlayerLayer: AVPlayerLayer {
             self.updateCoverConstraint()
         }
     }
-    public var clearURLWhenChangeView = true
+    public var changeViewClearPlayer = true
+    var clearURLWhenChangeView = true
     public var hideCoverDuration: TimeInterval = 3.0
     public lazy var thumbImageView: UIImageView = {
         let t = UIImageView()
@@ -103,7 +104,7 @@ public class MMPlayerLayer: AVPlayerLayer {
             if self.playView != newValue {
                 self._playView = newValue
                 
-                if clearURLWhenChangeView {
+                if clearURLWhenChangeView && changeViewClearPlayer {
                    self.playUrl = nil
                 }
             }

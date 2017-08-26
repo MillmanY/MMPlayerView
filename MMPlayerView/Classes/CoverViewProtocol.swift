@@ -36,13 +36,11 @@ public enum CoverViewFitType {
     case fitToVideoRect
 }
 
-
 public enum ProgressType {
     case `default`
     case none
     case custom(view: MMProgress)
 }
-
 
 public protocol IndicatorProtocol {
     func setup()

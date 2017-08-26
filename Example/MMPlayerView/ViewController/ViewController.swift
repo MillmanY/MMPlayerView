@@ -47,7 +47,7 @@ class ViewController: UIViewController {
     
     fileprivate func landscapeAction() {
         // just landscape when last result was finish
-        if self.playerCollect.isDragging || self.playerCollect.isTracking {
+        if self.playerCollect.isDragging || self.playerCollect.isTracking || self.presentedViewController != nil {
             return
         }
         if UIDevice.current.orientation.isLandscape {
@@ -55,6 +55,17 @@ class ViewController: UIViewController {
             MMLandscapeWindow.shared.makeKey(root: full, playLayer: self.mmPlayerLayer, completed: {
                 //                    self.playerCollect.isScrollEnabled = true
             })
+        }
+    }
+    
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+        if keyPath == "contentOffset" {
+            self.updateByContentOffset()
+            NSObject.cancelPreviousPerformRequests(withTarget: self)
+            self.perform(#selector(startLoading), with: nil, afterDelay: 0.3)
+            
+        } else {
+            super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
         }
     }
 }
@@ -90,17 +101,6 @@ extension ViewController: MMPlayerPrsentFromProtocol {
             if ($0 as? PlayerCell)?.imgView.isHidden == true && isShrinkVideo {
                 ($0 as? PlayerCell)?.imgView.isHidden = false
             }
-        }
-    }
-    
-    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
-        if keyPath == "contentOffset" {
-            self.updateByContentOffset()
-            NSObject.cancelPreviousPerformRequests(withTarget: self)
-            self.perform(#selector(startLoading), with: nil, afterDelay: 0.3)
-
-        } else {
-            super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
         }
     }
 }
