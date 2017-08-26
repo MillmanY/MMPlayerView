@@ -113,6 +113,7 @@ extension ViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         DispatchQueue.main.async { [unowned self] in
             if self.presentedViewController != nil {
+                self.playerCollect.scrollToItem(at: indexPath, at: .centeredVertically, animated: true)
                 self.updateDetail(at: indexPath)
             } else {
                 self.presentDetail(at: indexPath)

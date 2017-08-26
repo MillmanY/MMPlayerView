@@ -85,7 +85,7 @@ class PassViewPresentTransition: BasePresentTransition, UIViewControllerAnimated
             container.layoutIfNeeded()
             
             if config.dismissGesture {
-                config.playLayer?.playView = superV
+                config.playLayer?.playView = nil
                 config.playLayer?.layoutIfNeeded()
                 pass.removeFromSuperview()
                 from?.view.removeFromSuperview()
