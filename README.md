@@ -89,6 +89,12 @@
     2. Observer orientation when landscape call function
         MMLandscapeWindow.shared.makeKey(root: full, playLayer: self.mmPlayerLayer, completed: {
         })
+## Cover View
+![landscape](https://github.com/MillmanY/MMPlayerView/blob/master/demo/cover.png)
+
+    ## add cover item view on player
+    play.replace(cover: CoverA.instantiateFromNib())
+
 ## Requirements
 
     iOS 8.0+
