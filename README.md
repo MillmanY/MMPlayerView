@@ -20,13 +20,13 @@
          }
          
          public enum ProgressType {
-          case `default` // Use defualt indicator
-          case none // disable indicator
-          case custom(view: MMProgress) // Custom your Progress
+          case `default`
+          case none
+          case custom(view: MMProgress)
         }
         public var progressType: MMPlayerView.ProgressType  
         public var coverFitType: MMPlayerView.CoverViewFitType
-        public var changeViewClearPlayer: Bool // rest url will 
+        public var changeViewClearPlayer: Bool // rest url when change view 
         public var hideCoverDuration: TimeInterval // auto hide cover view after duration
         lazy public var thumbImageView: UIImageView 
         public var playView: UIView?
