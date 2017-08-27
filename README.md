@@ -71,10 +71,11 @@
          }
          
          public enum ProgressType {
-          case `default`
-          case none
-          case custom(view: MMProgress)
+            case `default`
+            case none
+            case custom(view: IndicatorProtocol)
         }
+                
         public var progressType: MMPlayerView.ProgressType  
         public var coverFitType: MMPlayerView.CoverViewFitType
         public var changeViewClearPlayer: Bool // rest url when change view 
