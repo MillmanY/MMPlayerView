@@ -50,7 +50,3 @@ public protocol ProgressProtocol {
 public protocol MMPlayViewProtocol: class {
     func touchInVideoRect(contain: Bool)
 }
-
-@objc public protocol CoverViewDelegate: class {
-    func reloadIfNeed() -> Bool
-}
