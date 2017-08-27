@@ -73,7 +73,7 @@
          public enum ProgressType {
             case `default`
             case none
-            case custom(view: IndicatorProtocol)
+            case custom(view: ProgressProtocol)
         }
                 
         public var progressType: MMPlayerView.ProgressType  
@@ -91,7 +91,7 @@
         public var playUrl: URL?
         public func setCoverView(enable: Bool)
         public func delayHideCover()
-        public func replace(cover: UIView)
+        public func replace<T: UIView>(cover:T) where T: CoverViewProtocol
         public func set(url: URL?, state: ((MMPlayerView.PlayViewPlayStatus) -> Swift.Void)?)
         public func startLoading() // if autoLoadUrl = false your need call startLoading() yourself
 
