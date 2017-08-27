@@ -112,7 +112,7 @@ pod "MMPlayerView"
 
 ## Author
 
-millmanyang@gmail.com, millmanyang@gmail.com
+millmanyang@gmail.com
 
 ## License
 
