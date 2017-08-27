@@ -12,8 +12,8 @@
 ![transition](https://github.com/MillmanY/MMPlayerView/blob/master/demo/transition_demo.gif)
 ![landscape](https://github.com/MillmanY/MMPlayerView/blob/master/demo/landscape_demo.gif)
 
-## MMPlayerLayer 
-    1. Parameter
+## Parameter
+
          public enum CoverViewFitType {
             case fitToPlayerView // coverview fit with playerview
             case fitToVideoRect // fit with VideoRect
@@ -42,9 +42,8 @@
         public func replace(cover: UIView)
         public func set(url: URL?, state: ((MMPlayerView.PlayViewPlayStatus) -> Swift.Void)?)
         public func startLoading() // if autoLoadUrl = false your need call startLoading() yourself
-    
-    2. Quick Start
-      
+
+## MMPlayerLayer       
         ex. use when change player view frequently like tableView / collectionView
         import MMPlayerView
         mmPlayerLayer.playView = cell.imgView
