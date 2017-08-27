@@ -73,7 +73,7 @@
          public enum ProgressType {
             case `default`
             case none
-            case custom(view: IndicatorProtocol)
+            case custom(view: ProgressProtocol)
         }
                 
         public var progressType: MMPlayerView.ProgressType  
