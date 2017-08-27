@@ -12,37 +12,6 @@
 ![transition](https://github.com/MillmanY/MMPlayerView/blob/master/demo/transition_demo.gif)
 ![landscape](https://github.com/MillmanY/MMPlayerView/blob/master/demo/landscape_demo.gif)
 
-## Parameter
-
-         public enum CoverViewFitType {
-            case fitToPlayerView // coverview fit with playerview
-            case fitToVideoRect // fit with VideoRect
-         }
-         
-         public enum ProgressType {
-          case `default`
-          case none
-          case custom(view: MMProgress)
-        }
-        public var progressType: MMPlayerView.ProgressType  
-        public var coverFitType: MMPlayerView.CoverViewFitType
-        public var changeViewClearPlayer: Bool // rest url when change view 
-        public var hideCoverDuration: TimeInterval // auto hide cover view after duration
-        lazy public var thumbImageView: UIImageView 
-        public var playView: UIView?
-        public var coverView: UIView? { get }
-        public var autoLoadUrl: Bool // when call set(url:,state) to auto fecth video
-        public var autoPlay: Bool // when MMPlayerView.PlayViewPlayStatus == ready auto play video
-        public var currentPlayStatus: MMPlayerView.PlayViewPlayStatus 
-        public var cacheInMemory: Bool // its AVPlayerItem cache in memory
-        public var asset: AVURLAsset?
-        public var playUrl: URL?
-        public func setCoverView(enable: Bool)
-        public func delayHideCover()
-        public func replace(cover: UIView)
-        public func set(url: URL?, state: ((MMPlayerView.PlayViewPlayStatus) -> Swift.Void)?)
-        public func startLoading() // if autoLoadUrl = false your need call startLoading() yourself
-
 ## MMPlayerLayer       
         ex. use when change player view frequently like tableView / collectionView
         import MMPlayerView
@@ -93,6 +62,38 @@
 
     ## add cover item view on player
     play.replace(cover: CoverA.instantiateFromNib())
+    
+## Parameter
+
+         public enum CoverViewFitType {
+            case fitToPlayerView // coverview fit with playerview
+            case fitToVideoRect // fit with VideoRect
+         }
+         
+         public enum ProgressType {
+            case `default`
+            case none
+            case custom(view: IndicatorProtocol)
+        }
+                
+        public var progressType: MMPlayerView.ProgressType  
+        public var coverFitType: MMPlayerView.CoverViewFitType
+        public var changeViewClearPlayer: Bool // rest url when change view 
+        public var hideCoverDuration: TimeInterval // auto hide cover view after duration
+        lazy public var thumbImageView: UIImageView 
+        public var playView: UIView?
+        public var coverView: UIView? { get }
+        public var autoLoadUrl: Bool // when call set(url:,state) to auto fecth video
+        public var autoPlay: Bool // when MMPlayerView.PlayViewPlayStatus == ready auto play video
+        public var currentPlayStatus: MMPlayerView.PlayViewPlayStatus 
+        public var cacheInMemory: Bool // its AVPlayerItem cache in memory
+        public var asset: AVURLAsset?
+        public var playUrl: URL?
+        public func setCoverView(enable: Bool)
+        public func delayHideCover()
+        public func replace(cover: UIView)
+        public func set(url: URL?, state: ((MMPlayerView.PlayViewPlayStatus) -> Swift.Void)?)
+        public func startLoading() // if autoLoadUrl = false your need call startLoading() yourself
 
 ## Requirements
 
@@ -111,7 +112,7 @@ pod "MMPlayerView"
 
 ## Author
 
-millmanyang@gmail.com, millmanyang@gmail.com
+millmanyang@gmail.com
 
 ## License
 
