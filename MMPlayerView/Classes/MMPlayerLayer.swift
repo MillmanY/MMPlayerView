@@ -12,7 +12,6 @@ import AVFoundation
 public class MMPlayerLayer: AVPlayerLayer {
     lazy var tapGesture: UITapGestureRecognizer = {
         let g = UITapGestureRecognizer.init(target: self, action: #selector(MMPlayerLayer.touchAction(gesture:)))
-        
         return g
     }()
 
@@ -221,30 +220,27 @@ public class MMPlayerLayer: AVPlayerLayer {
         self.perform(#selector(MMPlayerLayer.showCover(isShow:)), with: nil, afterDelay: hideCoverDuration)
     }
     
-    public func replace(cover: UIView) {
-        if let c = self.coverView ,c.isKind(of: cover.classForCoder) {
+    public func replace<T: UIView>(cover:T) where T: CoverViewProtocol{
+        if let c = self.coverView ,c.isMember(of: cover.classForCoder) {
             c.alpha = 1.0
             return
         }
         cover.backgroundColor = UIColor.clear
         cover.layoutIfNeeded()
-        if let c = cover as? CoverViewProtocol {
-            (_cover as? UIView)?.removeFromSuperview()
-            _cover?.removeObserver()
-            _cover = c
-            _cover?.playLayer = self
-            self.uploadSubViewIdx()
-            c.addObserver()
-            self.updateCoverConstraint()
-            if let m = self.player?.isMuted {
-                c.player?(isMuted: m)
-            }
-            c.currentPlayer(status: self.currentPlayStatus)
-            
-        } else {
-            NSException(name: .invalidArgumentException, reason: "Cover view need implement CoverViewProtocol", userInfo: nil).raise()
+        
+        (_cover as? UIView)?.removeFromSuperview()
+        _cover?.removeObserver()
+        _cover = cover
+        _cover?.playLayer = self
+        self.uploadSubViewIdx()
+        cover.addObserver()
+        self.updateCoverConstraint()
+        if let m = self.player?.isMuted {
+            cover.player?(isMuted: m)
         }
+        cover.currentPlayer(status: self.currentPlayStatus)
     }
+    
     fileprivate var willPlayUrl: URL? {
         didSet {
             
@@ -326,8 +322,6 @@ public class MMPlayerLayer: AVPlayerLayer {
         self.player?.safeAdd(observer: self, forKeyPath: "Muted", options: [.new, .old], context: nil)
         self.player?.safeAdd(observer: self, forKeyPath: "rate", options: [.new, .old], context: nil)
         self.player?.safeAdd(observer: self, forKeyPath: "currentItem", options: [.new , .old], context: nil)
-        _cover?.addObserver()
-        
     }
     
     func removeAllObserver() {
@@ -340,7 +334,6 @@ public class MMPlayerLayer: AVPlayerLayer {
         self.player?.safeRemove(observer: self, forKeyPath: "currentItem")
         _playView?.safeRemove(observer: self, forKeyPath: "bounds")
         _playView?.safeRemove(observer: self, forKeyPath: "frame")
-
         _cover?.removeObserver()
         if let t = timeObserver {
             self.player?.removeTimeObserver(t)
@@ -382,7 +375,6 @@ public class MMPlayerLayer: AVPlayerLayer {
                 
                 if let new = change?[.newKey] as? AVPlayerItem {
                     new.safeAdd(observer: self, forKeyPath: "status", options: [.new], context: nil)
-                    
                     new.safeAdd(observer: self, forKeyPath: "playbackLikelyToKeepUp", options: [.new], context: nil)
                     new.safeAdd(observer: self, forKeyPath: "playbackBufferEmpty", options: [.new], context: nil)
                 }
@@ -407,9 +399,7 @@ public class MMPlayerLayer: AVPlayerLayer {
                             return
                         }
                         self.currentPlayStatus = s
-                    case .failed(_):
-                        self.currentPlayStatus = s
-                    case .unknown:
+                    case .failed(_) ,.unknown:
                         self.currentPlayStatus = s
                     default:
                         break
@@ -441,16 +431,14 @@ public class MMPlayerLayer: AVPlayerLayer {
     func touchAction(gesture: UITapGestureRecognizer) {
         if let p = self.playView {
             let point = gesture.location(in: p)
-            
+    
             if p.frame.contains(point) {
                 self.showCover(isShow: !self.isCoverShow)
-            } else {
-                
             }
         }
     }
 
-    func showCover(isShow: Bool) {
+    public func showCover(isShow: Bool) {
         self.isCoverShow = isShow
         if isShow {
             NSObject.cancelPreviousPerformRequests(withTarget: self, selector: #selector(MMPlayerLayer.showCover(isShow:)), object: nil)

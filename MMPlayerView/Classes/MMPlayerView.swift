@@ -107,7 +107,7 @@ public class MMPlayerView: UIView {
         self.playerLayer.delayHideCover()
     }
 
-    public func replace(cover: UIView) {
+    public func replace<T: UIView>(cover: T) where T: CoverViewProtocol {
         self.playerLayer.replace(cover: cover)
     }
     
