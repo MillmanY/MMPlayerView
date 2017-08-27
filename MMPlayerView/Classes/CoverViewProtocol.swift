@@ -39,11 +39,10 @@ public enum CoverViewFitType {
 public enum ProgressType {
     case `default`
     case none
-    case custom(view: MMProgress)
+    case custom(view: IndicatorProtocol)
 }
 
 public protocol IndicatorProtocol {
-    func setup()
     func start()
     func stop()
 }

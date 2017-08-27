@@ -27,22 +27,17 @@ public class MMPlayerLayer: AVPlayerLayer {
         "playable",
         "hasProtectedContent",
     ]
-    fileprivate var indicator: MMProgress? {
-        willSet {
-            indicator?.removeFromSuperview()
-        } didSet {
-            if let i = indicator {
-                i.isUserInteractionEnabled = true
-                self.addSublayer(i.layer)
-                i.setup()
-            }
-        }
-    }
+    
+    fileprivate lazy var indicator: MMProgress = {
+        let i = MMProgress()
+        return i
+    }()
+
     weak fileprivate var _playView: UIView? {
         willSet {
             
             coverView?.removeFromSuperview()
-            indicator?.removeFromSuperview()
+            indicator.removeFromSuperview()
             self.removeFromSuperlayer()
             _playView?.removeGestureRecognizer(tapGesture)
             _playView?.havePlayer = false
@@ -60,24 +55,13 @@ public class MMPlayerLayer: AVPlayerLayer {
         if let c = coverView {
             _playView?.addSubview(c)
         }
-        if let i = indicator {
-            _playView?.addSubview(i)
-            i.setup()
-        }
+        _playView?.addSubview(indicator)
+        indicator.setup()
     }
-    
     
     public var progressType: ProgressType = .default {
         didSet {
-            switch progressType {
-            case .default:
-                indicator = MMProgress()
-            case .custom(let view):
-                indicator = view
-            default:
-                indicator = nil
-                break
-            }
+            indicator.set(progress: progressType)
         }
     }
     
@@ -226,7 +210,7 @@ public class MMPlayerLayer: AVPlayerLayer {
         } else {
             self.coverView?.isHidden = false
             self.coverView?.frame = vRect
-            self.indicator?.frame = vRect
+            self.indicator.frame = vRect
         }
         thumbImageView.frame = (playView?.bounds ?? .zero)
     }
@@ -486,9 +470,9 @@ public class MMPlayerLayer: AVPlayerLayer {
     
     fileprivate func startLoading(isStart: Bool) {
         if isStart {
-            self.indicator?.start()
+            self.indicator.start()
         } else {
-            self.indicator?.stop()
+            self.indicator.stop()
         }
     }
     deinit {
