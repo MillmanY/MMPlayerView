@@ -14,8 +14,10 @@ class MMProgress: UIView {
         return UIActivityIndicatorView()
     }()
     
-    fileprivate var custom: IndicatorProtocol? {
-        didSet {
+    fileprivate var custom: ProgressProtocol? {
+        willSet {
+          (custom as? UIView)?.removeFromSuperview()
+        } didSet {
             if let v = custom as? UIView {
                 self.addSubview(v)
             }
