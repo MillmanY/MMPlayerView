@@ -33,6 +33,14 @@ public class MMPlayerView: UIView {
         self.playerLayer.playView = self
     }
     
+    public weak var delegate: MMPlayerLayerProtocol? {
+        set {
+            self.playerLayer.mmDelegate = newValue
+        } get {
+            return self.playerLayer.mmDelegate
+        }
+    }
+    
     public var progressType: ProgressType {
         set {
             self.playerLayer.progressType = newValue

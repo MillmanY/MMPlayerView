@@ -47,6 +47,6 @@ public protocol ProgressProtocol {
     func stop()
 }
 
-public protocol MMPlayViewProtocol: class {
+public protocol MMPlayerLayerProtocol: class {
     func touchInVideoRect(contain: Bool)
 }

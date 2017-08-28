@@ -34,7 +34,6 @@ public class MMPlayerLayer: AVPlayerLayer {
 
     weak fileprivate var _playView: UIView? {
         willSet {
-            
             coverView?.removeFromSuperview()
             indicator.removeFromSuperview()
             self.removeFromSuperlayer()
@@ -57,7 +56,7 @@ public class MMPlayerLayer: AVPlayerLayer {
         _playView?.addSubview(indicator)
         indicator.setup()
     }
-    
+    public weak var mmDelegate: MMPlayerLayerProtocol?
     public var progressType: ProgressType = .default {
         didSet {
             indicator.set(progress: progressType)
@@ -437,9 +436,11 @@ public class MMPlayerLayer: AVPlayerLayer {
     func touchAction(gesture: UITapGestureRecognizer) {
         if let p = self.playView {
             let point = gesture.location(in: p)
-    
-            if p.frame.contains(point) {
+            if self.videoRect.isEmpty || self.videoRect.contains(point) {
                 self.showCover(isShow: !self.isCoverShow)
+                mmDelegate?.touchInVideoRect(contain: true)
+            } else if !self.videoRect.contains(point) {
+                mmDelegate?.touchInVideoRect(contain: false)
             }
         }
     }
