@@ -165,6 +165,12 @@ extension ViewController: UICollectionViewDelegateFlowLayout {
                     let alert = UIAlertController(title: "err", message: err.description, preferredStyle: .alert)
                     alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
                     self.present(alert, animated: true, completion: nil)
+                case .playing:
+                    print("Playing")
+                case .pause:
+                    print("Pause")
+                case .end:
+                    print("End")
                 default: break
                 }
             })

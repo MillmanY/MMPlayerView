@@ -359,8 +359,14 @@ public class MMPlayerLayer: AVPlayerLayer {
                 
             case "rate":
                 switch self.currentPlayStatus {
-                case .playing, .pause, .ready, .end:
+                case .playing, .pause, .ready:
                     if let new = change?[.newKey] as? CGFloat {
+                        self.currentPlayStatus = (new == 0.0) ? .pause : .playing
+                    }
+                case .end:
+                    let total = self.player?.currentItem?.duration.seconds ?? 0.0
+                    let current = self.player?.currentItem?.currentTime().seconds ?? 0.0
+                    if let new = change?[.newKey] as? CGFloat , current < total {
                         self.currentPlayStatus = (new == 0.0) ? .pause : .playing
                     }
                 default:
