@@ -438,10 +438,8 @@ public class MMPlayerLayer: AVPlayerLayer {
             let point = gesture.location(in: p)
             if self.videoRect.isEmpty || self.videoRect.contains(point) {
                 self.showCover(isShow: !self.isCoverShow)
-                mmDelegate?.touchInVideoRect(contain: true)
-            } else if !self.videoRect.contains(point) {
-                mmDelegate?.touchInVideoRect(contain: false)
             }
+            mmDelegate?.touchInVideoRect(contain: self.videoRect.contains(point))
         }
     }
 
