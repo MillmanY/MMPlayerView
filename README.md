@@ -62,7 +62,22 @@
 
     ## add cover item view on player
     play.replace(cover: CoverA.instantiateFromNib())
-    
+
+## Progress
+    // Custom your progress view and it will add on player center
+    // view need to implement ProgressProtocol, and add progress in this view, when start/stop control what need to do
+    .custom(view: <#T##ProgressProtocol#>)
+     public protocol ProgressProtocol {
+         func start()
+         func stop()
+     }
+## Layer Protocol
+    // detect if touch in videoRect
+    // if touch out of videoRect will not trigger show/hide cover view event
+    public protocol MMPlayerLayerProtocol: class {
+     func touchInVideoRect(contain: Bool) // 
+    }
+ 
 ## Parameter
 
          public enum CoverViewFitType {
@@ -94,6 +109,7 @@
         public func replace<T: UIView>(cover:T) where T: CoverViewProtocol
         public func set(url: URL?, state: ((MMPlayerView.PlayViewPlayStatus) -> Swift.Void)?)
         public func startLoading() // if autoLoadUrl = false your need call startLoading() yourself
+        public weak var mmDelegate: MMPlayerLayerProtocol?
 
 ## Requirements
 
