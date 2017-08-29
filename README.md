@@ -104,6 +104,7 @@
         public var cacheInMemory: Bool // its AVPlayerItem cache in memory
         public var asset: AVURLAsset?
         public var playUrl: URL?
+        public func showCover(isShow: Bool)
         public func setCoverView(enable: Bool)
         public func delayHideCover()
         public func replace<T: UIView>(cover:T) where T: CoverViewProtocol
