@@ -11,8 +11,7 @@ import MMPlayerView
 import AVFoundation
 
 class CoverA: UIView, CoverViewProtocol {
-    var playLayer: MMPlayerLayer?
-    
+    weak var playLayer: MMPlayerLayer?
     fileprivate var isUpdateTime = false
 
     @IBOutlet weak var btnPlay: UIButton!
