@@ -76,8 +76,9 @@ class MMProgress: UIView {
         if disable {
             return
         }
-        
-        self.isHidden = false
+        if !self.frame.isEmpty {
+            self.isHidden = false
+        }
 
         if (custom != nil) {
             self.custom?.start()
