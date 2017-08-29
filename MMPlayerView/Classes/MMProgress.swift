@@ -10,6 +10,12 @@ import UIKit
 
 class MMProgress: UIView {
     var disable = false
+    override var frame: CGRect {
+        didSet {
+            self.isHidden = frame.isEmpty
+        }
+    }
+    
     fileprivate lazy var defaultIndicator = {
         return UIActivityIndicatorView()
     }()
