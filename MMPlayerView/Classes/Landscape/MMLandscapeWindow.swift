@@ -14,9 +14,6 @@ public class MMLandscapeWindow: UIWindow {
     weak var currentPlayLayer: MMPlayerLayer?
     weak var originalPlayView: UIView?
     weak var originalWindow:UIWindow?
-    lazy var tempView: UIView = {
-        return UIView()
-    }()
     var completed: (()->Void)?
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -38,7 +35,6 @@ public class MMLandscapeWindow: UIWindow {
     
     public func makeDisable() {
         originalWindow?.makeKeyAndVisible()
-        tempView.removeFromSuperview()
         originalPlayView = nil
         currentPlayLayer = nil
         self.completed = nil
@@ -59,8 +55,6 @@ public class MMLandscapeWindow: UIWindow {
 
     override public func layoutSubviews() {
         super.layoutSubviews()
-        
-        
         switch UIDevice.current.orientation {
         case .landscapeRight, .landscapeLeft:
             self.rootViewController?.view.frame = UIScreen.main.bounds
