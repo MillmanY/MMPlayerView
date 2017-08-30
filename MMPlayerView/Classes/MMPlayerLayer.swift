@@ -127,6 +127,7 @@ public class MMPlayerLayer: AVPlayerLayer {
             }
         }
     }
+    fileprivate var asset: AVURLAsset?
     public var cacheInMemory = false
     public var playUrl: URL? {
         willSet {
@@ -139,23 +140,24 @@ public class MMPlayerLayer: AVPlayerLayer {
                 return
             }
             if let cacheItem = self.cahce.getItem(key: url) , cacheItem.status == .readyToPlay{
+                self.asset = (cacheItem.asset as? AVURLAsset)
                 self.player?.replaceCurrentItem(with: cacheItem)
             } else {
                 self.startLoading(isStart: true)
-                let asset = AVURLAsset(url: url)
-                asset.loadValuesAsynchronously(forKeys: assetKeysRequiredToPlay) { [weak self] in
+                self.asset = AVURLAsset(url: url)
+                self.asset?.loadValuesAsynchronously(forKeys: assetKeysRequiredToPlay) { [weak self] in
                     DispatchQueue.main.async {
-                        if let keys = self?.assetKeysRequiredToPlay {
+                        if let a = self?.asset, let keys = self?.assetKeysRequiredToPlay {
                             for key in keys {
                                 var error: NSError?
-                                let _ =  asset.statusOfValue(forKey: key, error: &error)
+                                let _ =  a.statusOfValue(forKey: key, error: &error)
                                 if let e = error {
                                     self?.currentPlayStatus = .failed(err: e.localizedDescription)
                                     return
                                 }
                             }
                             
-                            let item = AVPlayerItem(asset: asset)
+                            let item = AVPlayerItem(asset: a)
                             if self?.cacheInMemory == true {
                                 self?.cahce.appendCache(key: url, item: item)
                             }
