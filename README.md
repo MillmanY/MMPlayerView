@@ -18,6 +18,8 @@
         mmPlayerLayer.playView = cell.imgView
         mmPlayerLayer.set(url: cell.data?.play_Url, state: { (status) in 
         })
+        mmPlayerLayer.startLoading()
+
 ## MMPlayerView
     let url = URL.init(string: "http://www.html5videoplayer.net/videos/toystory.mp4")!
     playView.replace(cover: CoverA.instantiateFromNib())
@@ -26,7 +28,7 @@
            case ....
         }
     }
-    
+    playView.startLoading()
 ## Transition
     
     ##PresentedViewController
@@ -98,11 +100,9 @@
         lazy public var thumbImageView: UIImageView 
         public var playView: UIView?
         public var coverView: UIView? { get }
-        public var autoLoadUrl: Bool // when call set(url:,state) to auto fecth video
         public var autoPlay: Bool // when MMPlayerView.PlayViewPlayStatus == ready auto play video
         public var currentPlayStatus: MMPlayerView.PlayViewPlayStatus 
         public var cacheInMemory: Bool // its AVPlayerItem cache in memory
-        public var asset: AVURLAsset?
         public var playUrl: URL?
         public func showCover(isShow: Bool)
         public func setCoverView(enable: Bool)
