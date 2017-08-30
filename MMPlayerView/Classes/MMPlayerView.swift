@@ -89,25 +89,11 @@ public class MMPlayerView: UIView {
         }
     }
     
-    public var autoLoadUrl: Bool {
-        set {
-            self.playerLayer.autoLoadUrl = newValue
-        } get {
-            return self.playerLayer.autoLoadUrl
-        }
-    }
-    
     public var cacheInMemory: Bool {
         set {
             self.playerLayer.cacheInMemory = newValue
         } get {
             return self.playerLayer.cacheInMemory
-        }
-    }
-
-    public var asset: AVURLAsset? {
-        get {
-            return self.playerLayer.asset
         }
     }
     

@@ -99,7 +99,6 @@ public class MMPlayerLayer: AVPlayerLayer {
             return (_cover as? UIView)
         }
     }
-    public var autoLoadUrl = true
     public var autoPlay = true
     public var currentPlayStatus: PlayViewPlayStatus = .unknown {
         didSet {
@@ -129,7 +128,6 @@ public class MMPlayerLayer: AVPlayerLayer {
         }
     }
     public var cacheInMemory = false
-    public var asset:AVURLAsset?
     public var playUrl: URL? {
         willSet {
             self.currentPlayStatus = .unknown
@@ -141,25 +139,23 @@ public class MMPlayerLayer: AVPlayerLayer {
                 return
             }
             if let cacheItem = self.cahce.getItem(key: url) , cacheItem.status == .readyToPlay{
-                self.asset = (cacheItem.asset as? AVURLAsset)
                 self.player?.replaceCurrentItem(with: cacheItem)
             } else {
                 self.startLoading(isStart: true)
-                
-                self.asset = AVURLAsset(url: url)
-                self.asset?.loadValuesAsynchronously(forKeys: assetKeysRequiredToPlay) { [weak self] in
+                let asset = AVURLAsset(url: url)
+                asset.loadValuesAsynchronously(forKeys: assetKeysRequiredToPlay) { [weak self] in
                     DispatchQueue.main.async {
-                        if let a = self?.asset, let keys = self?.assetKeysRequiredToPlay {
+                        if let keys = self?.assetKeysRequiredToPlay {
                             for key in keys {
                                 var error: NSError?
-                                let _ =  a.statusOfValue(forKey: key, error: &error)
+                                let _ =  asset.statusOfValue(forKey: key, error: &error)
                                 if let e = error {
                                     self?.currentPlayStatus = .failed(err: e.localizedDescription)
                                     return
                                 }
                             }
                             
-                            let item = AVPlayerItem(asset: a)
+                            let item = AVPlayerItem(asset: asset)
                             if self?.cacheInMemory == true {
                                 self?.cahce.appendCache(key: url, item: item)
                             }
@@ -243,13 +239,8 @@ public class MMPlayerLayer: AVPlayerLayer {
     
     fileprivate var willPlayUrl: URL? {
         didSet {
-            
             if oldValue != willPlayUrl {
                 self.playUrl = nil
-            }
-            
-            if autoLoadUrl {
-                self.playUrl = willPlayUrl
             }
         }
     }
