@@ -27,34 +27,32 @@ public class MMPlayerLayer: AVPlayerLayer {
         "hasProtectedContent",
     ]
     
-    fileprivate lazy var indicator: MMProgress = {
-        let i = MMProgress()
-        return i
+    fileprivate var indicator = MMProgress()
+    lazy var  bgView: UIView = {
+        let v = UIView()
+        v.addSubview(self.thumbImageView)
+        v.addSubview(self.indicator)
+        v.frame = .zero
+        v.backgroundColor = UIColor.clear
+        v.translatesAutoresizingMaskIntoConstraints = false
+        return v
     }()
-
     weak fileprivate var _playView: UIView? {
         willSet {
-            coverView?.removeFromSuperview()
-            indicator.removeFromSuperview()
+            bgView.removeFromSuperview()
             self.removeFromSuperlayer()
             _playView?.removeGestureRecognizer(tapGesture)
-            _playView?.havePlayer = false
+            NSLayoutConstraint.deactivate(bgView.constraints)
         } didSet {
+            self._playView?.addSubview(self.bgView)
+            self.bgView.frame = self._playView?.bounds ?? .zero
+            self._playView?.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-0-[subview]-0-|", options: .directionLeadingToTrailing, metrics: nil, views: ["subview": self.bgView]))
+            self._playView?.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-0-[subview]-0-|", options: .directionLeadingToTrailing, metrics: nil, views: ["subview": self.bgView]))
+
             _playView?.isUserInteractionEnabled = true
             _playView?.addGestureRecognizer(tapGesture)
             _playView?.layer.insertSublayer(self, at: 0)
-            _playView?.havePlayer = true
-            self.uploadSubViewIdx()
         }
-    }
-    
-    fileprivate func uploadSubViewIdx() {
-        _playView?.addSubview(thumbImageView)
-        if let c = coverView {
-            _playView?.addSubview(c)
-        }
-        _playView?.addSubview(indicator)
-        indicator.setup()
     }
     public weak var mmDelegate: MMPlayerLayerProtocol?
     public var progressType: ProgressType = .default {
@@ -75,6 +73,7 @@ public class MMPlayerLayer: AVPlayerLayer {
     public var hideCoverDuration: TimeInterval = 3.0
     public lazy var thumbImageView: UIImageView = {
         let t = UIImageView()
+        t.autoresizingMask = [.flexibleWidth , .flexibleHeight]
         t.clipsToBounds = true
         return t
     }()
@@ -207,7 +206,7 @@ public class MMPlayerLayer: AVPlayerLayer {
             self.coverView?.isHidden = false
             self.coverView?.frame = vRect
         }
-        
+        self.frame = bgView.bounds
         self.indicator.frame = (playView?.bounds ?? .zero)
         thumbImageView.frame = (playView?.bounds ?? .zero)
     }
@@ -223,6 +222,7 @@ public class MMPlayerLayer: AVPlayerLayer {
             c.alpha = 1.0
             return
         }
+        
         cover.backgroundColor = UIColor.clear
         cover.layoutIfNeeded()
         
@@ -230,7 +230,7 @@ public class MMPlayerLayer: AVPlayerLayer {
         _cover?.removeObserver()
         _cover = cover
         _cover?.playLayer = self
-        self.uploadSubViewIdx()
+        bgView.insertSubview(cover, belowSubview: indicator)
         cover.addObserver()
         self.updateCoverConstraint()
         if let m = self.player?.isMuted {
@@ -311,6 +311,8 @@ public class MMPlayerLayer: AVPlayerLayer {
                 }
             }
         })
+        bgView.safeAdd(observer: self, forKeyPath: "frame", options: [.new,.old], context: nil)
+        bgView.safeAdd(observer: self, forKeyPath: "bounds", options: [.new,.old], context: nil)
         self.safeAdd(observer: self, forKeyPath: "videoRect", options: [.new , .old], context: nil)
         self.player?.safeAdd(observer: self, forKeyPath: "Muted", options: [.new, .old], context: nil)
         self.player?.safeAdd(observer: self, forKeyPath: "rate", options: [.new, .old], context: nil)
@@ -318,6 +320,8 @@ public class MMPlayerLayer: AVPlayerLayer {
     }
     
     func removeAllObserver() {
+        bgView.safeRemove(observer: self, forKeyPath: "frame")
+        bgView.safeRemove(observer: self, forKeyPath: "bounds")
         self.player?.replaceCurrentItem(with: nil)
         self.player?.pause()
         self.safeRemove(observer: self, forKeyPath: "videoRect")
@@ -325,8 +329,6 @@ public class MMPlayerLayer: AVPlayerLayer {
         self.player?.safeRemove(observer: self, forKeyPath: "rate")
         NotificationCenter.default.removeObserver(self)
         self.player?.safeRemove(observer: self, forKeyPath: "currentItem")
-        _playView?.safeRemove(observer: self, forKeyPath: "bounds")
-        _playView?.safeRemove(observer: self, forKeyPath: "frame")
         _cover?.removeObserver()
         if let t = timeObserver {
             self.player?.removeTimeObserver(t)
@@ -338,6 +340,16 @@ public class MMPlayerLayer: AVPlayerLayer {
         
         if let k = keyPath {
             switch k {
+            case "frame":
+                let old = (change?[.oldKey] as? CGRect) ?? .zero
+                if let new = change?[.newKey] as? CGRect , old != new && new != .zero {
+                    self.updateCoverConstraint()
+                }
+            case "bounds":
+                let old = (change?[.oldKey] as? CGRect) ?? .zero
+                if let new = change?[.newKey] as? CGRect ,old != new && new != .zero{
+                    self.updateCoverConstraint()
+                }
             case "videoRect":
                 let old = (change?[.oldKey] as? CGRect) ?? .zero
                 
@@ -468,6 +480,7 @@ public class MMPlayerLayer: AVPlayerLayer {
             self.indicator.stop()
         }
     }
+    
     deinit {
         if !isInitLayer {
             self.removeAllObserver()
