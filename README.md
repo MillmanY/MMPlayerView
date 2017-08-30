@@ -109,7 +109,7 @@
         public func delayHideCover()
         public func replace<T: UIView>(cover:T) where T: CoverViewProtocol
         public func set(url: URL?, state: ((MMPlayerView.PlayViewPlayStatus) -> Swift.Void)?)
-        public func startLoading() // if autoLoadUrl = false your need call startLoading() yourself
+        public func startLoading() // if loading finish autoPlay = false, need call playerLayer.player.play() where you want
         public weak var mmDelegate: MMPlayerLayerProtocol?
 
 ## Requirements
