@@ -8,7 +8,7 @@
 
 import Foundation
 import AVFoundation
-@objc public protocol BasePlayerProtocol: class {
+@objc public protocol MMPlayerBasePlayerProtocol: class {
     weak var playLayer: MMPlayerLayer? { set get }
     @objc optional func player(isMuted: Bool)
     
@@ -18,11 +18,11 @@ import AVFoundation
     func addObserver()
 }
 
-public protocol CoverViewProtocol: BasePlayerProtocol {
-    func currentPlayer(status: PlayViewPlayStatus)
+public protocol MMPlayerCoverViewProtocol: MMPlayerBasePlayerProtocol {
+    func currentPlayer(status: MMPlayerPlayStatus)
 }
 
-public enum PlayViewPlayStatus {
+public enum MMPlayerPlayStatus {
     case ready
     case unknown
     case failed(err: String)
@@ -39,10 +39,10 @@ public enum CoverViewFitType {
 public enum ProgressType {
     case `default`
     case none
-    case custom(view: ProgressProtocol)
+    case custom(view: MMProgressProtocol)
 }
 
-public protocol ProgressProtocol {
+public protocol MMProgressProtocol {
     func start()
     func stop()
 }

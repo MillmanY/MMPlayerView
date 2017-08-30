@@ -1,25 +1,23 @@
 //
-//  PassViewPushTransition.swift
+//  PassViewTransition.swift
 //  ETNews
 //
-//  Created by Millman YANG on 2017/5/22.
+//  Created by Millman YANG on 2017/5/16.
 //  Copyright © 2017年 Sen Informatoin co. All rights reserved.
 //
 
 import UIKit
 
-public class PassViewPushTransition: BaseNavTransition, UIViewControllerAnimatedTransitioning {
+class MMPlayerPassViewPresentTransition: MMPlayerBasePresentTransition, UIViewControllerAnimatedTransitioning {
     public func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
         return config.duration
     }
-    
+
     public func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
         let container = transitionContext.containerView
-        let toVC = transitionContext.viewController(forKey: .to)!
-        container.addSubview(toVC.view)
-
-        switch self.operation {
-        case .push:
+        if self.isPresent {
+            let toVC = transitionContext.viewController(forKey: .to)!
+            container.addSubview(toVC.view)
             guard let passLayer = (self.source as? MMPlayerFromProtocol)?.passPlayer else {
                 print("Need Called setView")
                 return
@@ -28,7 +26,7 @@ public class PassViewPushTransition: BaseNavTransition, UIViewControllerAnimated
                 print("Need implement PassViewToProtocol")
                 return
             }
-            if let c = self.config as? PassViewPushConfig {
+            if let c = self.config as? MMPlayerPassViewPresentConfig {
                 c.passOriginalSuper = passLayer.playView
                 c.playLayer = passLayer
             }
@@ -53,11 +51,13 @@ public class PassViewPushTransition: BaseNavTransition, UIViewControllerAnimated
                 pass.translatesAutoresizingMaskIntoConstraints = false
                 transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
                 passLayer.playView = passContainer
+                pass.removeFromSuperview()
                 (self.source as? MMPlayerFromProtocol)?.transitionCompleted()
             })
-        case .pop:
+        } else {
+            
             let from = transitionContext.viewController(forKey: .from)
-            guard let config = self.config as? PassViewPushConfig else {
+            guard let config = self.config as? MMPlayerPassViewPresentConfig else {
                 return
             }
             
@@ -65,14 +65,15 @@ public class PassViewPushTransition: BaseNavTransition, UIViewControllerAnimated
                 return
             }
             
-            guard let source = (self.source as? MMPlayerFromProtocol) else {
+            guard let source = (self.source as? MMPlayerPrsentFromProtocol) else {
                 print("Need Implement PassViewFromProtocol")
                 return
             }
+            
             pass.translatesAutoresizingMaskIntoConstraints = true
             let superV = source.backReplaceSuperView?(original: config.passOriginalSuper) ?? config.passOriginalSuper
             let original:CGRect = pass.convert(pass.frame, to: nil)
-
+            
             let convertRect:CGRect = (superV != nil ) ? superV!.convert(superV!.frame, to: nil) : .zero
             
             if superV != nil {
@@ -80,6 +81,18 @@ public class PassViewPushTransition: BaseNavTransition, UIViewControllerAnimated
                 container.addSubview(pass)
             }
             container.layoutIfNeeded()
+            
+            if config.dismissGesture {
+                config.playLayer?.playView = nil
+                config.playLayer?.layoutIfNeeded()
+                pass.removeFromSuperview()
+                from?.view.removeFromSuperview()
+                transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
+                (self.source as? MMPlayerPrsentFromProtocol)?.dismissViewFromGesture()
+                config.playLayer?.clearURLWhenChangeView = true
+                return
+            }
+            
             pass.frame = original
             UIView.animate(withDuration: self.config.duration, animations: {
                 from?.view.alpha = 0.0
@@ -90,11 +103,11 @@ public class PassViewPushTransition: BaseNavTransition, UIViewControllerAnimated
                 superV?.isHidden = false
                 pass.removeFromSuperview()
                 from?.view.removeFromSuperview()
+                
                 transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
                 config.playLayer?.clearURLWhenChangeView = true
+
             })
-        default:
-            break
         }
-    }
+    }    
 }

@@ -8,23 +8,23 @@
 
 import UIKit
 
-fileprivate var mmPresentKey = "MMPresentKey"
-fileprivate var mmPushKey = "MMPushKey"
-public extension MMTransition where T: UIViewController {
-    var present: MMPresentAnimator {
+fileprivate var mmPresentKey = "MMPlayerPresentKey"
+fileprivate var mmPushKey = "MMPlayerPushKey"
+public extension MMPlayerTransition where T: UIViewController {
+    var present: MMPlayerPresentAnimator {
         if let v = objc_getAssociatedObject(base, &mmPresentKey) {
-            return v as! MMPresentAnimator
+            return v as! MMPlayerPresentAnimator
         }
-        let m = MMPresentAnimator(self.base)
+        let m = MMPlayerPresentAnimator(self.base)
         objc_setAssociatedObject(base, &mmPresentKey, m, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         return m
     }
     
-    var push: MMPushAnimator {
+    var push: MMPlayerPushAnimator {
         if let v = objc_getAssociatedObject(base, &mmPushKey) {
-            return v as! MMPushAnimator
+            return v as! MMPlayerPushAnimator
         }
-        let m = MMPushAnimator(self.base)
+        let m = MMPlayerPushAnimator(self.base)
         objc_setAssociatedObject(base, &mmPushKey, m, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         return m
     }    

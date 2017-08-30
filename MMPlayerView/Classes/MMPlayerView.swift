@@ -101,15 +101,15 @@ public class MMPlayerView: UIView {
         self.playerLayer.delayHideCover()
     }
 
-    public func replace<T: UIView>(cover: T) where T: CoverViewProtocol {
+    public func replace<T: UIView>(cover: T) where T: MMPlayerCoverViewProtocol {
         self.playerLayer.replace(cover: cover)
     }
     
-    public func set(url: URL?, state: ((_ status: PlayViewPlayStatus) -> Void)?) {
+    public func set(url: URL?, state: ((_ status: MMPlayerPlayStatus) -> Void)?) {
         self.playerLayer.set(url: url, state: state)
     }
     
-    public func set(url: URL?, thumbImage: UIImage, state: ((_ status: PlayViewPlayStatus) -> Void)?) {
+    public func set(url: URL?, thumbImage: UIImage, state: ((_ status: MMPlayerPlayStatus) -> Void)?) {
         self.playerLayer.thumbImageView.image = thumbImage
         self.playerLayer.set(url: url, state: state)
     }

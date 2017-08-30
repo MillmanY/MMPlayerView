@@ -8,7 +8,7 @@
 
 import UIKit
 
-public class PassViewPresentConfig: NSObject ,PresentConfig {
+public class MMPlayerPassViewPresentConfig: NSObject ,MMPlayerPresentConfig {
     public var shrinkSize = CGSize(width: 150, height: 100)
 
     weak public var source: UIViewController?

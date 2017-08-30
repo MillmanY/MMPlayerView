@@ -8,8 +8,8 @@
 
 import UIKit
 
-public class MMPresentAnimator: NSObject , UIViewControllerTransitioningDelegate{
-    public typealias T = PresentConfig
+public class MMPlayerPresentAnimator: NSObject , UIViewControllerTransitioningDelegate{
+    public typealias T = MMPlayerPresentConfig
     public var config:T?
     
     unowned let base:UIViewController
@@ -21,13 +21,13 @@ public class MMPresentAnimator: NSObject , UIViewControllerTransitioningDelegate
         base.transitioningDelegate = self
     }
     
-    public func pass<T: PassViewPresentConfig>(setting: (_ config: T)->Void) {
-        self.config = PassViewPresentConfig()
+    public func pass<T: MMPlayerPassViewPresentConfig>(setting: (_ config: T)->Void) {
+        self.config = MMPlayerPassViewPresentConfig()
         setting(self.config! as! T)
     }
     
     public func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        (self.transition as? BasePresentTransition)?.isPresent = false
+        (self.transition as? MMPlayerBasePresentTransition)?.isPresent = false
         return self.transition
     }
     
@@ -44,8 +44,8 @@ public class MMPresentAnimator: NSObject , UIViewControllerTransitioningDelegate
         
         if let c = config {
             switch c {
-            case let c as PassViewPresentConfig:
-                let pass = PassViewPresentTransition(config: c, isPresent: isPresent)
+            case let c as MMPlayerPassViewPresentConfig:
+                let pass = MMPlayerPassViewPresentTransition(config: c, isPresent: isPresent)
                 pass.source = source
                 c.source = source
                 return pass
@@ -59,8 +59,8 @@ public class MMPresentAnimator: NSObject , UIViewControllerTransitioningDelegate
         
         if let c = config {
             switch c {
-            case let c as PassViewPresentConfig:
-                return PassViewPresentatinController(presentedViewController: presented, presenting: presenting, config: c)
+            case let c as MMPlayerPassViewPresentConfig:
+                return MMPlayerPassViewPresentatinController(presentedViewController: presented, presenting: presenting, config: c)
 
             default: break
             }

@@ -15,7 +15,7 @@ enum VideoPositionType {
     case rightBottom
 }
 
-public class PassViewPresentatinController: BasePresentationController {
+public class MMPlayerPassViewPresentatinController: MMPlayerBasePresentationController {
     weak var originalPlayView:UIView?
     var lastPoint: CGPoint = .zero
 
@@ -118,7 +118,7 @@ public class PassViewPresentatinController: BasePresentationController {
         }) { [unowned self] (_) in
             if dismissVideo {
     
-                (self.config as? PassViewPresentConfig)?._dismissGesture = true
+                (self.config as? MMPlayerPassViewPresentConfig)?._dismissGesture = true
                 self.config.playLayer?.setCoverView(enable: true)
                 self.presentedViewController.dismiss(animated: true, completion: nil)
             }

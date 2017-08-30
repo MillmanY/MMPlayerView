@@ -8,51 +8,51 @@
 
 import Foundation
 
-public protocol Config {
+public protocol MMPlayerConfig {
     var duration : TimeInterval { get set }
     weak var passOriginalSuper: UIView? {set get}
     weak var playLayer: MMPlayerLayer? { set get}
 }
 
-public protocol PresentConfig: Config {
+public protocol MMPlayerPresentConfig: MMPlayerConfig {
     var margin: CGFloat { set get }
     var shrinkSize: CGSize { set get }
     var dismissGesture: Bool { get }
     weak var source: UIViewController? { set get }
 }
 
-public protocol NavConfig: Config {
+public protocol MMPlayerNavConfig: MMPlayerConfig {
 }
 
-public protocol TransitionCompatible {
+public protocol MMPlayerTransitionCompatible {
     associatedtype CompatibleType
-    static var mmPlayerTransition: MMTransition<CompatibleType>.Type { get set }
+    static var mmPlayerTransition: MMPlayerTransition<CompatibleType>.Type { get set }
     
-    var mmPlayerTransition: MMTransition<CompatibleType> { get set }
+    var mmPlayerTransition: MMPlayerTransition<CompatibleType> { get set }
 }
 
-extension TransitionCompatible {
-    public static var mmPlayerTransition: MMTransition<Self>.Type {
+extension MMPlayerTransitionCompatible {
+    public static var mmPlayerTransition: MMPlayerTransition<Self>.Type {
         get {
-            return MMTransition<Self>.self
+            return MMPlayerTransition<Self>.self
         } set {}
     }
     
-    public var mmPlayerTransition: MMTransition<Self> {
+    public var mmPlayerTransition: MMPlayerTransition<Self> {
         get {
-            return MMTransition(self)
+            return MMPlayerTransition(self)
         } set {}
     }
 }
 
-public struct MMTransition<T> {
+public struct MMPlayerTransition<T> {
     public let base:T
     init(_ base: T) {
         self.base = base
     }
 }
 
-extension NSObject: TransitionCompatible { }
+extension NSObject: MMPlayerTransitionCompatible { }
 
 @objc public protocol MMPlayerPrsentFromProtocol: MMPlayerFromProtocol {
     

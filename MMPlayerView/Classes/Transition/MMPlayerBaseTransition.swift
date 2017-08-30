@@ -8,26 +8,24 @@
 
 import UIKit
 
-public class BasePresentTransition: NSObject {
+public class MMPlayerBasePresentTransition: NSObject {
     var isPresent = true
     var source: UIViewController?
-    internal var config: Config!
+    internal var config: MMPlayerConfig!
 
-    convenience init(config: Config , isPresent: Bool) {
+    convenience init(config: MMPlayerConfig , isPresent: Bool) {
         self.init()
         self.config = config
         self.isPresent = isPresent
     }
-
 }
 
-
-public class BaseNavTransition: NSObject {
+public class MMPlayerBaseNavTransition: NSObject {
     var operation:UINavigationControllerOperation = .none
     var source: UIViewController?
-    internal var config:Config!
+    internal var config:MMPlayerConfig!
     
-    convenience init(config: Config , operation: UINavigationControllerOperation) {
+    convenience init(config: MMPlayerConfig , operation: UINavigationControllerOperation) {
         self.init()
         self.config = config
         self.operation = operation

@@ -10,7 +10,7 @@ import UIKit
 import MMPlayerView
 import AVFoundation
 
-class CoverA: UIView, CoverViewProtocol {
+class CoverA: UIView, MMPlayerCoverViewProtocol {
     weak var playLayer: MMPlayerLayer?
     fileprivate var isUpdateTime = false
 
@@ -32,7 +32,7 @@ class CoverA: UIView, CoverViewProtocol {
         }
     }
     
-    func currentPlayer(status: PlayViewPlayStatus) {
+    func currentPlayer(status: MMPlayerPlayStatus) {
         switch status {
         case .playing:
             self.btnPlay.setImage(#imageLiteral(resourceName: "ic_pause_circle_filled"), for: .normal)

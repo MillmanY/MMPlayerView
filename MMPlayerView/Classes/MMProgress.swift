@@ -20,7 +20,7 @@ class MMProgress: UIView {
         return UIActivityIndicatorView()
     }()
     
-    fileprivate var custom: ProgressProtocol? {
+    fileprivate var custom: MMProgressProtocol? {
         willSet {
           (custom as? UIView)?.removeFromSuperview()
         } didSet {

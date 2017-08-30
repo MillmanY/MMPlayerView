@@ -18,9 +18,9 @@ public class MMPlayerLayer: AVPlayerLayer {
     fileprivate var isCoverShow = false
     fileprivate var timeObserver: Any?
     fileprivate var isBackgroundPause = false
-    fileprivate var _cover: CoverViewProtocol?
+    fileprivate var _cover: MMPlayerCoverViewProtocol?
     fileprivate var cahce = MMPlayerCache()
-    fileprivate var playStatusBlock: ((_ status: PlayViewPlayStatus) ->Void)?
+    fileprivate var playStatusBlock: ((_ status: MMPlayerPlayStatus) ->Void)?
     fileprivate let assetKeysRequiredToPlay = [
         "duration",
         "playable",
@@ -100,7 +100,7 @@ public class MMPlayerLayer: AVPlayerLayer {
         }
     }
     public var autoPlay = true
-    public var currentPlayStatus: PlayViewPlayStatus = .unknown {
+    public var currentPlayStatus: MMPlayerPlayStatus = .unknown {
         didSet {
             if let block = self.playStatusBlock {
                 block(currentPlayStatus)
@@ -216,7 +216,7 @@ public class MMPlayerLayer: AVPlayerLayer {
         self.perform(#selector(MMPlayerLayer.showCover(isShow:)), with: nil, afterDelay: hideCoverDuration)
     }
     
-    public func replace<T: UIView>(cover:T) where T: CoverViewProtocol{
+    public func replace<T: UIView>(cover:T) where T: MMPlayerCoverViewProtocol{
         if let c = self.coverView ,c.isMember(of: cover.classForCoder) {
             c.alpha = 1.0
             return
@@ -244,7 +244,7 @@ public class MMPlayerLayer: AVPlayerLayer {
             }
         }
     }
-    public func set(url: URL?, state: ((_ status: PlayViewPlayStatus) -> Void)?) {
+    public func set(url: URL?, state: ((_ status: MMPlayerPlayStatus) -> Void)?) {
         self.playStatusBlock = state
         self.willPlayUrl = url
     }
@@ -410,7 +410,7 @@ public class MMPlayerLayer: AVPlayerLayer {
         }
     }
     
-    fileprivate func convertItemStatus() -> PlayViewPlayStatus {
+    fileprivate func convertItemStatus() -> MMPlayerPlayStatus {
         if let item = self.player?.currentItem {
             switch item.status {
             case .failed:

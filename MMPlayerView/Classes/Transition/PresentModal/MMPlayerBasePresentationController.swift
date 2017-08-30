@@ -8,11 +8,11 @@
 
 import UIKit
 
-public class BasePresentationController: UIPresentationController {
-    internal var config:PresentConfig!
+public class MMPlayerBasePresentationController: UIPresentationController {
+    internal var config: MMPlayerPresentConfig!
     public convenience init(presentedViewController: UIViewController, presenting
         presentingViewController: UIViewController? ,
-                            config:PresentConfig) {
+                            config: MMPlayerPresentConfig) {
         
         self.init(presentedViewController: presentedViewController, presenting: presentingViewController)
         self.config = config

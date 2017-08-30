@@ -31,7 +31,7 @@ class DetailViewController: UIViewController {
     }
     
     @IBAction func shrinkVideoAction() {
-        (self.presentationController as? PassViewPresentatinController)?.shrinkView()
+        (self.presentationController as? MMPlayerPassViewPresentatinController)?.shrinkView()
     }
 
     @IBAction func dismiss() {        

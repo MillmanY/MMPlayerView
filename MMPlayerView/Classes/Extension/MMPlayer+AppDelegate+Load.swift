@@ -10,13 +10,13 @@ import UIKit
 
 extension UIApplication {
     
-    private static let runOnce: Void = {
+    private static let mmPlayerRunOnce: Void = {
         UIView.replaceFrameVar()
     }()
     
     override open var next: UIResponder? {
         // Called before applicationDidFinishLaunching
-        UIApplication.runOnce
+        UIApplication.mmPlayerRunOnce
         return super.next
     }
 }

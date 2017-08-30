@@ -8,9 +8,9 @@
 
 import Foundation
 
-var LastDelegateKey = "UINavigationContrllerLastDelegateKey"
+var LastDelegateKey = "MMPlayerUINavigationContrllerLastDelegateKey"
 extension UINavigationController {
-    var lastDelegate: UINavigationControllerDelegate? {
+    var mmPlayerlastDelegate: UINavigationControllerDelegate? {
         set {
             objc_setAssociatedObject(self, &LastDelegateKey, newValue, .OBJC_ASSOCIATION_RETAIN)
         } get {
