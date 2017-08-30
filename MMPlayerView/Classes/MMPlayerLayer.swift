@@ -426,6 +426,12 @@ public class MMPlayerLayer: AVPlayerLayer {
     }
     
     func touchAction(gesture: UITapGestureRecognizer) {
+        switch self.currentPlayStatus {
+        case .unknown:
+            return
+        default: break
+        }
+        
         if let p = self.playView {
             let point = gesture.location(in: p)
             if self.videoRect.isEmpty || self.videoRect.contains(point) {

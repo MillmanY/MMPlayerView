@@ -92,6 +92,7 @@ extension ViewController: MMPlayerPrsentFromProtocol {
     }
     
     func dismissViewFromGesture() {
+        mmPlayerLayer.thumbImageView.image = nil
         self.updateByContentOffset()
         self.startLoading()
     }

@@ -19,6 +19,7 @@ extension UIView {
 private var MMPlayerKey = "MMPlayerKey"
 extension UIView {
     
+    
     var havePlayer: Bool {
         set {
             objc_setAssociatedObject(self, &MMPlayerKey, newValue, .OBJC_ASSOCIATION_RETAIN)
@@ -63,8 +64,8 @@ extension UIView {
     }
     
     static func replaceFrameVar() {
-        self.replace(original: #selector(setter: UIView.frame), to: #selector(UILabel.customSet(frame:)))
-        self.replace(original: #selector(setter: UIView.bounds), to: #selector(UILabel.customSet(bounds:)))
+        self.replace(original: #selector(setter: UIView.frame), to: #selector(UIView.customSet(frame:)))
+        self.replace(original: #selector(setter: UIView.bounds), to: #selector(UIView.customSet(bounds:)))
     }
 
 }
