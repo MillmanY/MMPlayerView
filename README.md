@@ -68,8 +68,8 @@
 ## Progress
     // Custom your progress view and it will add on player center
     // view need to implement ProgressProtocol, and add progress in this view, when start/stop control what need to do
-    .custom(view: <#T##ProgressProtocol#>)
-     public protocol ProgressProtocol {
+    .custom(view: <#T##MMProgressProtocol#>)
+     public protocol MMProgressProtocol {
          func start()
          func stop()
      }
@@ -100,15 +100,15 @@
         lazy public var thumbImageView: UIImageView 
         public var playView: UIView?
         public var coverView: UIView? { get }
-        public var autoPlay: Bool // when MMPlayerView.PlayViewPlayStatus == ready auto play video
-        public var currentPlayStatus: MMPlayerView.PlayViewPlayStatus 
+        public var autoPlay: Bool // when MMPlayerView.MMPlayerPlayStatus == ready auto play video
+        public var currentPlayStatus: MMPlayerView.MMPlayerPlayStatus 
         public var cacheInMemory: Bool // its AVPlayerItem cache in memory
         public var playUrl: URL?
         public func showCover(isShow: Bool)
         public func setCoverView(enable: Bool)
         public func delayHideCover()
         public func replace<T: UIView>(cover:T) where T: CoverViewProtocol
-        public func set(url: URL?, state: ((MMPlayerView.PlayViewPlayStatus) -> Swift.Void)?)
+        public func set(url: URL?, state: ((MMPlayerView.MMPlayerPlayStatus) -> Swift.Void)?)
         public func startLoading() // if loading finish autoPlay = false, need call playerLayer.player.play() where you want
         public weak var mmDelegate: MMPlayerLayerProtocol?
 
