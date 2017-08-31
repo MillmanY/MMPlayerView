@@ -18,6 +18,7 @@
 		5E562DA11EF9556900025869 /* MMPlayerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E562D9D1EF9556900025869 /* MMPlayerProtocol.swift */; };
 		5E562DA21EF9556900025869 /* MMPlayerCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E562D9E1EF9556900025869 /* MMPlayerCache.swift */; };
 		5E562DA41EF9556900025869 /* MMPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E562DA01EF9556900025869 /* MMPlayerView.swift */; };
+		5E8FCFB11F57A7D7004A4E52 /* UIView+LayoutFit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E8FCFB01F57A7D7004A4E52 /* UIView+LayoutFit.swift */; };
 		5E9A1B421F4D2DAB00746E5B /* MMProgress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E9A1B411F4D2DAB00746E5B /* MMProgress.swift */; };
 		5E9A1B4C1F4D804400746E5B /* MMPlayer+NSObject+safeObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E9A1B4A1F4D804400746E5B /* MMPlayer+NSObject+safeObserver.swift */; };
 		5E9A1B4D1F4D804400746E5B /* MMPlayer+UIView+Load.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E9A1B4B1F4D804400746E5B /* MMPlayer+UIView+Load.swift */; };
@@ -69,6 +70,7 @@
 		5E562D9D1EF9556900025869 /* MMPlayerProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MMPlayerProtocol.swift; sourceTree = "<group>"; };
 		5E562D9E1EF9556900025869 /* MMPlayerCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MMPlayerCache.swift; sourceTree = "<group>"; };
 		5E562DA01EF9556900025869 /* MMPlayerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MMPlayerView.swift; sourceTree = "<group>"; };
+		5E8FCFB01F57A7D7004A4E52 /* UIView+LayoutFit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+LayoutFit.swift"; sourceTree = "<group>"; };
 		5E9A1B411F4D2DAB00746E5B /* MMProgress.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MMProgress.swift; sourceTree = "<group>"; };
 		5E9A1B4A1F4D804400746E5B /* MMPlayer+NSObject+safeObserver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "MMPlayer+NSObject+safeObserver.swift"; sourceTree = "<group>"; };
 		5E9A1B4B1F4D804400746E5B /* MMPlayer+UIView+Load.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "MMPlayer+UIView+Load.swift"; sourceTree = "<group>"; };
@@ -175,6 +177,7 @@
 				5E9A1B4A1F4D804400746E5B /* MMPlayer+NSObject+safeObserver.swift */,
 				5E9A1B4B1F4D804400746E5B /* MMPlayer+UIView+Load.swift */,
 				5E3E68ED1F4FF77900122F6C /* MMPlayer+UIView+Shadow.swift */,
+				5E8FCFB01F57A7D7004A4E52 /* UIView+LayoutFit.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -466,6 +469,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5E8FCFB11F57A7D7004A4E52 /* UIView+LayoutFit.swift in Sources */,
 				5E9A1B7A1F4D80E600746E5B /* MMPlayerPresentAnimator.swift in Sources */,
 				5E9A1B731F4D80E600746E5B /* MMPlayerBasePresentationController.swift in Sources */,
 				5E9A1B6F1F4D80E600746E5B /* MMPlayerPushAnimator.swift in Sources */,

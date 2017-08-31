@@ -37,18 +37,19 @@ public class MMPlayerLayer: AVPlayerLayer {
         v.translatesAutoresizingMaskIntoConstraints = false
         return v
     }()
+    
     weak fileprivate var _playView: UIView? {
         willSet {
+            NSLayoutConstraint.deactivate(bgView.constraints)
             bgView.removeFromSuperview()
             self.removeFromSuperlayer()
             _playView?.removeGestureRecognizer(tapGesture)
-            NSLayoutConstraint.deactivate(bgView.constraints)
         } didSet {
             self._playView?.addSubview(self.bgView)
-            self.bgView.frame = self._playView?.bounds ?? .zero
-            self._playView?.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-0-[subview]-0-|", options: .directionLeadingToTrailing, metrics: nil, views: ["subview": self.bgView]))
-            self._playView?.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-0-[subview]-0-|", options: .directionLeadingToTrailing, metrics: nil, views: ["subview": self.bgView]))
-
+            self.bgView.mPlayFit.layoutFitSuper()
+            self.indicator.mPlayFit.layoutFitSuper()
+            self.thumbImageView.mPlayFit.layoutFitSuper()
+            self.bgView.layoutIfNeeded()
             _playView?.isUserInteractionEnabled = true
             _playView?.addGestureRecognizer(tapGesture)
             _playView?.layer.insertSublayer(self, at: 0)
@@ -73,7 +74,6 @@ public class MMPlayerLayer: AVPlayerLayer {
     public var hideCoverDuration: TimeInterval = 3.0
     public lazy var thumbImageView: UIImageView = {
         let t = UIImageView()
-        t.autoresizingMask = [.flexibleWidth , .flexibleHeight]
         t.clipsToBounds = true
         return t
     }()
@@ -207,8 +207,6 @@ public class MMPlayerLayer: AVPlayerLayer {
             self.coverView?.frame = vRect
         }
         self.frame = bgView.bounds
-        self.indicator.frame = (playView?.bounds ?? .zero)
-        thumbImageView.frame = (playView?.bounds ?? .zero)
     }
     
     public func delayHideCover() {
