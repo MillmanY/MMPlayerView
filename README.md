@@ -78,7 +78,8 @@
     playerLayer.cacheType = .memory(count: 10)
     public enum MMPlayerCacheType {
         case none
-        case memory(count: Int) // set this case to cache seek time in memory and if cache out of count will remove first you                                    stored
+        case memory(count: Int) // set this to cache seek time in memory and if cache out of count will remove first you    
+        stored
     }
 ## Layer Protocol
     // detect if touch in videoRect
