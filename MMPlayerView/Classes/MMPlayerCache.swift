@@ -10,17 +10,17 @@ import UIKit
 import AVFoundation
 class MMPlayerCache: NSObject {
     
-    static let shared = MMPlayerCache()
-    
     var cacheCount = 20
     fileprivate var cache = [URL : AVPlayerItem]()
+    fileprivate var queueURL = [URL]()
     
     func appendCache(key: URL , item: AVPlayerItem) {
-        if cache.keys.count >= 20 {
-            if let url = cache.first?.key {
-                cache.removeValue(forKey: url)
+        if cache.keys.count >= cacheCount {
+            if let f = queueURL.first {
+                self.removeCache(key: f)
             }
         }
+        queueURL.append(key)
         cache[key] = item
     }
     
@@ -29,10 +29,14 @@ class MMPlayerCache: NSObject {
     }
     
     func removeCache(key: URL) {
+        if let idx = queueURL.index(of: key) {
+            queueURL.remove(at: idx)
+        }
         cache.removeValue(forKey: key)
     }
     
     func removeAll() {
+        queueURL.removeAll()
         cache.removeAll()
     }
 }

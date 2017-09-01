@@ -13,6 +13,7 @@ import MMPlayerView
 class ViewController: UIViewController {
     lazy var mmPlayerLayer: MMPlayerLayer = {
         let l = MMPlayerLayer()
+        l.cacheType = .memory(count: 5)
         l.coverFitType = .fitToPlayerView
         l.videoGravity = AVLayerVideoGravityResizeAspectFill
         l.replace(cover: CoverA.instantiateFromNib())

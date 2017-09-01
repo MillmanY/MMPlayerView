@@ -89,11 +89,11 @@ public class MMPlayerView: UIView {
         }
     }
     
-    public var cacheInMemory: Bool {
+    public var cacheType: MMPlayerCacheType {
         set {
-            self.playerLayer.cacheInMemory = newValue
+            self.playerLayer.cacheType = newValue
         } get {
-            return self.playerLayer.cacheInMemory
+            return self.playerLayer.cacheType
         }
     }
     

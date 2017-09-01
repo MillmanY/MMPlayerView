@@ -22,6 +22,11 @@ public protocol MMPlayerCoverViewProtocol: MMPlayerBasePlayerProtocol {
     func currentPlayer(status: MMPlayerPlayStatus)
 }
 
+public enum MMPlayerCacheType {
+    case none
+    case memory(count: Int)
+}
+
 public enum MMPlayerPlayStatus {
     case ready
     case unknown
