@@ -73,6 +73,12 @@
          func start()
          func stop()
      }
+     
+## Cache
+    public enum MMPlayerCacheType {
+        case none
+        case memory(count: Int) // set this case to cache seek time in memory and if cache out of count will remove first you                                    stored
+    }
 ## Layer Protocol
     // detect if touch in videoRect
     // if touch out of videoRect will not trigger show/hide cover view event
