@@ -13,12 +13,12 @@
 ![landscape](https://github.com/MillmanY/MMPlayerView/blob/master/demo/landscape_demo.gif)
 
 ## MMPlayerLayer       
-        ex. use when change player view frequently like tableView / collectionView
-        import MMPlayerView
-        mmPlayerLayer.playView = cell.imgView
-        mmPlayerLayer.set(url: cell.data?.play_Url, state: { (status) in 
-        })
-        mmPlayerLayer.startLoading()
+    ex. use when change player view frequently like tableView / collectionView
+    import MMPlayerView
+    mmPlayerLayer.playView = cell.imgView
+    mmPlayerLayer.set(url: cell.data?.play_Url, state: { (status) in 
+    })
+    mmPlayerLayer.startLoading()
 
 ## MMPlayerView
     let url = URL.init(string: "http://www.html5videoplayer.net/videos/toystory.mp4")!
@@ -75,6 +75,7 @@
      }
      
 ## Cache
+    playerLayer.cacheType = .memory(count: 10)
     public enum MMPlayerCacheType {
         case none
         case memory(count: Int) // set this case to cache seek time in memory and if cache out of count will remove first you                                    stored
@@ -83,40 +84,45 @@
     // detect if touch in videoRect
     // if touch out of videoRect will not trigger show/hide cover view event
     public protocol MMPlayerLayerProtocol: class {
-     func touchInVideoRect(contain: Bool) // 
+    
+    func touchInVideoRect(contain: Bool) // 
     }
  
 ## Parameter
 
-         public enum CoverViewFitType {
-            case fitToPlayerView // coverview fit with playerview
-            case fitToVideoRect // fit with VideoRect
-         }
+    public enum MMPlayerCacheType {
+       case none // set no cache and remove all
+       case memory(count: Int) // cache player seek time in memory
+    }
+    public enum CoverViewFitType {
+      case fitToPlayerView // coverview fit with playerview
+      case fitToVideoRect // fit with VideoRect
+    }
          
-         public enum ProgressType {
-            case `default`
-            case none
-            case custom(view: ProgressProtocol)
-        }
+    public enum ProgressType {
+       case `default`
+       case none
+       case custom(view: ProgressProtocol)
+    }
                 
-        public var progressType: MMPlayerView.ProgressType  
-        public var coverFitType: MMPlayerView.CoverViewFitType
-        public var changeViewClearPlayer: Bool // rest url when change view 
-        public var hideCoverDuration: TimeInterval // auto hide cover view after duration
-        lazy public var thumbImageView: UIImageView 
-        public var playView: UIView?
-        public var coverView: UIView? { get }
-        public var autoPlay: Bool // when MMPlayerView.MMPlayerPlayStatus == ready auto play video
-        public var currentPlayStatus: MMPlayerView.MMPlayerPlayStatus 
-        public var cacheInMemory: Bool // its AVPlayerItem cache in memory
-        public var playUrl: URL?
-        public func showCover(isShow: Bool)
-        public func setCoverView(enable: Bool)
-        public func delayHideCover()
-        public func replace<T: UIView>(cover:T) where T: CoverViewProtocol
-        public func set(url: URL?, state: ((MMPlayerView.MMPlayerPlayStatus) -> Swift.Void)?)
-        public func startLoading() // if loading finish autoPlay = false, need call playerLayer.player.play() where you want
-        public weak var mmDelegate: MMPlayerLayerProtocol?
+    public var progressType: MMPlayerView.ProgressType  
+    public var coverFitType: MMPlayerView.CoverViewFitType
+    public var changeViewClearPlayer: Bool // rest url when change view 
+    public var hideCoverDuration: TimeInterval // auto hide cover view after duration
+    lazy public var thumbImageView: UIImageView 
+    public var playView: UIView?
+    public var coverView: UIView? { get }
+    public var autoPlay: Bool // when MMPlayerView.MMPlayerPlayStatus == ready auto play video
+    public var currentPlayStatus: MMPlayerView.MMPlayerPlayStatus 
+    public var cacheType: MMPlayerCacheType = .none
+    public var playUrl: URL?
+    public func showCover(isShow: Bool)
+    public func setCoverView(enable: Bool)
+    public func delayHideCover()
+    public func replace<T: UIView>(cover:T) where T: CoverViewProtocol
+    public func set(url: URL?, state: ((MMPlayerView.MMPlayerPlayStatus) -> Swift.Void)?)
+    public func startLoading() // if loading finish autoPlay = false, need call playerLayer.player.play() where you want
+    public weak var mmDelegate: MMPlayerLayerProtocol?
 
 ## Requirements
 
