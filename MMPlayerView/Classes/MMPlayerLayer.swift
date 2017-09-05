@@ -32,6 +32,8 @@ public class MMPlayerLayer: AVPlayerLayer {
         let v = UIView()
         v.addSubview(self.thumbImageView)
         v.addSubview(self.indicator)
+        self.indicator.mPlayFit.layoutFitSuper()
+        self.thumbImageView.mPlayFit.layoutFitSuper()
         v.frame = .zero
         v.backgroundColor = UIColor.clear
         v.translatesAutoresizingMaskIntoConstraints = false
@@ -40,15 +42,13 @@ public class MMPlayerLayer: AVPlayerLayer {
     
     weak fileprivate var _playView: UIView? {
         willSet {
-            NSLayoutConstraint.deactivate(bgView.constraints)
+            
             bgView.removeFromSuperview()
             self.removeFromSuperlayer()
             _playView?.removeGestureRecognizer(tapGesture)
         } didSet {
             self._playView?.addSubview(self.bgView)
             self.bgView.mPlayFit.layoutFitSuper()
-            self.indicator.mPlayFit.layoutFitSuper()
-            self.thumbImageView.mPlayFit.layoutFitSuper()
             self.bgView.layoutIfNeeded()
             _playView?.isUserInteractionEnabled = true
             _playView?.addGestureRecognizer(tapGesture)
