@@ -37,7 +37,6 @@ public class MMLandscapeWindow: UIWindow {
         originalWindow?.makeKeyAndVisible()
         originalPlayView = nil
         currentPlayLayer = nil
-        self.completed = nil
         self.rootViewController = nil
         originalWindow = nil
         self.isHidden = true
@@ -69,6 +68,7 @@ public class MMLandscapeWindow: UIWindow {
                 self.currentPlayLayer?.clearURLWhenChangeView = true
                 self.makeDisable()
                 self.completed?()
+                self.completed = nil
             })
         default:
             break

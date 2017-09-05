@@ -54,6 +54,7 @@ class ViewController: UIViewController {
         if UIDevice.current.orientation.isLandscape {
             let full = UIStoryboard.init(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "FullScreenViewController") as! FullScreenViewController
             MMLandscapeWindow.shared.makeKey(root: full, playLayer: self.mmPlayerLayer, completed: {
+                print("landscape completed")
                 //                    self.playerCollect.isScrollEnabled = true
             })
         }
