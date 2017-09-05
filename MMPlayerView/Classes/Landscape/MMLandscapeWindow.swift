@@ -60,8 +60,8 @@ public class MMLandscapeWindow: UIWindow {
             self.rootViewController?.view.frame = UIScreen.main.bounds
             break
         case .portrait:
-            let convertR = originalPlayView?.superview?.frame ?? .zero
-            let frame = originalPlayView?.superview?.convert(convertR, to: nil) ?? .zero
+            let convertR = originalPlayView?.frame ?? .zero
+            let frame = originalPlayView?.convert(convertR, to: nil) ?? .zero
             self.rootViewController?.view.frame = frame
             
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.3, execute: { [unowned self] in
