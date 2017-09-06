@@ -46,13 +46,17 @@ public class MMPlayerLayer: AVPlayerLayer {
             self.removeFromSuperlayer()
             _playView?.removeGestureRecognizer(tapGesture)
         } didSet {
-            self._playView?.addSubview(self.bgView)
+            guard let new = _playView else {
+                return
+            }
+
+            new.addSubview(self.bgView)
             self.bgView.mPlayFit.layoutFitSuper()
             self.bgView.layoutIfNeeded()
-            
-            _playView?.isUserInteractionEnabled = true
-            _playView?.addGestureRecognizer(tapGesture)
-            _playView?.layer.insertSublayer(self, at: 0)
+            self.updateCoverConstraint()
+            new.isUserInteractionEnabled = true
+            new.addGestureRecognizer(tapGesture)
+            new.layer.insertSublayer(self, at: 0)
         }
     }
     public weak var mmDelegate: MMPlayerLayerProtocol?
@@ -175,10 +179,8 @@ public class MMPlayerLayer: AVPlayerLayer {
     }
 
     public func setCoverView(enable: Bool) {
-        DispatchQueue.main.async { [unowned self] in
-            self.coverView?.isHidden = !enable
-            self.tapGesture.isEnabled = enable
-        }
+        self.coverView?.isHidden = !enable
+        self.tapGesture.isEnabled = enable
     }
     
     fileprivate var isInitLayer = false
@@ -209,7 +211,7 @@ public class MMPlayerLayer: AVPlayerLayer {
         if vRect.isEmpty {
             self.coverView?.isHidden = true
         } else {
-            self.coverView?.isHidden = false
+            self.coverView?.isHidden = (self.tapGesture.isEnabled) ? false : true
             self.coverView?.frame = vRect
         }
         self.frame = self.playView?.bounds ?? .zero
