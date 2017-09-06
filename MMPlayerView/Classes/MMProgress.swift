@@ -26,6 +26,7 @@ class MMProgress: UIView {
         } didSet {
             if let v = custom as? UIView {
                 self.addSubview(v)
+                v.mPlayFit.centerWith(size: v.frame.size)
             }
         }
     }
@@ -51,18 +52,6 @@ class MMProgress: UIView {
         self.setup()
     }
     
-    override public func layoutSubviews() {
-        super.layoutSubviews()
-        if let c = custom as? UIView {
-            var f = c.frame
-            f.origin.x = (self.frame.width - f.width)/2
-            f.origin.y = (self.frame.height - f.height)/2
-            c.frame = f
-        } else {
-            defaultIndicator.frame = self.bounds
-        }
-    }
-    
     required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         self.setup()
@@ -76,6 +65,7 @@ class MMProgress: UIView {
     func setup() {
         defaultIndicator.activityIndicatorViewStyle = .whiteLarge
         self.addSubview(defaultIndicator)
+        defaultIndicator.mPlayFit.layoutFitSuper()
     }
     
     func start() {
@@ -106,5 +96,4 @@ class MMProgress: UIView {
             defaultIndicator.stopAnimating()
         }
     }
-
 }

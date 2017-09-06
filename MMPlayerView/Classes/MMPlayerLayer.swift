@@ -30,19 +30,18 @@ public class MMPlayerLayer: AVPlayerLayer {
     fileprivate var indicator = MMProgress()
     lazy var  bgView: UIView = {
         let v = UIView()
+        v.translatesAutoresizingMaskIntoConstraints = false
         v.addSubview(self.thumbImageView)
         v.addSubview(self.indicator)
         self.indicator.mPlayFit.layoutFitSuper()
         self.thumbImageView.mPlayFit.layoutFitSuper()
         v.frame = .zero
         v.backgroundColor = UIColor.clear
-        v.translatesAutoresizingMaskIntoConstraints = false
         return v
     }()
     
     weak fileprivate var _playView: UIView? {
         willSet {
-            
             bgView.removeFromSuperview()
             self.removeFromSuperlayer()
             _playView?.removeGestureRecognizer(tapGesture)
@@ -50,6 +49,7 @@ public class MMPlayerLayer: AVPlayerLayer {
             self._playView?.addSubview(self.bgView)
             self.bgView.mPlayFit.layoutFitSuper()
             self.bgView.layoutIfNeeded()
+            
             _playView?.isUserInteractionEnabled = true
             _playView?.addGestureRecognizer(tapGesture)
             _playView?.layer.insertSublayer(self, at: 0)
@@ -212,7 +212,7 @@ public class MMPlayerLayer: AVPlayerLayer {
             self.coverView?.isHidden = false
             self.coverView?.frame = vRect
         }
-        self.frame = bgView.bounds
+        self.frame = self.playView?.bounds ?? .zero
     }
     
     public func delayHideCover() {
