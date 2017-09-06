@@ -56,8 +56,8 @@ public class MMLandscapeWindow: UIWindow {
         super.layoutSubviews()
         switch UIDevice.current.orientation {
         case .landscapeRight, .landscapeLeft:
+            self.frame = UIScreen.main.bounds
             self.rootViewController?.view.frame = UIScreen.main.bounds
-            break
         case .portrait:
             let convertR = originalPlayView?.frame ?? .zero
             let frame = originalPlayView?.convert(convertR, to: nil) ?? .zero
