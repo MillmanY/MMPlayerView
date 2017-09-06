@@ -191,7 +191,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="OPY-9A-GNO" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-292" y="296"/>
+            <point key="canvasLocation" x="-196" y="296"/>
         </scene>
         <!--Full Screen View Controller-->
         <scene sceneID="gcM-JA-4ZI">

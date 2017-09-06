@@ -53,7 +53,7 @@ public class MMPlayerPassViewPushTransition: MMPlayerBaseNavTransition, UIViewCo
                 pass.translatesAutoresizingMaskIntoConstraints = false
                 transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
                 passLayer.playView = passContainer
-                (self.source as? MMPlayerFromProtocol)?.transitionCompleted()
+                (toVC as? MMPLayerToProtocol)?.transitionCompleted(player: passLayer)
             })
         case .pop:
             let from = transitionContext.viewController(forKey: .from)
@@ -92,6 +92,7 @@ public class MMPlayerPassViewPushTransition: MMPlayerBaseNavTransition, UIViewCo
                 from?.view.removeFromSuperview()
                 transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
                 config.playLayer?.clearURLWhenChangeView = true
+                source.transitionCompleted()
             })
         default:
             break

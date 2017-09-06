@@ -69,5 +69,5 @@ extension NSObject: MMPlayerTransitionCompatible { }
 
 @objc public protocol MMPLayerToProtocol {
     var containerView: UIView { get }
-    func transitionCompleted()
+    func transitionCompleted(player: MMPlayerLayer)
 }

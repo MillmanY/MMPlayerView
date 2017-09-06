@@ -52,7 +52,8 @@ class MMPlayerPassViewPresentTransition: MMPlayerBasePresentTransition, UIViewCo
                 transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
                 passLayer.playView = passContainer
                 pass.removeFromSuperview()
-                (self.source as? MMPlayerFromProtocol)?.transitionCompleted()
+                (toVC as? MMPLayerToProtocol)?.transitionCompleted(player: passLayer)
+                
             })
         } else {
             
@@ -89,6 +90,7 @@ class MMPlayerPassViewPresentTransition: MMPlayerBasePresentTransition, UIViewCo
                 from?.view.removeFromSuperview()
                 transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
                 (self.source as? MMPlayerPrsentFromProtocol)?.dismissViewFromGesture()
+                (self.source as? MMPlayerFromProtocol)?.transitionCompleted()
                 config.playLayer?.clearURLWhenChangeView = true
                 return
             }
@@ -105,6 +107,7 @@ class MMPlayerPassViewPresentTransition: MMPlayerBasePresentTransition, UIViewCo
                 from?.view.removeFromSuperview()
                 
                 transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
+                (self.source as? MMPlayerFromProtocol)?.transitionCompleted()
                 config.playLayer?.clearURLWhenChangeView = true
 
             })
