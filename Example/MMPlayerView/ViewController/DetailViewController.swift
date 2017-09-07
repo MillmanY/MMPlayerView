@@ -42,7 +42,6 @@ class DetailViewController: UIViewController {
 extension DetailViewController: MMPLayerToProtocol {
     
     func transitionCompleted(player: MMPlayerLayer) {
-        print("TransitionCompleted")
         self.playerLayer = player
     }
 

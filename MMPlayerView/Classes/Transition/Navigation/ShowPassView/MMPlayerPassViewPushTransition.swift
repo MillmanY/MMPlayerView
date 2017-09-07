@@ -54,6 +54,7 @@ public class MMPlayerPassViewPushTransition: MMPlayerBaseNavTransition, UIViewCo
                 transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
                 passLayer.playView = passContainer
                 (toVC as? MMPLayerToProtocol)?.transitionCompleted(player: passLayer)
+                passLayer.clearURLWhenChangeView = true
             })
         case .pop:
             let from = transitionContext.viewController(forKey: .from)
@@ -69,6 +70,7 @@ public class MMPlayerPassViewPushTransition: MMPlayerBaseNavTransition, UIViewCo
                 print("Need Implement PassViewFromProtocol")
                 return
             }
+            config.playLayer?.clearURLWhenChangeView = false
             pass.translatesAutoresizingMaskIntoConstraints = true
             let superV = source.backReplaceSuperView?(original: config.passOriginalSuper) ?? config.passOriginalSuper
             let original:CGRect = pass.convert(pass.frame, to: nil)
