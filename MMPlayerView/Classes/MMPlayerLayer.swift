@@ -26,7 +26,6 @@ public class MMPlayerLayer: AVPlayerLayer {
         "playable",
         "hasProtectedContent",
     ]
-    
     fileprivate var indicator = MMProgress()
     lazy var  bgView: UIView = {
         let v = UIView()

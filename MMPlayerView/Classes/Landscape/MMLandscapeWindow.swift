@@ -54,6 +54,11 @@ public class MMLandscapeWindow: UIWindow {
 
     override public func layoutSubviews() {
         super.layoutSubviews()
+        
+        if !self.isKeyWindow {
+            return
+        }
+        
         switch UIDevice.current.orientation {
         case .landscapeRight, .landscapeLeft:
             self.frame = UIScreen.main.bounds
