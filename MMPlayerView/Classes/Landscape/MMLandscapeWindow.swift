@@ -39,7 +39,9 @@ public class MMLandscapeWindow: UIWindow {
         currentPlayLayer = nil
         self.rootViewController = nil
         originalWindow = nil
-        self.isHidden = true
+        DispatchQueue.main.async { [unowned self] in
+            self.isHidden = true
+        }
     }
     
     required public init?(coder aDecoder: NSCoder) {
