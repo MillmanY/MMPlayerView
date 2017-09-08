@@ -13,7 +13,6 @@ public class MMLandscapeWindow: UIWindow {
     public static let shared =  MMLandscapeWindow()
     weak var currentPlayLayer: MMPlayerLayer?
     weak var originalPlayView: UIView?
-    weak var originalWindow:UIWindow?
     var completed: (()->Void)?
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -34,13 +33,13 @@ public class MMLandscapeWindow: UIWindow {
     }
     
     public func makeDisable() {
-        originalWindow?.makeKeyAndVisible()
         originalPlayView = nil
         currentPlayLayer = nil
         self.rootViewController = nil
-        originalWindow = nil
         DispatchQueue.main.async { [unowned self] in
             self.isHidden = true
+            self.completed?()
+            self.completed = nil
         }
     }
     
@@ -74,8 +73,6 @@ public class MMLandscapeWindow: UIWindow {
                 self.currentPlayLayer?.playView = self.originalPlayView
                 self.currentPlayLayer?.clearURLWhenChangeView = true
                 self.makeDisable()
-                self.completed?()
-                self.completed = nil
             })
         default:
             break
