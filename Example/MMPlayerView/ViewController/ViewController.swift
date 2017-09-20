@@ -15,7 +15,7 @@ class ViewController: UIViewController {
         let l = MMPlayerLayer()
         l.cacheType = .memory(count: 5)
         l.coverFitType = .fitToPlayerView
-        l.videoGravity = AVLayerVideoGravityResizeAspectFill
+        l.videoGravity = AVLayerVideoGravity.resizeAspectFill
         l.replace(cover: CoverA.instantiateFromNib())
         return l
     }()

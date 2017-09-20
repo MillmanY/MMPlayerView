@@ -18,7 +18,6 @@ public class MMPlayerLayer: AVPlayerLayer {
     fileprivate var isCoverShow = false
     fileprivate var timeObserver: Any?
     fileprivate var isBackgroundPause = false
-    fileprivate var _cover: MMPlayerCoverViewProtocol?
     fileprivate var cahce = MMPlayerCache()
     fileprivate var playStatusBlock: ((_ status: MMPlayerPlayStatus) ->Void)?
     fileprivate let assetKeysRequiredToPlay = [
@@ -83,7 +82,6 @@ public class MMPlayerLayer: AVPlayerLayer {
     
     public var playView: UIView? {
         set {
-
             if self.playView != newValue {
                 self._playView = newValue
                 
@@ -95,19 +93,14 @@ public class MMPlayerLayer: AVPlayerLayer {
             return _playView
         }
     }
-    
-    public var coverView: UIView? {
-        get {
-            return (_cover as? UIView)
-        }
-    }
+    public var coverView: (UIView & MMPlayerCoverViewProtocol)?
     public var autoPlay = true
     public var currentPlayStatus: MMPlayerPlayStatus = .unknown {
         didSet {
             if let block = self.playStatusBlock {
                 block(currentPlayStatus)
             }
-            _cover?.currentPlayer(status: currentPlayStatus)
+            coverView?.currentPlayer(status: currentPlayStatus)
             
             switch self.currentPlayStatus {
             case .ready:
@@ -230,11 +223,10 @@ public class MMPlayerLayer: AVPlayerLayer {
         
         cover.backgroundColor = UIColor.clear
         cover.layoutIfNeeded()
-        
-        (_cover as? UIView)?.removeFromSuperview()
-        _cover?.removeObserver()
-        _cover = cover
-        _cover?.playLayer = self
+        coverView?.removeFromSuperview()
+        coverView?.removeObserver()
+        coverView = cover
+        coverView?.playLayer = self
         bgView.insertSubview(cover, belowSubview: indicator)
         cover.addObserver()
         self.updateCoverConstraint()
@@ -273,16 +265,12 @@ public class MMPlayerLayer: AVPlayerLayer {
         NotificationCenter.default.removeObserver(self)
         if timeObserver == nil {
             timeObserver = self.player?.addPeriodicTimeObserver(forInterval: CMTimeMake(1, 100), queue: DispatchQueue.main, using: { [weak self] (time) in
-                if let cover = self?.coverView, cover.responds(to: #selector(self?._cover?.timerObserver(time:))) {
-                    if (time.isIndefinite) {
-                        return
-                    }
-                    
-                    switch self?.currentPlayStatus {
-                    case .some(.playing):
-                        self?._cover?.timerObserver!(time: time)
-                    default: break
-                    }
+                
+                if time.isIndefinite {
+                    return
+                }
+                if let cover = self?.coverView, cover.responds(to: #selector(cover.timerObserver(time:))) {
+                    cover.timerObserver!(time: time)
                 }
             })
         }
@@ -334,7 +322,7 @@ public class MMPlayerLayer: AVPlayerLayer {
         self.player?.safeRemove(observer: self, forKeyPath: "rate")
         NotificationCenter.default.removeObserver(self)
         self.player?.safeRemove(observer: self, forKeyPath: "currentItem")
-        _cover?.removeObserver()
+        coverView?.removeObserver()
         if let t = timeObserver {
             self.player?.removeTimeObserver(t)
             timeObserver = nil
@@ -364,7 +352,7 @@ public class MMPlayerLayer: AVPlayerLayer {
             case "Muted":
                 if let old = change?[.oldKey] as? Bool,
                     let new = change?[.newKey] as? Bool , old != new{
-                    _cover?.player?(isMuted: new)
+                    coverView?.player?(isMuted: new)
                 }
                 
             case "rate":
@@ -444,7 +432,7 @@ public class MMPlayerLayer: AVPlayerLayer {
         return .unknown
     }
     
-    func touchAction(gesture: UITapGestureRecognizer) {
+    @objc func touchAction(gesture: UITapGestureRecognizer) {
         switch self.currentPlayStatus {
         case .unknown:
             return
@@ -460,16 +448,17 @@ public class MMPlayerLayer: AVPlayerLayer {
         }
     }
 
-    public func showCover(isShow: Bool) {
+    @objc public func showCover(isShow: Bool) {
         self.isCoverShow = isShow
         if isShow {
             NSObject.cancelPreviousPerformRequests(withTarget: self, selector: #selector(MMPlayerLayer.showCover(isShow:)), object: nil)
             self.perform(#selector(MMPlayerLayer.showCover(isShow:)), with: nil, afterDelay: self.hideCoverDuration)
         }
         
+        
         if let cover = self.coverView ,
-            cover.responds(to: #selector(_cover?.coverView(isShow:))) {
-            _cover?.coverView?(isShow: isShow)
+            cover.responds(to: #selector(cover.coverView(isShow:))) {
+            cover.coverView!(isShow: isShow)
             return
         }
         

@@ -53,7 +53,7 @@ extension BaseNavigationController {
                                              target: self)])
     }
 
-    func backAction() {
+    @objc func backAction() {
         if self.presentingViewController != nil && self.viewControllers.count == 1 {
             self.dismiss(animated: true, completion: nil)
         } else {

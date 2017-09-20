@@ -67,9 +67,9 @@ public class MMPlayerView: UIView {
     
     public var videoGravity: String {
         set {
-            self.playerLayer.videoGravity = newValue
+            self.playerLayer.videoGravity = AVLayerVideoGravity(rawValue: newValue)
         } get {
-            return self.playerLayer.videoGravity
+            return self.playerLayer.videoGravity.rawValue
         }
     }
 

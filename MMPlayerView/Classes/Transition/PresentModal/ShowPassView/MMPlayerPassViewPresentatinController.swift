@@ -60,7 +60,7 @@ public class MMPlayerPassViewPresentatinController: MMPlayerBasePresentationCont
         (self.config.source as? MMPlayerPrsentFromProtocol)?.presentedView(isShrinkVideo: true)
     }
     
-    func pan(gesture: UIPanGestureRecognizer) {
+    @objc func pan(gesture: UIPanGestureRecognizer) {
         let point = gesture.location(in: self.config.playLayer?.playView)
         let velocity = gesture.velocity(in: self.config.playLayer?.playView)
 
@@ -127,7 +127,7 @@ public class MMPlayerPassViewPresentatinController: MMPlayerBasePresentationCont
         }
     }
     
-    func tapVideo(gesture: UITapGestureRecognizer) {
+    @objc func tapVideo(gesture: UITapGestureRecognizer) {
         containerGesture.isEnabled = false
         if let p = self.config.playLayer?.playView {
             self.containerView?.addSubview(p)
