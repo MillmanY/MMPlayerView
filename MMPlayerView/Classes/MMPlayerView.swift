@@ -64,15 +64,13 @@ public class MMPlayerView: UIView {
             return self.playerLayer.hideCoverDuration
         }
     }
-    
-    public var videoGravity: String {
+    public var videoGravity: AVLayerVideoGravity {
         set {
-            self.playerLayer.videoGravity = AVLayerVideoGravity(rawValue: newValue)
+            self.playerLayer.videoGravity = newValue
         } get {
-            return self.playerLayer.videoGravity.rawValue
+            return self.playerLayer.videoGravity
         }
     }
-
     public var thumbImage: UIImage? {
         set {
             self.playerLayer.thumbImageView.image = newValue
