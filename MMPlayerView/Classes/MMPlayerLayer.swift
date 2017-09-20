@@ -101,7 +101,6 @@ public class MMPlayerLayer: AVPlayerLayer {
                 block(currentPlayStatus)
             }
             coverView?.currentPlayer(status: currentPlayStatus)
-            
             switch self.currentPlayStatus {
             case .ready:
                 self.thumbImageView.isHidden = false

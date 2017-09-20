@@ -44,7 +44,7 @@ public enum CoverViewFitType {
 public enum ProgressType {
     case `default`
     case none
-    case custom(view: MMProgressProtocol)
+    case custom(view: UIView & MMProgressProtocol)
 }
 
 public protocol MMProgressProtocol {

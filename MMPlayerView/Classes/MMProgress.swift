@@ -20,11 +20,11 @@ class MMProgress: UIView {
         return UIActivityIndicatorView()
     }()
     
-    fileprivate var custom: MMProgressProtocol? {
+    fileprivate var custom: (UIView & MMProgressProtocol)? {
         willSet {
-          (custom as? UIView)?.removeFromSuperview()
+            custom?.removeFromSuperview()
         } didSet {
-            if let v = custom as? UIView {
+            if let v = custom {
                 self.addSubview(v)
                 v.mPlayFit.centerWith(size: v.frame.size)
             }
