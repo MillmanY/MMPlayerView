@@ -139,8 +139,8 @@ it, simply add the following line to your Podfile:
 ```ruby
 Swift 3 
 pod 'MMPlayerView', '~> 2.1.8'
-Swift 4
-pod 'MMPlayerView', '~> 3.0.1'
+Swift 4 (> 3.0.1)
+pod 'MMPlayerView', '~> 3.0.2'
 ```
 
 ## Author
