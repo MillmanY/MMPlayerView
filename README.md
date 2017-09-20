@@ -129,7 +129,7 @@
 
     iOS 8.0+
     Xcode 8.0+
-    Swift 3.0+
+    Swift 3.0+, 4.0+
     
 ## Installation
 
@@ -137,7 +137,10 @@ MMPlayerView is available through [CocoaPods](http://cocoapods.org). To install
 it, simply add the following line to your Podfile:
 
 ```ruby
-pod "MMPlayerView"
+Swift 3 
+pod 'MMPlayerView', '~> 2.1.8'
+Swift 4
+pod 'MMPlayerView', '~> 3.0.1'
 ```
 
 ## Author
