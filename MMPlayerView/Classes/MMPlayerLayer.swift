@@ -280,7 +280,7 @@ public class MMPlayerLayer: AVPlayerLayer {
                     
                     switch self?.currentPlayStatus {
                     case .some(.playing):
-                        self?._cover?.timerObserver?(time: time)
+                        self?._cover?.timerObserver!(time: time)
                     default: break
                     }
                 }
