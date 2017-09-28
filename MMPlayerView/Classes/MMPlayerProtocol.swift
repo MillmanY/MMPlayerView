@@ -22,6 +22,11 @@ public protocol MMPlayerCoverViewProtocol: MMPlayerBasePlayerProtocol {
     func currentPlayer(status: MMPlayerPlayStatus)
 }
 
+public enum MMPlayerCoverAutoHideType {
+    case autoHide(after: TimeInterval)
+    case disable
+}
+
 public enum MMPlayerCacheType {
     case none
     case memory(count: Int)

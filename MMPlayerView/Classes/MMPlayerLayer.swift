@@ -66,14 +66,22 @@ public class MMPlayerLayer: AVPlayerLayer {
     
     public var coverFitType: CoverViewFitType = .fitToVideoRect {
         didSet {
-            
             thumbImageView.contentMode = (coverFitType == .fitToVideoRect) ? .scaleAspectFit : .scaleAspectFill
             self.updateCoverConstraint()
         }
     }
     public var changeViewClearPlayer = true
     var clearURLWhenChangeView = true
-    public var hideCoverDuration: TimeInterval = 3.0
+    public var autoHideCoverType = MMPlayerCoverAutoHideType.autoHide(after: 3.0) {
+        didSet {
+            switch autoHideCoverType {
+            case .disable:
+                NSObject.cancelPreviousPerformRequests(withTarget: self, selector: #selector(MMPlayerLayer.showCover(isShow:)), object: nil)
+            case .autoHide(let after):
+                self.perform(#selector(MMPlayerLayer.showCover(isShow:)), with: nil, afterDelay: after)
+            }
+        }
+    }
     public lazy var thumbImageView: UIImageView = {
         let t = UIImageView()
         t.clipsToBounds = true
@@ -210,8 +218,13 @@ public class MMPlayerLayer: AVPlayerLayer {
     
     public func delayHideCover() {
         self.showCover(isShow: true)
-        NSObject.cancelPreviousPerformRequests(withTarget: self, selector: #selector(MMPlayerLayer.showCover(isShow:)), object: nil)
-        self.perform(#selector(MMPlayerLayer.showCover(isShow:)), with: nil, afterDelay: hideCoverDuration)
+        switch self.autoHideCoverType {
+        case .autoHide(let after):
+            NSObject.cancelPreviousPerformRequests(withTarget: self, selector: #selector(MMPlayerLayer.showCover(isShow:)), object: nil)
+            self.perform(#selector(MMPlayerLayer.showCover(isShow:)), with: nil, afterDelay: after)
+        default:
+            break
+        }
     }
     
     public func replace<T: UIView>(cover:T) where T: MMPlayerCoverViewProtocol{
@@ -450,8 +463,12 @@ public class MMPlayerLayer: AVPlayerLayer {
     @objc public func showCover(isShow: Bool) {
         self.isCoverShow = isShow
         if isShow {
-            NSObject.cancelPreviousPerformRequests(withTarget: self, selector: #selector(MMPlayerLayer.showCover(isShow:)), object: nil)
-            self.perform(#selector(MMPlayerLayer.showCover(isShow:)), with: nil, afterDelay: self.hideCoverDuration)
+            switch self.autoHideCoverType {
+            case .autoHide(let after):
+                NSObject.cancelPreviousPerformRequests(withTarget: self, selector: #selector(MMPlayerLayer.showCover(isShow:)), object: nil)
+                self.perform(#selector(MMPlayerLayer.showCover(isShow:)), with: nil, afterDelay: after)
+            default: break
+            }
         }
         
         

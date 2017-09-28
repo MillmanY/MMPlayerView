@@ -33,6 +33,14 @@ public class MMPlayerView: UIView {
         self.playerLayer.playView = self
     }
     
+    public var playUrl: URL? {
+        set {
+            self.playerLayer.playUrl = newValue
+        } get {
+            return self.playerLayer.playUrl
+        }
+    }
+    
     public weak var delegate: MMPlayerLayerProtocol? {
         set {
             self.playerLayer.mmDelegate = newValue
@@ -57,11 +65,11 @@ public class MMPlayerView: UIView {
         }
     }
     
-    public var hideCoverDuration: TimeInterval {
+    public var autoHideCoverType: MMPlayerCoverAutoHideType {
         set {
-            self.playerLayer.hideCoverDuration = newValue
+            self.playerLayer.autoHideCoverType = newValue
         } get {
-            return self.playerLayer.hideCoverDuration
+            return self.playerLayer.autoHideCoverType
         }
     }
     public var videoGravity: AVLayerVideoGravity {
