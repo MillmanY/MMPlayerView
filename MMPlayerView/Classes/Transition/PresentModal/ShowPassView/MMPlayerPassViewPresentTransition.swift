@@ -85,8 +85,9 @@ class MMPlayerPassViewPresentTransition: MMPlayerBasePresentTransition, UIViewCo
             
             if config.dismissGesture {
                 pass.removeFromSuperview()
-                from?.view.removeFromSuperview()
+                from?.view.removeFromSuperview()                
                 config.playLayer?.playView = nil
+                config.playLayer?.needRefreshFrame = true
                 transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
                 (self.source as? MMPlayerPrsentFromProtocol)?.dismissViewFromGesture()
                 (self.source as? MMPlayerFromProtocol)?.transitionCompleted()

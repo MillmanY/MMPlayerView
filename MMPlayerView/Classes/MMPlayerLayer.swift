@@ -14,7 +14,23 @@ public class MMPlayerLayer: AVPlayerLayer {
         let g = UITapGestureRecognizer.init(target: self, action: #selector(MMPlayerLayer.touchAction(gesture:)))
         return g
     }()
-
+    // prevent set frame frequently
+    override public var frame: CGRect {
+        set {
+            if newValue == frame {
+                return
+            }
+            
+            super.frame = newValue
+            if newValue != .zero && needRefreshFrame {
+                CATransaction.commit()
+                needRefreshFrame = false
+            }
+        } get {
+            return super.frame
+        }
+    }
+    
     fileprivate var isCoverShow = false
     fileprivate var timeObserver: Any?
     fileprivate var isBackgroundPause = false
@@ -37,7 +53,7 @@ public class MMPlayerLayer: AVPlayerLayer {
         v.backgroundColor = UIColor.clear
         return v
     }()
-    
+    var needRefreshFrame = false
     weak fileprivate var _playView: UIView? {
         willSet {
             bgView.removeFromSuperview()
@@ -203,6 +219,7 @@ public class MMPlayerLayer: AVPlayerLayer {
         self.backgroundColor = UIColor.black.cgColor
         self.progressType = .default
         self.addPlayerObserver()
+        CATransaction.setDisableActions(true)
     }
     
     func updateCoverConstraint() {
