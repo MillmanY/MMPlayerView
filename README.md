@@ -90,6 +90,11 @@
     }
  
 ## Parameter
+    
+    public enum MMPlayerCoverAutoHideType {
+        case autoHide(after: TimeInterval)
+        case disable
+    }
 
     public enum MMPlayerCacheType {
        case none // set no cache and remove all
@@ -105,11 +110,10 @@
        case none
        case custom(view: ProgressProtocol)
     }
-                
+    public var autoHideCoverType = MMPlayerCoverAutoHideType.autoHide(after: 3.0) // Default hide after 3.0 , set disable to close auto hide cover            
     public var progressType: MMPlayerView.ProgressType  
     public var coverFitType: MMPlayerView.CoverViewFitType
     public var changeViewClearPlayer: Bool // rest url when change view 
-    public var hideCoverDuration: TimeInterval // auto hide cover view after duration
     lazy public var thumbImageView: UIImageView 
     public var playView: UIView?
     public var coverView: UIView? { get }
