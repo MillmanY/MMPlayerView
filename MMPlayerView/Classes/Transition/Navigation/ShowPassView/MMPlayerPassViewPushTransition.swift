@@ -20,6 +20,7 @@ public class MMPlayerPassViewPushTransition: MMPlayerBaseNavTransition, UIViewCo
 
         switch self.operation {
         case .push:
+            toVC.view.layoutIfNeeded()
             guard let passLayer = (self.source as? MMPlayerFromProtocol)?.passPlayer else {
                 print("Need Called setView")
                 return
@@ -37,13 +38,12 @@ public class MMPlayerPassViewPushTransition: MMPlayerBaseNavTransition, UIViewCo
             let finalFrame = transitionContext.finalFrame(for: toVC)
             let originalColor = toVC.view.backgroundColor
             passLayer.clearURLWhenChangeView = false
-            let pass = UIView()
+            let pass = UIView(frame: convertRect)
             passLayer.playView = pass
             toVC.view.backgroundColor = UIColor.clear
             toVC.view.frame = finalFrame
             pass.removeFromSuperview()
             container.addSubview(pass)
-            container.layoutIfNeeded()
             pass.frame = convertRect
             UIView.animate(withDuration: self.config.duration, animations: {
                 pass.frame = passContainer.frame

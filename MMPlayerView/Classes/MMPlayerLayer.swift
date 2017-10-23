@@ -135,9 +135,11 @@ public class MMPlayerLayer: AVPlayerLayer {
             case .failed(err: _):
                 self.thumbImageView.isHidden = false
                 self.coverView?.isHidden = false
+                self.startLoading(isStart: false)
             case .unknown:
                 self.thumbImageView.isHidden = false
                 self.coverView?.isHidden = true
+                self.startLoading(isStart: false)
             default:
                 self.thumbImageView.isHidden = true
                 self.coverView?.isHidden = false
