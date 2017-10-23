@@ -81,7 +81,6 @@ public class MMPlayerPassViewPushTransition: MMPlayerBaseNavTransition, UIViewCo
                 pass.removeFromSuperview()
                 container.addSubview(pass)
             }
-            container.layoutIfNeeded()
             pass.frame = original
             UIView.animate(withDuration: self.config.duration, animations: {
                 from?.view.alpha = 0.0

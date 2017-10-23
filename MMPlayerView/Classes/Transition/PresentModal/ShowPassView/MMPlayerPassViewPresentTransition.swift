@@ -80,9 +80,7 @@ class MMPlayerPassViewPresentTransition: MMPlayerBasePresentTransition, UIViewCo
             if superV != nil {
                 pass.removeFromSuperview()
                 container.addSubview(pass)
-            }
-            container.layoutIfNeeded()
-            
+            }            
             if config.dismissGesture {
                 pass.removeFromSuperview()
                 from?.view.removeFromSuperview()                
