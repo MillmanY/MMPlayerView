@@ -225,7 +225,7 @@ public class MMPlayerLayer: AVPlayerLayer {
     }
     
     func updateCoverConstraint() {
-        let vRect = self.coverFitType == .fitToVideoRect ? videoRect : (playView?.bounds ?? .zero)
+        let vRect = self.coverFitType == .fitToVideoRect ? videoRect : bgView.bounds
         if vRect.isEmpty {
             self.coverView?.isHidden = true
         } else {
