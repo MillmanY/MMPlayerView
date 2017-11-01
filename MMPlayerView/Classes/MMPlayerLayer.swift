@@ -232,7 +232,7 @@ public class MMPlayerLayer: AVPlayerLayer {
             self.coverView?.isHidden = (self.tapGesture.isEnabled) ? false : true
             self.coverView?.frame = vRect
         }
-        self.frame = self.playView?.bounds ?? .zero
+        self.frame = bgView.bounds
     }
     
     public func delayHideCover() {
