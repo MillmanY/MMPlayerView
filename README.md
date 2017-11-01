@@ -1,3 +1,5 @@
+[![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=W5C6A3FB8H4DQ)
+
 # MMPlayerView
 
 [![CI Status](http://img.shields.io/travis/millmanyang@gmail.com/MMPlayerView.svg?style=flat)](https://travis-ci.org/millmanyang@gmail.com/MMPlayerView)
@@ -146,7 +148,6 @@ pod 'MMPlayerView', '~> 2.1.8'
 Swift 4 (> 3.0.1)
 pod 'MMPlayerView', '~> 3.0.2'
 ```
-
 ## Author
 
 millmanyang@gmail.com
