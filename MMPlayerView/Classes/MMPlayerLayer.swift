@@ -150,6 +150,7 @@ public class MMPlayerLayer: AVPlayerLayer {
     fileprivate var asset: AVURLAsset?
 
     public var cacheType: MMPlayerCacheType = .none
+    public var removeCacheOnPlayToEndTime: Bool = true
     public var playUrl: URL? {
         willSet {
             self.currentPlayStatus = .unknown
@@ -327,8 +328,10 @@ public class MMPlayerLayer: AVPlayerLayer {
             if let s = self?.currentPlayStatus {
                 switch s {
                 case .playing, .pause:
-                    if let u = self?.playUrl {
-                        self?.cahce.removeCache(key: u)
+                    if let u = self?.playUrl, let remove = self?.removeCacheOnPlayToEndTime {
+                        if remove {
+                            self?.cahce.removeCache(key: u)
+                        }
                     }
                     self?.currentPlayStatus = .end
                 default: break
