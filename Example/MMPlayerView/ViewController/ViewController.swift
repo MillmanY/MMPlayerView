@@ -22,7 +22,6 @@ class ViewController: UIViewController {
     @IBOutlet weak var playerCollect: UICollectionView!
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         playerCollect.addObserver(self, forKeyPath: "contentOffset", options: [.new], context: nil)
         playerCollect.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 200, right:0)
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
@@ -135,6 +134,7 @@ extension ViewController: UICollectionViewDelegateFlowLayout {
     }
     
     fileprivate func updateDetail(at indexPath: IndexPath) {
+        
         self.mmPlayerLayer.thumbImageView.image = DemoSource.shared.demoData[indexPath.row].image
         self.mmPlayerLayer.set(url: DemoSource.shared.demoData[indexPath.row].play_Url, state: { (status) in
             

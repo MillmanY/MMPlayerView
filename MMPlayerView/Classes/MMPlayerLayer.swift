@@ -279,6 +279,10 @@ public class MMPlayerLayer: AVPlayerLayer {
         self.willPlayUrl = url
     }
 
+    public func stopLoading() {
+        self.willPlayUrl = nil
+    }
+    
     public func startLoading() {
 
         switch self.currentPlayStatus {
