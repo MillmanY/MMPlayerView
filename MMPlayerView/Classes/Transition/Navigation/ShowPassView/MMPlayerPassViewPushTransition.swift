@@ -21,14 +21,18 @@ public class MMPlayerPassViewPushTransition: MMPlayerBaseNavTransition, UIViewCo
         switch self.operation {
         case .push:
             toVC.view.layoutIfNeeded()
-            guard let passLayer = (self.source as? MMPlayerFromProtocol)?.passPlayer else {
+            
+            
+            guard let from = transitionContext.viewController(forKey: .from),
+                let passLayer = self.findFromVCWithProtocol(vc: from)?.passPlayer else {
+                    print("Need Called setView")
+                    return
+            }
+            guard let passContainer = (transitionContext.viewController(forKey: .to) as? MMPLayerToProtocol)?.containerView else {
                 print("Need Called setView")
                 return
             }
-            guard let passContainer = (toVC as? MMPLayerToProtocol)?.containerView else {
-                print("Need implement PassViewToProtocol")
-                return
-            }
+            
             if let c = self.config as? MMPlayerPassViewPushConfig {
                 c.passOriginalSuper = passLayer.playView
                 c.playLayer = passLayer
@@ -58,6 +62,7 @@ public class MMPlayerPassViewPushTransition: MMPlayerBaseNavTransition, UIViewCo
             })
         case .pop:
             let from = transitionContext.viewController(forKey: .from)
+            
             guard let config = self.config as? MMPlayerPassViewPushConfig else {
                 return
             }
@@ -66,10 +71,12 @@ public class MMPlayerPassViewPushTransition: MMPlayerBaseNavTransition, UIViewCo
                 return
             }
             
-            guard let source = (self.source as? MMPlayerFromProtocol) else {
-                print("Need Implement PassViewFromProtocol")
-                return
+            guard let to = transitionContext.viewController(forKey: .to),
+                let source =  self.findFromVCWithProtocol(vc: to)  else {
+                    print("Need Implement PassViewFromProtocol")
+                    return
             }
+
             config.playLayer?.clearURLWhenChangeView = false
             pass.translatesAutoresizingMaskIntoConstraints = true
             let superV = source.backReplaceSuperView?(original: config.passOriginalSuper) ?? config.passOriginalSuper
@@ -98,5 +105,16 @@ public class MMPlayerPassViewPushTransition: MMPlayerBaseNavTransition, UIViewCo
         default:
             break
         }
+        
     }
+
+    func findFromVCWithProtocol(vc: UIViewController) -> (MMPlayerFromProtocol & UIViewController)? {
+        if let pass = vc as? MMPlayerFromProtocol & UIViewController , pass.willPassView?() ?? true {
+            return pass
+        } else if let first = vc.childViewControllers.first(where: { self.findFromVCWithProtocol(vc: $0) != nil }) as? MMPlayerFromProtocol & UIViewController {
+            return first
+        }
+        return nil
+    }
+
 }

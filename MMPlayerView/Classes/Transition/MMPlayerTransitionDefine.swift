@@ -62,6 +62,7 @@ extension NSObject: MMPlayerTransitionCompatible { }
 
 @objc public protocol MMPlayerFromProtocol {
     var passPlayer: MMPlayerLayer { get }
+    @objc optional func willPassView() -> Bool
     func transitionWillStart()
     func transitionCompleted()
     @objc optional func backReplaceSuperView(original: UIView?) -> UIView?

@@ -9,19 +9,23 @@
 import UIKit
 
 public typealias T = MMPlayerNavConfig
-public class MMPlayerPushAnimator: NSObject , UINavigationControllerDelegate {
+public class MMPlayerPushAnimator: NSObject, UINavigationControllerDelegate {
     public var config:T?
-    unowned let base:UIViewController
+    unowned let base: UINavigationController
     var transition: UIViewControllerAnimatedTransitioning?
-    public init(_ base: UIViewController) {
+    //    public var enableCustomTransition: Bool = false
+    lazy var _proxy: NavigationDelegateProxy = {
+        return NavigationDelegateProxy(parent: self, forward: self.base.delegate)
+    }()
+    
+    public init(_ base: UINavigationController) {
         self.base = base
         super.init()
     }
     
     public func pass<T: MMPlayerPassViewPushConfig>(setting: (_ config: T)->Void) {
+        self.base.delegate = _proxy
         self.config = MMPlayerPassViewPushConfig()
-        self.base.navigationController?.mmPlayerlastDelegate = self
-        base.navigationController?.delegate = self
         self.transition = nil
         setting(self.config! as! T)
     }
@@ -29,25 +33,31 @@ public class MMPlayerPushAnimator: NSObject , UINavigationControllerDelegate {
     public func removeAnimate() {
         self.config = nil
         self.transition = nil
-        self.base.navigationController?.mmPlayerlastDelegate = nil
-        base.navigationController?.delegate = nil
+        self.base.delegate = nil
     }
     
-    public var enableCustomTransition: Bool = false {
+    public var enableCustomTransition: Bool = true {
         didSet {
             if enableCustomTransition {
-                base.navigationController?.delegate = self.base.navigationController?.mmPlayerlastDelegate
+                base.delegate = _proxy
             } else {
-                base.navigationController?.delegate = nil
+                base.delegate = nil
             }
         }
     }
-    
+
     public func navigationController(_ navigationController: UINavigationController,
                                      animationControllerFor operation: UINavigationControllerOperation,
                                      from fromVC: UIViewController,
                                      to toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         
+        
+        if let proxy = self.base.navigationController?.delegate as? NavigationDelegateProxy,
+            let childTransition = proxy.forward?.navigationController?(navigationController, animationControllerFor: operation, from: fromVC, to: toVC) {
+            return childTransition
+        } else if self.enableCustomTransition == false {
+            return nil
+        }
         if let t = self.transition as? MMPlayerBaseNavTransition {
             t.operation = operation
         } else {
@@ -62,3 +72,4 @@ public class MMPlayerPushAnimator: NSObject , UINavigationControllerDelegate {
         return nil
     }
 }
+

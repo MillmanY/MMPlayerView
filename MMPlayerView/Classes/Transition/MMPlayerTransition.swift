@@ -19,7 +19,9 @@ public extension MMPlayerTransition where T: UIViewController {
         objc_setAssociatedObject(base, &mmPresentKey, m, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         return m
     }
-    
+}
+
+public extension MMPlayerTransition where T: UINavigationController {
     var push: MMPlayerPushAnimator {
         if let v = objc_getAssociatedObject(base, &mmPushKey) {
             return v as! MMPlayerPushAnimator
@@ -27,5 +29,5 @@ public extension MMPlayerTransition where T: UIViewController {
         let m = MMPlayerPushAnimator(self.base)
         objc_setAssociatedObject(base, &mmPushKey, m, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         return m
-    }    
+    }
 }

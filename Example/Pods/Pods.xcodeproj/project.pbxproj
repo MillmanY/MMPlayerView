@@ -13,8 +13,10 @@
 		3F36178114111084A425DAD22200BF04 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6604A7D69453B4569E4E4827FB9155A9 /* Foundation.framework */; };
 		46DA9D7994E92E654C2886F7FC2B18EE /* Pods-MMPlayerView_Tests-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 639D550590747C95B9C1B9BDB67CBA3B /* Pods-MMPlayerView_Tests-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5E0038571F4C4CC90012A096 /* MMPlayerLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E0038561F4C4CC90012A096 /* MMPlayerLayer.swift */; };
+		5E101954206244E900BF59AA /* MMPlayer+UINavigationController+Proxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E101953206244E900BF59AA /* MMPlayer+UINavigationController+Proxy.swift */; };
+		5E1019562062450F00BF59AA /* MMPlayer+DispatchQueue+Once.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E1019552062450F00BF59AA /* MMPlayer+DispatchQueue+Once.swift */; };
 		5E3E68EE1F4FF77900122F6C /* MMPlayer+UIView+Shadow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E3E68ED1F4FF77900122F6C /* MMPlayer+UIView+Shadow.swift */; };
-		5E3EB5DB1F56B06400F376F9 /* MMPlayer+UINavigationController+LastDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E3EB5DA1F56B06400F376F9 /* MMPlayer+UINavigationController+LastDelegate.swift */; };
+		5E4F8A8B206245E200A2B19D /* MMPlayer+NSObject+Replace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E4F8A8A206245E200A2B19D /* MMPlayer+NSObject+Replace.swift */; };
 		5E562DA11EF9556900025869 /* MMPlayerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E562D9D1EF9556900025869 /* MMPlayerProtocol.swift */; };
 		5E562DA21EF9556900025869 /* MMPlayerCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E562D9E1EF9556900025869 /* MMPlayerCache.swift */; };
 		5E562DA41EF9556900025869 /* MMPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E562DA01EF9556900025869 /* MMPlayerView.swift */; };
@@ -65,8 +67,10 @@
 		50CE89AE0B419FDA5AD76D4FB01E1309 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		54FDECC2546C1D9926705F45CFC22667 /* Pods-MMPlayerView_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-MMPlayerView_Tests.release.xcconfig"; sourceTree = "<group>"; };
 		5E0038561F4C4CC90012A096 /* MMPlayerLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MMPlayerLayer.swift; sourceTree = "<group>"; };
+		5E101953206244E900BF59AA /* MMPlayer+UINavigationController+Proxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MMPlayer+UINavigationController+Proxy.swift"; sourceTree = "<group>"; };
+		5E1019552062450F00BF59AA /* MMPlayer+DispatchQueue+Once.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MMPlayer+DispatchQueue+Once.swift"; sourceTree = "<group>"; };
 		5E3E68ED1F4FF77900122F6C /* MMPlayer+UIView+Shadow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "MMPlayer+UIView+Shadow.swift"; sourceTree = "<group>"; };
-		5E3EB5DA1F56B06400F376F9 /* MMPlayer+UINavigationController+LastDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "MMPlayer+UINavigationController+LastDelegate.swift"; sourceTree = "<group>"; };
+		5E4F8A8A206245E200A2B19D /* MMPlayer+NSObject+Replace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MMPlayer+NSObject+Replace.swift"; sourceTree = "<group>"; };
 		5E562D9D1EF9556900025869 /* MMPlayerProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MMPlayerProtocol.swift; sourceTree = "<group>"; };
 		5E562D9E1EF9556900025869 /* MMPlayerCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MMPlayerCache.swift; sourceTree = "<group>"; };
 		5E562DA01EF9556900025869 /* MMPlayerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MMPlayerView.swift; sourceTree = "<group>"; };
@@ -173,11 +177,13 @@
 		5E9A1B491F4D804400746E5B /* Extension */ = {
 			isa = PBXGroup;
 			children = (
-				5E3EB5DA1F56B06400F376F9 /* MMPlayer+UINavigationController+LastDelegate.swift */,
 				5E9A1B4A1F4D804400746E5B /* MMPlayer+NSObject+safeObserver.swift */,
 				5E9A1B4B1F4D804400746E5B /* MMPlayer+UIView+Load.swift */,
 				5E3E68ED1F4FF77900122F6C /* MMPlayer+UIView+Shadow.swift */,
 				5E8FCFB01F57A7D7004A4E52 /* UIView+LayoutFit.swift */,
+				5E101953206244E900BF59AA /* MMPlayer+UINavigationController+Proxy.swift */,
+				5E1019552062450F00BF59AA /* MMPlayer+DispatchQueue+Once.swift */,
+				5E4F8A8A206245E200A2B19D /* MMPlayer+NSObject+Replace.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -476,9 +482,11 @@
 				5E9A1B7A1F4D80E600746E5B /* MMPlayerPresentAnimator.swift in Sources */,
 				5E9A1B731F4D80E600746E5B /* MMPlayerBasePresentationController.swift in Sources */,
 				5E9A1B6F1F4D80E600746E5B /* MMPlayerPushAnimator.swift in Sources */,
-				5E3EB5DB1F56B06400F376F9 /* MMPlayer+UINavigationController+LastDelegate.swift in Sources */,
+				5E4F8A8B206245E200A2B19D /* MMPlayer+NSObject+Replace.swift in Sources */,
 				5E3E68EE1F4FF77900122F6C /* MMPlayer+UIView+Shadow.swift in Sources */,
 				5E9A1B6C1F4D80E600746E5B /* MMPlayerTransition.swift in Sources */,
+				5E1019562062450F00BF59AA /* MMPlayer+DispatchQueue+Once.swift in Sources */,
+				5E101954206244E900BF59AA /* MMPlayer+UINavigationController+Proxy.swift in Sources */,
 				5E9A1B7B1F4D80E600746E5B /* MMPlayerPassViewPresentatinController.swift in Sources */,
 				5E9A1B711F4D80E600746E5B /* MMPlayerPassViewPushTransition.swift in Sources */,
 				5E9A1B4D1F4D804400746E5B /* MMPlayer+UIView+Load.swift in Sources */,

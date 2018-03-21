@@ -245,8 +245,8 @@ public class MMPlayerLayer: AVPlayerLayer {
             break
         }
     }
-    
-    public func replace<T: UIView>(cover:T) where T: MMPlayerCoverViewProtocol{
+    public func replace(cover: UIView & MMPlayerCoverViewProtocol) {
+//    public func replace<T: UIView>(cover:T) where T: MMPlayerCoverViewProtocol{
         if let c = self.coverView ,c.isMember(of: cover.classForCoder) {
             c.alpha = 1.0
             return
@@ -501,8 +501,8 @@ public class MMPlayerLayer: AVPlayerLayer {
             return
         }
         
-        UIView.animate(withDuration: 0.2, animations: {
-            self.coverView?.alpha = (isShow) ? 1.0 : 0.0
+        UIView.animate(withDuration: 0.2, animations: { [weak self] in
+            self?.coverView?.alpha = (isShow) ? 1.0 : 0.0
         })
     }
     
