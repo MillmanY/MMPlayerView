@@ -13,13 +13,14 @@ class MMPlayerShrinkControl {
     weak var from: UIViewController?
     weak var to: UIViewController?
     unowned let containerView: UIView
-    let config: MMPlayerConfig
-    init(containerView: UIView, config: MMPlayerConfig) {
+    let config: MMPlayerPresentConfig
+    init(containerView: UIView, config: MMPlayerPresentConfig) {
         self.config = config
         self.containerView = containerView
+    
     }
     
-    
+
     lazy var  containerGesture: UIPanGestureRecognizer = {
         let g = UIPanGestureRecognizer.init(target: self, action: #selector(pan(gesture:)))
         g.isEnabled = false
