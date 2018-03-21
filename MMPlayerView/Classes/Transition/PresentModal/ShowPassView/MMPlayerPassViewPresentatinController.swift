@@ -41,7 +41,6 @@ public class MMPlayerPassViewPresentatinController: MMPlayerBasePresentationCont
     }
     
     public func shrinkView() {
-        
         self.containerView?.isUserInteractionEnabled = false
         containerGesture.isEnabled = true
         self.config.playLayer?.clearURLWhenChangeView = false
@@ -144,6 +143,5 @@ public class MMPlayerPassViewPresentatinController: MMPlayerBasePresentationCont
             self.config.playLayer?.clearURLWhenChangeView = true
         }
     }
-    
 }
 

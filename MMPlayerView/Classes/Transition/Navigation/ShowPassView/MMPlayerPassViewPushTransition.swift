@@ -24,20 +24,24 @@ public class MMPlayerPassViewPushTransition: MMPlayerBaseNavTransition, UIViewCo
             
             
             guard let from = transitionContext.viewController(forKey: .from),
-                let passLayer = self.findFromVCWithProtocol(vc: from)?.passPlayer else {
+                let fromProtocol = from.fromProtocolVC else {
                     print("Need Called setView")
                     return
             }
-            guard let passContainer = (transitionContext.viewController(forKey: .to) as? MMPLayerToProtocol)?.containerView else {
-                print("Need Called setView")
+
+            guard let toProtocol = toVC.toProtocolVC else {
+                    print("Need Called setView")
                 return
             }
+
+            let passLayer = fromProtocol.passPlayer
+            let passContainer = toProtocol.containerView
             
             if let c = self.config as? MMPlayerPassViewPushConfig {
                 c.passOriginalSuper = passLayer.playView
                 c.playLayer = passLayer
             }
-            (self.source as? MMPlayerFromProtocol)?.transitionWillStart()
+            fromProtocol.transitionWillStart()
             let convertRect:CGRect = passLayer.superlayer?.convert(passLayer.superlayer!.frame, to: nil) ?? .zero
             let finalFrame = transitionContext.finalFrame(for: toVC)
             let originalColor = toVC.view.backgroundColor
@@ -57,7 +61,7 @@ public class MMPlayerPassViewPushTransition: MMPlayerBaseNavTransition, UIViewCo
                 pass.translatesAutoresizingMaskIntoConstraints = false
                 transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
                 passLayer.playView = passContainer
-                (toVC as? MMPLayerToProtocol)?.transitionCompleted(player: passLayer)
+                toProtocol.transitionCompleted(player: passLayer)
                 passLayer.clearURLWhenChangeView = true
             })
         case .pop:
@@ -72,7 +76,7 @@ public class MMPlayerPassViewPushTransition: MMPlayerBaseNavTransition, UIViewCo
             }
             
             guard let to = transitionContext.viewController(forKey: .to),
-                let source =  self.findFromVCWithProtocol(vc: to)  else {
+                let source =  to.fromProtocolVC  else {
                     print("Need Implement PassViewFromProtocol")
                     return
             }
@@ -107,14 +111,4 @@ public class MMPlayerPassViewPushTransition: MMPlayerBaseNavTransition, UIViewCo
         }
         
     }
-
-    func findFromVCWithProtocol(vc: UIViewController) -> (MMPlayerFromProtocol & UIViewController)? {
-        if let pass = vc as? MMPlayerFromProtocol & UIViewController , pass.willPassView?() ?? true {
-            return pass
-        } else if let first = vc.childViewControllers.first(where: { self.findFromVCWithProtocol(vc: $0) != nil }) as? MMPlayerFromProtocol & UIViewController {
-            return first
-        }
-        return nil
-    }
-
 }

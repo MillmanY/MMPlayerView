@@ -19,19 +19,26 @@ class MMPlayerPassViewPresentTransition: MMPlayerBasePresentTransition, UIViewCo
             let toVC = transitionContext.viewController(forKey: .to)!
             toVC.view.layoutIfNeeded()
             container.addSubview(toVC.view)
-            guard let passLayer = (self.source as? MMPlayerFromProtocol)?.passPlayer else {
+            guard let from = transitionContext.viewController(forKey: .from),
+                let fromProtocol = from.fromProtocolVC else {
+                    print("Need Called setView")
+                    transitionContext.completeTransition(true)
+                    return
+            }
+
+            guard let toProtocol = toVC.toProtocolVC else {
                 print("Need Called setView")
+                transitionContext.completeTransition(true)
                 return
             }
-            guard let passContainer = (toVC as? MMPLayerToProtocol)?.containerView else {
-                print("Need implement PassViewToProtocol")
-                return
-            }
+            let passLayer = fromProtocol.passPlayer
+            let passContainer = toProtocol.containerView
+
             if let c = self.config as? MMPlayerPassViewPresentConfig {
                 c.passOriginalSuper = passLayer.playView
                 c.playLayer = passLayer
             }
-            (self.source as? MMPlayerFromProtocol)?.transitionWillStart()
+            fromProtocol.transitionWillStart()
             let convertRect:CGRect = passLayer.superlayer?.convert(passLayer.superlayer!.frame, to: nil) ?? .zero
             let finalFrame = transitionContext.finalFrame(for: toVC)
             let originalColor = toVC.view.backgroundColor
@@ -53,22 +60,26 @@ class MMPlayerPassViewPresentTransition: MMPlayerBasePresentTransition, UIViewCo
                 passLayer.clearURLWhenChangeView = true
                 pass.removeFromSuperview()
                 transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
-                (toVC as? MMPLayerToProtocol)?.transitionCompleted(player: passLayer)
+                toProtocol.transitionCompleted(player: passLayer)
             })
         } else {
             
             let from = transitionContext.viewController(forKey: .from)
             guard let config = self.config as? MMPlayerPassViewPresentConfig else {
+                transitionContext.completeTransition(true)
                 return
             }
             
             guard let pass = config.playLayer?.playView else {
+                transitionContext.completeTransition(true)
                 return
             }
             
-            guard let source = (self.source as? MMPlayerPrsentFromProtocol) else {
-                print("Need Implement PassViewFromProtocol")
-                return
+            guard let to = transitionContext.viewController(forKey: .to),
+                let source =  to.fromProtocolVC  else {
+                    transitionContext.completeTransition(true)
+                    print("Need Implement PassViewFromProtocol")
+                    return
             }
             config.playLayer?.clearURLWhenChangeView = false
             pass.translatesAutoresizingMaskIntoConstraints = true
@@ -88,7 +99,7 @@ class MMPlayerPassViewPresentTransition: MMPlayerBasePresentTransition, UIViewCo
                 config.playLayer?.needRefreshFrame = true
                 transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
                 (self.source as? MMPlayerPrsentFromProtocol)?.dismissViewFromGesture()
-                (self.source as? MMPlayerFromProtocol)?.transitionCompleted()
+                source.transitionCompleted()
                 config.playLayer?.clearURLWhenChangeView = true
                 return
             }
@@ -105,7 +116,7 @@ class MMPlayerPassViewPresentTransition: MMPlayerBasePresentTransition, UIViewCo
                 from?.view.removeFromSuperview()
                 
                 transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
-                (self.source as? MMPlayerFromProtocol)?.transitionCompleted()
+                source.transitionCompleted()
                 config.playLayer?.clearURLWhenChangeView = true
             })
         }

@@ -39,7 +39,7 @@ class DetailViewController: UIViewController {
     }
 }
 
-extension DetailViewController: MMPLayerToProtocol {
+extension DetailViewController: MMPlayerToProtocol {
     
     func transitionCompleted(player: MMPlayerLayer) {
         self.playerLayer = player
