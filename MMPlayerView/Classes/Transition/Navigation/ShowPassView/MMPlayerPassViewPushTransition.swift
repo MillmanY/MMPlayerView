@@ -63,6 +63,7 @@ public class MMPlayerPassViewPushTransition: MMPlayerBaseNavTransition, UIViewCo
                 passLayer.playView = passContainer
                 toProtocol.transitionCompleted(player: passLayer)
                 passLayer.clearURLWhenChangeView = true
+                container.insertSubview(from.view, at: 0)
             })
         case .pop:
             let from = transitionContext.viewController(forKey: .from)

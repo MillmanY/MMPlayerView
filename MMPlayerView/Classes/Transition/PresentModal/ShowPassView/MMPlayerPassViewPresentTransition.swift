@@ -98,7 +98,8 @@ class MMPlayerPassViewPresentTransition: MMPlayerBasePresentTransition, UIViewCo
                 config.playLayer?.playView = nil
                 config.playLayer?.needRefreshFrame = true
                 transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
-                (self.source as? MMPlayerPrsentFromProtocol)?.dismissViewFromGesture()
+            
+                source.dismissViewFromGesture?()
                 source.transitionCompleted()
                 config.playLayer?.clearURLWhenChangeView = true
                 return

@@ -22,9 +22,6 @@ class ViewController: UIViewController {
     @IBOutlet weak var playerCollect: UICollectionView!
     override func viewDidLoad() {
         super.viewDidLoad()
-//        self.navigationController?.mmPlayerTransition.push.pass(setting: { (_) in
-//
-//        })
         playerCollect.addObserver(self, forKeyPath: "contentOffset", options: [.new], context: nil)
         playerCollect.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 200, right:0)
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
@@ -76,7 +73,7 @@ class ViewController: UIViewController {
 }
 
 // This protocol use to pass playerLayer to second UIViewcontroller
-extension ViewController: MMPlayerPrsentFromProtocol {
+extension ViewController: MMPlayerFromProtocol {
     // when second controller pop or dismiss, this help to put player back to where you want
     // original was player last view ex. it will be nil because of this view on reuse view
     func backReplaceSuperView(original: UIView?) -> UIView? {
@@ -150,7 +147,6 @@ extension ViewController: UICollectionViewDelegateFlowLayout {
         self.startLoading()
         if let vc = UIStoryboard.init(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "DetailViewController") as? DetailViewController {
             vc.data = DemoSource.shared.demoData[indexPath.row]
-//            self.navigationController?.pushViewController(vc, animated: true)
             self.present(vc, animated: true, completion: nil)
         }
     }

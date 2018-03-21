@@ -54,11 +54,11 @@ public struct MMPlayerTransition<T> {
 
 extension NSObject: MMPlayerTransitionCompatible { }
 
-@objc public protocol MMPlayerPrsentFromProtocol: MMPlayerFromProtocol {
-    
-    func presentedView(isShrinkVideo: Bool)
-    func dismissViewFromGesture()
-}
+//@objc public protocol MMPlayerPrsentFromProtocol: MMPlayerFromProtocol {
+//
+//    func presentedView(isShrinkVideo: Bool)
+//    func dismissViewFromGesture()
+//}
 
 @objc public protocol MMPlayerFromProtocol {
     var passPlayer: MMPlayerLayer { get }
@@ -66,6 +66,9 @@ extension NSObject: MMPlayerTransitionCompatible { }
     func transitionWillStart()
     func transitionCompleted()
     @objc optional func backReplaceSuperView(original: UIView?) -> UIView?
+    @objc optional func presentedView(isShrinkVideo: Bool)
+    @objc optional func dismissViewFromGesture()
+
 }
 
 @objc public protocol MMPlayerToProtocol {
