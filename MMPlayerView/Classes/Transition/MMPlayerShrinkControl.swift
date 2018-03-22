@@ -7,9 +7,14 @@
 
 import Foundation
 class MMPlayerShrinkControl {
-    weak var originalPlayView:UIView?
+    lazy var  containerGesture: UIPanGestureRecognizer = {
+        let g = UIPanGestureRecognizer.init(target: self, action: #selector(pan(gesture:)))
+        g.isEnabled = false
+        return g
+    }()
+
     var lastPoint: CGPoint = .zero
-    
+    weak var originalPlayView:UIView?
     weak var from: UIViewController?
     weak var to: UIViewController?
     unowned let containerView: UIView
@@ -20,13 +25,6 @@ class MMPlayerShrinkControl {
     
     }
     
-
-    lazy var  containerGesture: UIPanGestureRecognizer = {
-        let g = UIPanGestureRecognizer.init(target: self, action: #selector(pan(gesture:)))
-        g.isEnabled = false
-        return g
-    }()
-
     public func shrinkView() {
         self.containerView.isUserInteractionEnabled = false
         containerGesture.isEnabled = true
@@ -44,8 +42,8 @@ class MMPlayerShrinkControl {
         self.config.playLayer?.playView = view
         view.addGestureRecognizer(containerGesture)
         self.setFrameWith(quadrant: .rightBottom, dismissVideo: false)
-        from?.fromProtocolVC?.presentedView?(isShrinkVideo: true)
-//        (self.config.source as? MMPlayerPrsentFromProtocol)?.presentedView(isShrinkVideo: true)
+//        from?.fromProtocolVC?.presentedView?(isShrinkVideo: true)
+        (self.config.source as? MMPlayerFromProtocol)?.presentedView?(isShrinkVideo: true)
     }
     
     @objc func pan(gesture: UIPanGestureRecognizer) {

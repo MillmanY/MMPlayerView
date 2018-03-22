@@ -67,7 +67,6 @@ public class MMPlayerPushAnimator: NSObject, UINavigationControllerDelegate {
             t.operation = operation
         } else {
             let t = MMPlayerPassViewPushTransition(config: config!, operation: operation)
-            t.source = self.base
             transition = t
         }
         return transition

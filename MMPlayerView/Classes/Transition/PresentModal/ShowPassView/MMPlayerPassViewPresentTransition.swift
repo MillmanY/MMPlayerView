@@ -19,8 +19,7 @@ class MMPlayerPassViewPresentTransition: MMPlayerBasePresentTransition, UIViewCo
             let toVC = transitionContext.viewController(forKey: .to)!
             toVC.view.layoutIfNeeded()
             container.addSubview(toVC.view)
-            guard let from = transitionContext.viewController(forKey: .from),
-                let fromProtocol = from.fromProtocolVC else {
+            guard let fromProtocol = config.source?.fromProtocolVC else {
                     print("Need Called setView")
                     transitionContext.completeTransition(true)
                     return
@@ -75,12 +74,12 @@ class MMPlayerPassViewPresentTransition: MMPlayerBasePresentTransition, UIViewCo
                 return
             }
             
-            guard let to = transitionContext.viewController(forKey: .to),
-                let source =  to.fromProtocolVC  else {
+            guard let source =  config.source?.fromProtocolVC  else {
                     transitionContext.completeTransition(true)
                     print("Need Implement PassViewFromProtocol")
                     return
             }
+            
             config.playLayer?.clearURLWhenChangeView = false
             pass.translatesAutoresizingMaskIntoConstraints = true
             let superV = source.backReplaceSuperView?(original: config.passOriginalSuper) ?? config.passOriginalSuper

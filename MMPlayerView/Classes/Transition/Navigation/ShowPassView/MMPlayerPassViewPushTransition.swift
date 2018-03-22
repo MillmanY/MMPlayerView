@@ -25,12 +25,14 @@ public class MMPlayerPassViewPushTransition: MMPlayerBaseNavTransition, UIViewCo
             
             guard let from = transitionContext.viewController(forKey: .from),
                 let fromProtocol = from.fromProtocolVC else {
-                    print("Need Called setView")
+                    print("From protocol not found")
+                    transitionContext.completeTransition(true)
                     return
             }
 
             guard let toProtocol = toVC.toProtocolVC else {
-                    print("Need Called setView")
+                    print("To Protocol not found")
+                transitionContext.completeTransition(true)
                 return
             }
 
@@ -77,6 +79,7 @@ public class MMPlayerPassViewPushTransition: MMPlayerBaseNavTransition, UIViewCo
             
             guard let to = transitionContext.viewController(forKey: .to),
                 let source =  to.fromProtocolVC  else {
+                    transitionContext.completeTransition(true)
                     print("Need Implement PassViewFromProtocol")
                     return
             }

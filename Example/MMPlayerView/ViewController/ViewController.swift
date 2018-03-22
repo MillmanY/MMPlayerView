@@ -22,6 +22,9 @@ class ViewController: UIViewController {
     @IBOutlet weak var playerCollect: UICollectionView!
     override func viewDidLoad() {
         super.viewDidLoad()
+//        self.navigationController?.mmPlayerTransition.push.pass(setting: { (_) in
+//
+//        })
         playerCollect.addObserver(self, forKeyPath: "contentOffset", options: [.new], context: nil)
         playerCollect.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 200, right:0)
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
