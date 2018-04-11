@@ -12,6 +12,7 @@ import AVFoundation
 public class MMPlayerLayer: AVPlayerLayer {
     lazy var tapGesture: UITapGestureRecognizer = {
         let g = UITapGestureRecognizer.init(target: self, action: #selector(MMPlayerLayer.touchAction(gesture:)))
+        g.cancelsTouchesInView = false
         return g
     }()
     // prevent set frame frequently
