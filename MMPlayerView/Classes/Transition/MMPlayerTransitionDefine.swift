@@ -10,15 +10,15 @@ import Foundation
 
 public protocol MMPlayerConfig {
     var duration : TimeInterval { get set }
-    weak var passOriginalSuper: UIView? {set get}
-    weak var playLayer: MMPlayerLayer? { set get}
+    var passOriginalSuper: UIView? {set get}
+    var playLayer: MMPlayerLayer? { set get}
 }
 
 public protocol MMPlayerPresentConfig: MMPlayerConfig {
     var margin: CGFloat { set get }
     var shrinkSize: CGSize { set get }
     var dismissGesture: Bool { get }
-    weak var source: UIViewController? { set get }
+    var source: UIViewController? { set get }
 }
 
 public protocol MMPlayerNavConfig: MMPlayerConfig {
