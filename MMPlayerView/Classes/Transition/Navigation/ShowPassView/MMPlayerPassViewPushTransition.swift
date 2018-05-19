@@ -22,7 +22,6 @@ public class MMPlayerPassViewPushTransition: MMPlayerBaseNavTransition, UIViewCo
         case .push:
             toVC.view.layoutIfNeeded()
             
-            
             guard let from = transitionContext.viewController(forKey: .from),
                 let fromProtocol = from.fromProtocolVC else {
                     print("From protocol not found")

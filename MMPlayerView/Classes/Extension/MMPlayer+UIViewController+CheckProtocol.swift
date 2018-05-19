@@ -23,20 +23,30 @@ extension UIViewController {
     static func findFromVCWithProtocol(vc: UIViewController) -> (MMPlayerFromProtocol & UIViewController)? {
         if let pass = vc as? MMPlayerFromProtocol & UIViewController , pass.willPassView?() ?? true {
             return pass
-        } else if let first = vc.childViewControllers.first(where: { UIViewController.findFromVCWithProtocol(vc: $0) != nil }) as? MMPlayerFromProtocol & UIViewController {
-            return first
+        } else {
+            var find: (MMPlayerFromProtocol & UIViewController)?
+            vc.childViewControllers.forEach { (vc) in
+                if let f = UIViewController.findFromVCWithProtocol(vc: vc) {
+                    find = f
+                }
+            }
+            return find
         }
-        return nil
     }
 
     static func findToVCWithProtocol(vc: UIViewController) -> (MMPlayerToProtocol & UIViewController)? {
         
         if let pass = vc as? MMPlayerToProtocol & UIViewController {
             return pass
-        } else if let first = vc.childViewControllers.first(where: { UIViewController.findFromVCWithProtocol(vc: $0) != nil }) as? MMPlayerToProtocol & UIViewController {
-            return first
+        } else {
+            var find: (MMPlayerToProtocol & UIViewController)?
+            vc.childViewControllers.forEach { (vc) in
+                if let f = UIViewController.findToVCWithProtocol(vc: vc) {
+                    find = f
+                }
+            }
+            return find
         }
-        return nil
     }
 
 }

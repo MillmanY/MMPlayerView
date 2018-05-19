@@ -16,7 +16,7 @@ class ViewController: UIViewController {
         l.cacheType = .memory(count: 5)
         l.coverFitType = .fitToPlayerView
         l.videoGravity = AVLayerVideoGravity.resizeAspectFill
-//        l.replace(cover: CoverA.instantiateFromNib())
+        l.replace(cover: CoverA.instantiateFromNib())
         return l
     }()
     @IBOutlet weak var playerCollect: UICollectionView!
@@ -25,6 +25,7 @@ class ViewController: UIViewController {
 //        self.navigationController?.mmPlayerTransition.push.pass(setting: { (_) in
 //
 //        })
+        
         playerCollect.addObserver(self, forKeyPath: "contentOffset", options: [.new], context: nil)
         playerCollect.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 200, right:0)
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
@@ -148,6 +149,9 @@ extension ViewController: UICollectionViewDelegateFlowLayout {
     fileprivate func presentDetail(at indexPath: IndexPath) {
         self.updateCell(at: indexPath)
         self.startLoading()
+        self.navigationController?.mmPlayerTransition.push.pass(setting: { (_) in
+            
+        })
         if let vc = UIStoryboard.init(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "DetailViewController") as? DetailViewController {
             vc.data = DemoSource.shared.demoData[indexPath.row]
             self.present(vc, animated: true, completion: nil)
