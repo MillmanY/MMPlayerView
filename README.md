@@ -145,7 +145,7 @@ it, simply add the following line to your Podfile:
 Swift 3 
 pod 'MMPlayerView', '~> 2.1.8'
 Swift 4 (> 3.0.1)
-pod 'MMPlayerView', '~> 3.0.2'
+pod 'MMPlayerView'
 ```
 ## Author
 
