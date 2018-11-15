@@ -41,6 +41,21 @@ public enum MMPlayerPlayStatus {
     case end
 }
 
+public enum VideoType: Int, Codable {
+    case mp4 = 0
+    case hls
+}
+
+public enum MMPlayerDownloadStatus {
+    case unknown
+    case waiting
+    case exporting(value: Float)
+    case completed(info: MMPlayerDownLoadVideoInfo)
+    case failed(err: String)
+    case cancelled
+    case exist
+}
+
 public enum CoverViewFitType {
     case fitToPlayerView
     case fitToVideoRect
@@ -60,3 +75,5 @@ public protocol MMProgressProtocol {
 public protocol MMPlayerLayerProtocol: class {
     func touchInVideoRect(contain: Bool)
 }
+
+let VideoBasePath = NSTemporaryDirectory()

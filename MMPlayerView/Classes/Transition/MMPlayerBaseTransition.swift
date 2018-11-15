@@ -20,10 +20,10 @@ public class MMPlayerBasePresentTransition: NSObject {
 }
 
 public class MMPlayerBaseNavTransition: NSObject {
-    var operation:UINavigationControllerOperation = .none
+    var operation: UINavigationController.Operation = .none
     internal var config: MMPlayerConfig!
     
-    convenience init(config: MMPlayerConfig , operation: UINavigationControllerOperation) {
+    convenience init(config: MMPlayerConfig , operation: UINavigationController.Operation) {
         self.init()
         self.config = config
         self.operation = operation

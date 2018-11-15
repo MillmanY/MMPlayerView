@@ -19,6 +19,8 @@ public protocol MMPlayerPresentConfig: MMPlayerConfig {
     var shrinkSize: CGSize { set get }
     var dismissGesture: Bool { get }
     var source: UIViewController? { set get }
+    var isMarginNeedArea: Bool { get set }
+
 }
 
 public protocol MMPlayerNavConfig: MMPlayerConfig {

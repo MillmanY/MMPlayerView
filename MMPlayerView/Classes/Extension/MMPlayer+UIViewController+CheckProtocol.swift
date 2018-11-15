@@ -25,7 +25,7 @@ extension UIViewController {
             return pass
         } else {
             var find: (MMPlayerFromProtocol & UIViewController)?
-            vc.childViewControllers.forEach { (vc) in
+            vc.children.forEach { (vc) in
                 if let f = UIViewController.findFromVCWithProtocol(vc: vc) {
                     find = f
                 }
@@ -40,7 +40,7 @@ extension UIViewController {
             return pass
         } else {
             var find: (MMPlayerToProtocol & UIViewController)?
-            vc.childViewControllers.forEach { (vc) in
+            vc.children.forEach { (vc) in
                 if let f = UIViewController.findToVCWithProtocol(vc: vc) {
                     find = f
                 }

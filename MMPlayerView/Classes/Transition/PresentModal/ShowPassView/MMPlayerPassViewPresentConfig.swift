@@ -13,8 +13,10 @@ public class MMPlayerPassViewPresentConfig: NSObject ,MMPlayerPresentConfig {
     weak public var passOriginalSuper: UIView?
     weak public var playLayer: MMPlayerLayer?
     public var margin: CGFloat = 10.0
+    public var isMarginNeedArea = true
     public var duration:TimeInterval = 0.3
     public var shrinkSize = CGSize(width: 150, height: 100)
+
     weak public var source: UIViewController?
 
     var _dismissGesture = false

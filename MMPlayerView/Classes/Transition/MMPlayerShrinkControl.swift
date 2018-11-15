@@ -42,7 +42,6 @@ class MMPlayerShrinkControl {
         self.config.playLayer?.playView = view
         view.addGestureRecognizer(containerGesture)
         self.setFrameWith(quadrant: .rightBottom, dismissVideo: false)
-//        from?.fromProtocolVC?.presentedView?(isShrinkVideo: true)
         (self.config.source as? MMPlayerFromProtocol)?.presentedView?(isShrinkVideo: true)
     }
     
@@ -82,19 +81,28 @@ class MMPlayerShrinkControl {
         let margin = self.config.margin
         var rect = self.config.playLayer?.playView?.frame ?? .zero
         let size = UIScreen.main.bounds
+        
+        let safe = UIApplication.shared.keyWindow?.safeAreaInsets
+        
+        var safeTop: CGFloat = 0
+        var safeBottom: CGFloat = 0
+        if self.config.isMarginNeedArea {
+            safeTop = safe?.top ?? 0
+            safeBottom = safe?.bottom ?? 0
+        }
         switch quadrant {
         case .leftTop:
             rect.origin.x = dismissVideo ? -rect.size.width : margin
-            rect.origin.y = margin
+            rect.origin.y = margin + safeTop
         case .rightTop:
             rect.origin.x = dismissVideo ? size.width : size.width-rect.size.width-margin
-            rect.origin.y = margin
+            rect.origin.y = margin + safeTop
         case .leftBottom:
             rect.origin.x = dismissVideo ? -rect.size.width : margin
-            rect.origin.y = size.height-rect.size.height-margin
+            rect.origin.y = size.height-rect.size.height-margin-safeBottom
         case .rightBottom:
             rect.origin.x = dismissVideo ? size.width : size.width-rect.size.width-margin
-            rect.origin.y = size.height-rect.size.height-margin
+            rect.origin.y = size.height-rect.size.height-margin-safeBottom
         }
         
         to?.view.alpha = 0.0

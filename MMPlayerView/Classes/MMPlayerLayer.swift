@@ -73,6 +73,7 @@ public class MMPlayerLayer: AVPlayerLayer {
             new.layer.insertSublayer(self, at: 0)
         }
     }
+    
     public weak var mmDelegate: MMPlayerLayerProtocol?
     public var progressType: ProgressType = .default {
         didSet {
@@ -166,6 +167,7 @@ public class MMPlayerLayer: AVPlayerLayer {
                 self.player?.replaceCurrentItem(with: cacheItem)
             } else {
                 self.asset = AVURLAsset(url: url)
+
                 self.asset?.loadValuesAsynchronously(forKeys: assetKeysRequiredToPlay) { [weak self] in
                     DispatchQueue.main.async {
                         if let a = self?.asset, let keys = self?.assetKeysRequiredToPlay {
@@ -276,14 +278,28 @@ public class MMPlayerLayer: AVPlayerLayer {
     }
     public func set(url: URL?, state: ((_ status: MMPlayerPlayStatus) -> Void)?) {
         self.playStatusBlock = state
-        self.willPlayUrl = url
+        
+        if let will = url ,
+            let real = MMPlayerDownloader.shared.localFileFrom(url: will) {
+            switch real.type {
+            case .hls:
+                var statle = false
+                let data = try? Data(contentsOf: real.localURL)
+                self.willPlayUrl = try? URL(resolvingBookmarkData: data!, bookmarkDataIsStale: &statle)
+            case .mp4:
+                self.willPlayUrl = real.localURL
+            }
+        } else {
+            self.willPlayUrl = url
+
+        }
     }
 
     public func stopLoading() {
         self.willPlayUrl = nil
     }
     
-    public func startLoading() {
+    public func startLoading(localFirst: Bool = true) {
 
         switch self.currentPlayStatus {
         case .playing , .pause:
@@ -293,13 +309,26 @@ public class MMPlayerLayer: AVPlayerLayer {
         default:
             break
         }
+//        if let will = willPlayUrl ,
+//           let real = MMPlayerDownloader.shared.localFileFrom(url: will) {
+//            switch real.type {
+//            case .hls:
+//                var statle = false
+//                let data = try? Data(contentsOf: real.localURL)
+//                self.willPlayUrl = try? URL(resolvingBookmarkData: data!, bookmarkDataIsStale: &statle)
+//            case .mp4:
+//                self.willPlayUrl = real.localURL
+//            }
+//        }
+        
         self.playUrl = willPlayUrl
+
     }
     
     fileprivate func addPlayerObserver() {
         NotificationCenter.default.removeObserver(self)
         if timeObserver == nil {
-            timeObserver = self.player?.addPeriodicTimeObserver(forInterval: CMTimeMake(1, 100), queue: DispatchQueue.main, using: { [weak self] (time) in
+            timeObserver = self.player?.addPeriodicTimeObserver(forInterval: CMTimeMake(value: 1, timescale: 100), queue: DispatchQueue.main, using: { [weak self] (time) in
                 
                 if time.isIndefinite {
                     return
@@ -310,7 +339,7 @@ public class MMPlayerLayer: AVPlayerLayer {
             })
         }
         
-        NotificationCenter.default.addObserver(forName: .UIApplicationWillResignActive, object: nil, queue: nil, using: { [weak self] (nitification) in
+        NotificationCenter.default.addObserver(forName: UIApplication.willResignActiveNotification, object: nil, queue: nil, using: { [weak self] (nitification) in
             switch self?.currentPlayStatus ?? .unknown {
             case .pause:
                 self?.isBackgroundPause = true
@@ -320,7 +349,7 @@ public class MMPlayerLayer: AVPlayerLayer {
             self?.player?.pause()
         })
         
-        NotificationCenter.default.addObserver(forName: .UIApplicationDidBecomeActive, object: nil, queue: nil, using: { [weak self] (nitification) in
+        NotificationCenter.default.addObserver(forName: UIApplication.didBecomeActiveNotification, object: nil, queue: nil, using: { [weak self] (nitification) in
             if self?.isBackgroundPause == false {
                 self?.player?.play()
             }

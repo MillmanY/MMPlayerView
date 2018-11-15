@@ -159,7 +159,7 @@ extension ViewController: UICollectionViewDelegateFlowLayout {
     }
     
     fileprivate func updateCell(at indexPath: IndexPath) {
-        if let cell = playerCollect.cellForItem(at: indexPath) as? PlayerCell {
+        if let cell = playerCollect.cellForItem(at: indexPath) as? PlayerCell, let playURL = cell.data?.play_Url {
             // this thumb use when transition start and your video dosent start
             mmPlayerLayer.thumbImageView.image = cell.imgView.image
             // set video where to play
@@ -167,8 +167,12 @@ extension ViewController: UICollectionViewDelegateFlowLayout {
                 mmPlayerLayer.playView = cell.imgView
             }
             
-            // set url prepare to load
-            mmPlayerLayer.set(url: cell.data?.play_Url, state: { (status) in
+//            var statle = false
+//
+//            let data = try? Data.init(contentsOf: real)
+//            let url = try? URL.init(resolvingBookmarkData: data!, bookmarkDataIsStale: &statle)
+            
+            mmPlayerLayer.set(url: playURL, state: { (status) in
                 switch status {
                 case .failed(let err):
                     let alert = UIAlertController(title: "err", message: err.description, preferredStyle: .alert)

@@ -63,7 +63,7 @@ class MMProgress: UIView {
     }
     
     func setup() {
-        defaultIndicator.activityIndicatorViewStyle = .whiteLarge
+        defaultIndicator.style = .whiteLarge
         self.addSubview(defaultIndicator)
         defaultIndicator.mPlayFit.layoutFitSuper()
     }
