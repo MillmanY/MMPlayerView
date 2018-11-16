@@ -1,33 +1,27 @@
 //
-//  MMPlayerDownloadRequest.swift
-//  Pods
+//  MMPlayerMP4Converter.swift
+//  MMPlayerView
 //
-//  Created by Millman YANG on 2017/9/2.
-//
+//  Created by Millman on 2018/11/16.
 //
 
-import UIKit
+import Foundation
 import AVFoundation
-class MMPlayerDownloadRequest: NSObject {
+class MMPlayerDownloadRequest {
     unowned let asset: AVURLAsset
-
     fileprivate var timer: Timer?
-    fileprivate var willDownloadToUrlMap = [AVAggregateAssetDownloadTask: URL]()
-    lazy var downloadSession: AVAssetDownloadURLSession = {
-        let backgroundConfiguration = URLSessionConfiguration.background(withIdentifier: "Download-Identifier")
-        return AVAssetDownloadURLSession.init(configuration: backgroundConfiguration, assetDownloadDelegate: self, delegateQueue: OperationQueue.main)
-    }()
     var statusBlock: ((_ status: MMPlayerDownloadStatus)->Void)?
     let videoPath: (current: URL, hide: URL)
     let pathInfo: DownloaderPath
     let fileName: String
-
-    public init(asset: AVURLAsset, pathInfo: DownloaderPath, fileName: String) {
+    let manager: MMPlayerHLSManager
+    public init(asset: AVURLAsset, pathInfo: DownloaderPath, fileName: String, manager: MMPlayerHLSManager) {
         self.asset = asset
         self.pathInfo =  pathInfo
         self.fileName = fileName
         self.videoPath = (pathInfo.fullPath.appendingPathComponent(fileName),
                           pathInfo.fullPath.appendingPathComponent(".\(fileName)"))
+        self.manager = manager
     }
     
     func start(status:((_ status: MMPlayerDownloadStatus)->Void)?) {
@@ -35,18 +29,31 @@ class MMPlayerDownloadRequest: NSObject {
         try? FileManager.default.removeItem(at: self.videoPath.current)
         self.statusBlock = status
         
-        if self.asset.isExportable {
+        if asset.isExportable {
             self.export()
         } else {
-            let preferredMediaSelection = asset.preferredMediaSelection
-            
-            let task = downloadSession.aggregateAssetDownloadTask(with: asset,
-                                                                  mediaSelections: [preferredMediaSelection],
-                                                                  assetTitle: fileName,
-                                                                  assetArtworkData: nil,
-                                                                  options:
-                [AVAssetDownloadTaskMinimumRequiredMediaBitrateKey: 265_000])
-            task?.resume()
+            self.hls()
+        }
+    }
+    
+    func hls() {
+        manager.start(asset: asset, fileName: fileName) { [weak self] (status) in
+            guard let self = self else {return}
+            switch status {
+            case .completed(let data):
+                try? data.write(to: self.videoPath.current)
+                let info = MMPlayerDownLoadVideoInfo(url: self.asset.url,
+                                                     type: .hls,
+                                                     fileName: self.fileName,
+                                                     fileSubPath: self.pathInfo.subPath)
+                self.statusBlock?(.completed(info: info))
+            case .failed(let err):
+                self.statusBlock?(.failed(err: err))
+            case .downloading(let value):
+                self.statusBlock?(.downloading(value: value))
+            case .none:
+                self.statusBlock?(.none)
+            }
         }
     }
     
@@ -59,13 +66,13 @@ class MMPlayerDownloadRequest: NSObject {
         } catch {
             return
         }
-
+        
         let finalComposition = composition.copy() as! AVComposition
-
+        
         guard let export = AVAssetExportSession(asset: finalComposition, presetName: AVAssetExportPresetPassthrough) else {
             return
         }
-
+        
         let path = self.pathInfo.fullPath.appendingPathComponent(".\(fileName)")
         export.outputURL = path
         export.outputFileType = .mp4
@@ -73,8 +80,6 @@ class MMPlayerDownloadRequest: NSObject {
             switch export.status {
             case .exporting:
                 break
-            case .waiting:
-                self.statusBlock?(.waiting)
             case .cancelled:
                 self.timer?.invalidate()
                 self.timer = nil
@@ -95,70 +100,18 @@ class MMPlayerDownloadRequest: NSObject {
                 self.timer = nil
                 try? FileManager.default.removeItem(at: self.videoPath.hide)
                 self.statusBlock?(.failed(err: ""))
-            case .unknown:
+            case .unknown , .waiting:
                 self.timer?.invalidate()
                 self.timer = nil
-                self.statusBlock?(.unknown)
+                self.statusBlock?(.none)
             }
         })
         timer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(progressUpdate), userInfo: export, repeats: true)
     }
-
+    
     @objc func progressUpdate(timer: Timer) {
         if let export = timer.userInfo as? AVAssetExportSession {
-            self.statusBlock?(.exporting(value: export.progress))
+            self.statusBlock?(.downloading(value: export.progress))
         }
-    }
-}
-
-
-extension MMPlayerDownloadRequest: AVAssetDownloadDelegate {
-    func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
-        guard let task = task as? AVAggregateAssetDownloadTask else { return }
-        if let err = error as NSError? {
-            switch (err.domain, err.code) {
-            case (NSURLErrorDomain, NSURLErrorCancelled):
-                statusBlock?(.failed(err: err.localizedDescription))
-            case (NSURLErrorDomain, NSURLErrorUnknown):
-                fatalError("Downloading HLS streams is not supported in the simulator.")
-            default:
-                fatalError("An unexpected error occured \(err.domain)")
-                
-            }
-        } else if willDownloadToUrlMap[task] == nil {
-            task.resume()
-        } else {
-            guard let downloadURL = willDownloadToUrlMap.removeValue(forKey: task) else { return }
-            do {
-                let data = try downloadURL.bookmarkData()
-                try? data.write(to: videoPath.current)
-                let info = MMPlayerDownLoadVideoInfo(url: task.urlAsset.url,
-                                                     type: .hls,
-                                                     fileName: fileName,
-                                                     fileSubPath: self.pathInfo.subPath)
-
-                statusBlock?(.completed(info: info))
-            } catch let dataErr {
-                
-                statusBlock?(.failed(err: dataErr.localizedDescription))
-            }
-        }
-    }
-    
-    func urlSession(_ session: URLSession, aggregateAssetDownloadTask: AVAggregateAssetDownloadTask,
-                            willDownloadTo location: URL) {
-        
-        willDownloadToUrlMap[aggregateAssetDownloadTask] = location
-    }
-    
-    func urlSession(_ session: URLSession, aggregateAssetDownloadTask: AVAggregateAssetDownloadTask,
-                            didLoad timeRange: CMTimeRange, totalTimeRangesLoaded loadedTimeRanges: [NSValue],
-                            timeRangeExpectedToLoad: CMTimeRange, for mediaSelection: AVMediaSelection) {
-   
-        let percentComplete = loadedTimeRanges.reduce(0) { (rc, value) -> Float in
-            let loadedTimeRange: CMTimeRange = value.timeRangeValue
-            return rc + Float((loadedTimeRange.duration.seconds / timeRangeExpectedToLoad.duration.seconds))
-        }
-        statusBlock?(.exporting(value: percentComplete))
     }
 }

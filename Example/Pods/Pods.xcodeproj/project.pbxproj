@@ -10,9 +10,11 @@
 		139987C7DC290D6BA15D5C71A6F2F31F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6604A7D69453B4569E4E4827FB9155A9 /* Foundation.framework */; };
 		179DFFF5A41590159B910EB208055F9F /* MMPlayerView-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 15A6BD688A2D656904144E5B76D1FB4D /* MMPlayerView-dummy.m */; };
 		2717E199219D388600DCC8CB /* MMPlayerDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2717E197219D388600DCC8CB /* MMPlayerDownloader.swift */; };
-		2717E19A219D388600DCC8CB /* MMPlayerDownloadRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2717E198219D388600DCC8CB /* MMPlayerDownloadRequest.swift */; };
 		2717E19D219DA46800DCC8CB /* MMPlayerDownLoadVideoInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2717E19C219DA46800DCC8CB /* MMPlayerDownLoadVideoInfo.swift */; };
 		2717E19F219DB17000DCC8CB /* MMPlayer+Codable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2717E19E219DB17000DCC8CB /* MMPlayer+Codable.swift */; };
+		27874357219E7522001B98F9 /* MMPlayer+String+Encode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27874356219E7522001B98F9 /* MMPlayer+String+Encode.swift */; };
+		27874359219E774A001B98F9 /* MMPlayerHLSManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27874358219E774A001B98F9 /* MMPlayerHLSManager.swift */; };
+		2787435B219E7966001B98F9 /* MMPlayerDownloadRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2787435A219E7966001B98F9 /* MMPlayerDownloadRequest.swift */; };
 		2E84F8562C8CCA5CDEB1FFB61D2BD886 /* Pods-MMPlayerView_Example-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EFD9156A61B9FAA04CE035D9A3722F0 /* Pods-MMPlayerView_Example-dummy.m */; };
 		3F36178114111084A425DAD22200BF04 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6604A7D69453B4569E4E4827FB9155A9 /* Foundation.framework */; };
 		46DA9D7994E92E654C2886F7FC2B18EE /* Pods-MMPlayerView_Tests-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 639D550590747C95B9C1B9BDB67CBA3B /* Pods-MMPlayerView_Tests-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -65,9 +67,11 @@
 		15A6BD688A2D656904144E5B76D1FB4D /* MMPlayerView-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "MMPlayerView-dummy.m"; sourceTree = "<group>"; };
 		1E3C9876962EA1DCB602AE70C4C5EB03 /* Pods-MMPlayerView_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-MMPlayerView_Example.release.xcconfig"; sourceTree = "<group>"; };
 		2717E197219D388600DCC8CB /* MMPlayerDownloader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MMPlayerDownloader.swift; sourceTree = "<group>"; };
-		2717E198219D388600DCC8CB /* MMPlayerDownloadRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MMPlayerDownloadRequest.swift; sourceTree = "<group>"; };
 		2717E19C219DA46800DCC8CB /* MMPlayerDownLoadVideoInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MMPlayerDownLoadVideoInfo.swift; sourceTree = "<group>"; };
 		2717E19E219DB17000DCC8CB /* MMPlayer+Codable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MMPlayer+Codable.swift"; sourceTree = "<group>"; };
+		27874356219E7522001B98F9 /* MMPlayer+String+Encode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MMPlayer+String+Encode.swift"; sourceTree = "<group>"; };
+		27874358219E774A001B98F9 /* MMPlayerHLSManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MMPlayerHLSManager.swift; sourceTree = "<group>"; };
+		2787435A219E7966001B98F9 /* MMPlayerDownloadRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MMPlayerDownloadRequest.swift; sourceTree = "<group>"; };
 		36CCC8551496A7DFC48D0DFB3E4F03F7 /* Pods-MMPlayerView_Tests.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = "Pods-MMPlayerView_Tests.modulemap"; sourceTree = "<group>"; };
 		3783F984175A354A180562418CBB2252 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3C7B95119BA632F4D49667B3D93FF2AC /* Pods-MMPlayerView_Tests-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-MMPlayerView_Tests-dummy.m"; sourceTree = "<group>"; };
@@ -153,9 +157,10 @@
 		2717E196219D386D00DCC8CB /* Downloader */ = {
 			isa = PBXGroup;
 			children = (
-				2717E197219D388600DCC8CB /* MMPlayerDownloader.swift */,
-				2717E198219D388600DCC8CB /* MMPlayerDownloadRequest.swift */,
 				2717E19C219DA46800DCC8CB /* MMPlayerDownLoadVideoInfo.swift */,
+				2717E197219D388600DCC8CB /* MMPlayerDownloader.swift */,
+				2787435A219E7966001B98F9 /* MMPlayerDownloadRequest.swift */,
+				27874358219E774A001B98F9 /* MMPlayerHLSManager.swift */,
 			);
 			path = Downloader;
 			sourceTree = "<group>";
@@ -208,6 +213,7 @@
 				5E4F8A8A206245E200A2B19D /* MMPlayer+NSObject+Replace.swift */,
 				5E4F8A9220627FC100A2B19D /* MMPlayer+UIViewController+CheckProtocol.swift */,
 				2717E19E219DB17000DCC8CB /* MMPlayer+Codable.swift */,
+				27874356219E7522001B98F9 /* MMPlayer+String+Encode.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -513,13 +519,13 @@
 				5E4F8A8B206245E200A2B19D /* MMPlayer+NSObject+Replace.swift in Sources */,
 				5E3E68EE1F4FF77900122F6C /* MMPlayer+UIView+Shadow.swift in Sources */,
 				5E9A1B6C1F4D80E600746E5B /* MMPlayerTransition.swift in Sources */,
-				2717E19A219D388600DCC8CB /* MMPlayerDownloadRequest.swift in Sources */,
 				5E1019562062450F00BF59AA /* MMPlayer+DispatchQueue+Once.swift in Sources */,
 				5E101954206244E900BF59AA /* MMPlayer+UINavigationController+Proxy.swift in Sources */,
 				5E9A1B7B1F4D80E600746E5B /* MMPlayerPassViewPresentatinController.swift in Sources */,
 				5E9A1B711F4D80E600746E5B /* MMPlayerPassViewPushTransition.swift in Sources */,
 				5E9A1B4D1F4D804400746E5B /* MMPlayer+UIView+Load.swift in Sources */,
 				5E0038571F4C4CC90012A096 /* MMPlayerLayer.swift in Sources */,
+				27874357219E7522001B98F9 /* MMPlayer+String+Encode.swift in Sources */,
 				5E9A1B7E1F4D80E600746E5B /* MMPlayerTransitionDefine.swift in Sources */,
 				2717E19F219DB17000DCC8CB /* MMPlayer+Codable.swift in Sources */,
 				5E9A1B4C1F4D804400746E5B /* MMPlayer+NSObject+safeObserver.swift in Sources */,
@@ -527,8 +533,10 @@
 				5E4F8A9320627FC100A2B19D /* MMPlayer+UIViewController+CheckProtocol.swift in Sources */,
 				5EC40F441F4EA47100510EDF /* MMLandscapeWindow.swift in Sources */,
 				5E9A1B6B1F4D80E600746E5B /* MMPlayerBaseTransition.swift in Sources */,
+				27874359219E774A001B98F9 /* MMPlayerHLSManager.swift in Sources */,
 				5E562DA11EF9556900025869 /* MMPlayerProtocol.swift in Sources */,
 				179DFFF5A41590159B910EB208055F9F /* MMPlayerView-dummy.m in Sources */,
+				2787435B219E7966001B98F9 /* MMPlayerDownloadRequest.swift in Sources */,
 				5E562DA21EF9556900025869 /* MMPlayerCache.swift in Sources */,
 				5E562DA41EF9556900025869 /* MMPlayerView.swift in Sources */,
 				5E9A1B701F4D80E600746E5B /* MMPlayerPassViewPushConfig.swift in Sources */,

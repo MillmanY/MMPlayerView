@@ -284,8 +284,12 @@ public class MMPlayerLayer: AVPlayerLayer {
             switch real.type {
             case .hls:
                 var statle = false
-                let data = try? Data(contentsOf: real.localURL)
-                self.willPlayUrl = try? URL(resolvingBookmarkData: data!, bookmarkDataIsStale: &statle)
+                if let data = try? Data(contentsOf: real.localURL),
+                   let convert = try? URL(resolvingBookmarkData: data, bookmarkDataIsStale: &statle) {
+                    self.willPlayUrl = convert
+                } else {
+                    self.willPlayUrl = url
+                }
             case .mp4:
                 self.willPlayUrl = real.localURL
             }

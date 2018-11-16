@@ -6,7 +6,7 @@
 //
 
 import Foundation
-public struct MMPlayerDownLoadVideoInfo: Codable {
+public struct MMPlayerDownLoadVideoInfo: Codable, Equatable {
     let url: URL
     let type: VideoType
     let fileName: String
@@ -18,5 +18,12 @@ public struct MMPlayerDownLoadVideoInfo: Codable {
                       .appendingPathComponent(fileSubPath)
                       .appendingPathComponent(fileName)
         }
+    }
+    
+    public static func == (lhs: MMPlayerDownLoadVideoInfo, rhs: MMPlayerDownLoadVideoInfo) -> Bool {
+        return lhs.url == rhs.url &&
+               lhs.type == rhs.type &&
+               lhs.fileName == rhs.fileName &&
+               lhs.fileSubPath == rhs.fileSubPath
     }
 }

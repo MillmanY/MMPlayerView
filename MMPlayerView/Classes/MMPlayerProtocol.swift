@@ -47,13 +47,20 @@ public enum VideoType: Int, Codable {
 }
 
 public enum MMPlayerDownloadStatus {
-    case unknown
-    case waiting
-    case exporting(value: Float)
+    case none
+    case downloading(value: Float)
     case completed(info: MMPlayerDownLoadVideoInfo)
     case failed(err: String)
     case cancelled
     case exist
+}
+
+public enum HLSManagerStatus {
+    case none
+    case downloading(value: Float)
+    case completed(data: Data)
+    case failed(err: String)
+
 }
 
 public enum CoverViewFitType {

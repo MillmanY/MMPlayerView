@@ -11,7 +11,7 @@ import AVFoundation
 typealias DownloaderPath = (fullPath: URL, subPath: String)
 private let videoExpireInterval = TimeInterval(60*60*12)
 public class MMPlayerDownloader: NSObject {
-    
+    fileprivate let hls = MMPlayerHLSManager()
     public static let shared: MMPlayerDownloader = {
         NSTemporaryDirectory()
         let shared =  MMPlayerDownloader.init(subPath: "MMPlayerVideo/Share")
@@ -46,27 +46,16 @@ public class MMPlayerDownloader: NSObject {
         }
     }
     
-//    public func deletedExpireVideo() {
-//        if let allVideos = FileManager.default.subpaths(atPath: self.downloaderPath.fullPath.path){
-//            allVideos.forEach({ (path) in
-//                let absolutePath = downloadPath.appendingPathComponent(path)
-//                if let attribute = try? FileManager.default.attributesOfItem(atPath: absolutePath.path),
-//                   let createDate = attribute[.creationDate] as? Date,
-//                   Date() >= createDate.addingTimeInterval(videoExpireInterval){
-//                    try? FileManager.default.removeItem(at: absolutePath)
-//                }
-//            })
-//        }
-//    }
-//    
-//    public func deleteAllVideo() {
-//        do {
-//            try? FileManager.default.removeItem(at: downloadPath)
-//        } catch let error {
-//            print(error.localizedDescription)
-//        }
-//        self.create(path: downloadPath.path)
-//    }
+    public func deleteVideo(_ videoInfo: MMPlayerDownLoadVideoInfo) {
+        downloadInfo.removeAll { (info) -> Bool in
+            if info == videoInfo {
+                try? FileManager.default.removeItem(at: info.localURL)
+                self.downloadBLock[info.url]?(.none)
+                return true
+            }
+            return false
+        }
+    }
     
     public func localFileFrom(url: URL) -> MMPlayerDownLoadVideoInfo? {
         return downloadInfo.first { (info) -> Bool in
@@ -86,16 +75,17 @@ public class MMPlayerDownloader: NSObject {
             fatalError("Input fileURL is Invalid \(url.absoluteString)")
         }
         
-        if mapList[url] != nil {
-            return
-        }
+        if mapList[url] != nil { return }
         
         self.downloadInfo.removeAll { $0.url == url }
-        let name = fileName ?? url.lastPathComponent
+        let name = fileName ?? url.absoluteString.base64
         let asset = AVURLAsset(url: url)
+        
         mapList[url] = MMPlayerDownloadRequest(asset: asset,
                                                pathInfo: downloadPathInfo,
-                                               fileName: name)
+                                               fileName: name,
+                                               manager: hls)
+        
         mapList[url]?.start(status: { [weak self] in
             self?.downloadBLock[url]?($0)
             switch $0 {

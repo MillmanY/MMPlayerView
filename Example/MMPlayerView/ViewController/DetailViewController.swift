@@ -37,18 +37,18 @@ class DetailViewController: UIViewController {
         MMPlayerDownloader.shared.observe(downloadURL: downloadURL) { [weak self] (status) in
             switch status {
             case .cancelled:
-                print("Download Cancel")
+                print("Download")
             case .completed:
                 DispatchQueue.main.async {
-                    self?.downloadBtn.setTitle("Download Completed", for: .normal)
+                    self?.downloadBtn.setTitle("Delete", for: .normal)
                     self?.downloadBtn.isHidden = false
                     self?.progress.isHidden = true
                 }
-            case .exporting(let value):
+            case .downloading(let value):
                 self?.downloadBtn.isHidden = true
                 self?.progress.isHidden = false
                 self?.progress.progress = value
-                print("Exporting \(value)")
+                print("Exporting \(value) \(downloadURL)")
             case .failed(let err):
                 DispatchQueue.main.async {
                     self?.downloadBtn.setTitle("Download", for: .normal)
@@ -57,13 +57,15 @@ class DetailViewController: UIViewController {
                 self?.downloadBtn.isHidden = false
                 self?.progress.isHidden = true
                 print("Download Failed \(err)")
-            case .unknown:
-                print("Donload Unknown")
-            case .waiting:
-                print("Download waiting")
+            case .none:
+                DispatchQueue.main.async {
+                    self?.downloadBtn.setTitle("Download", for: .normal)
+                }
+                self?.downloadBtn.isHidden = false
+                self?.progress.isHidden = true
             case .exist:
                 DispatchQueue.main.async {
-                    self?.downloadBtn.setTitle("File Exist", for: .normal)
+                    self?.downloadBtn.setTitle("Delete", for: .normal)
                 }
                 self?.downloadBtn.isHidden = false
                 self?.progress.isHidden = true
@@ -85,13 +87,17 @@ class DetailViewController: UIViewController {
         guard let downloadURL = self.data?.play_Url else {
             return
         }
-        if MMPlayerDownloader.shared.localFileFrom(url: downloadURL) != nil {
-            let alert = UIAlertController(title: "File Exist", message: "", preferredStyle: .alert)
+        if let info = MMPlayerDownloader.shared.localFileFrom(url: downloadURL)  {
+            MMPlayerDownloader.shared.deleteVideo(info)
+            let alert = UIAlertController(title: "Delete completed", message: "", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
             self.present(alert, animated: true, completion: nil)
             return
         }
-        MMPlayerDownloader.shared.download(url: downloadURL)
+        
+        DispatchQueue.main.async {
+            MMPlayerDownloader.shared.download(url: downloadURL)
+        }
     }
     deinit {
         print("Deinit")
