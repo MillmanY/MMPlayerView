@@ -9,7 +9,45 @@
 import UIKit
 import AVFoundation
 
+public extension MMPlayerLayer {
+    public enum PlayerCacheType {
+        case none
+        case memory(count: Int)
+    }
+    
+    public enum PlayStatus {
+        case ready
+        case unknown
+        case failed(err: String)
+        case playing
+        case pause
+        case end
+    }
+    
+    public enum CoverFitType {
+        case fitToPlayerView
+        case fitToVideoRect
+    }
+    
+    
+    public enum CoverAutoHideType {
+        case autoHide(after: TimeInterval)
+        case disable
+    }
+    
+    public enum MMplayerDownloadOption {
+        case autoDownload(isAuto: Bool)
+        case loadDisk(ifExist: Bool)
+    }
+}
+
 public class MMPlayerLayer: AVPlayerLayer {
+    var frameObservation: NSKeyValueObservation?
+    var boundsObservation: NSKeyValueObservation?
+    var videoRectObservation: NSKeyValueObservation?
+    var mutedObservation: NSKeyValueObservation?
+    var rateObservation: NSKeyValueObservation?
+
     lazy var tapGesture: UITapGestureRecognizer = {
         let g = UITapGestureRecognizer.init(target: self, action: #selector(MMPlayerLayer.touchAction(gesture:)))
         return g
@@ -35,7 +73,7 @@ public class MMPlayerLayer: AVPlayerLayer {
     fileprivate var timeObserver: Any?
     fileprivate var isBackgroundPause = false
     fileprivate var cahce = MMPlayerCache()
-    fileprivate var playStatusBlock: ((_ status: MMPlayerPlayStatus) ->Void)?
+    fileprivate var playStatusBlock: ((_ status: PlayStatus) ->Void)?
     fileprivate let assetKeysRequiredToPlay = [
         "duration",
         "playable",
@@ -75,13 +113,13 @@ public class MMPlayerLayer: AVPlayerLayer {
     }
     
     public weak var mmDelegate: MMPlayerLayerProtocol?
-    public var progressType: ProgressType = .default {
+    public var progressType: MMProgress.ProgressType = .default {
         didSet {
             indicator.set(progress: progressType)
         }
     }
     
-    public var coverFitType: CoverViewFitType = .fitToVideoRect {
+    public var coverFitType: MMPlayerLayer.CoverFitType = .fitToVideoRect {
         didSet {
             thumbImageView.contentMode = (coverFitType == .fitToVideoRect) ? .scaleAspectFit : .scaleAspectFill
             self.updateCoverConstraint()
@@ -89,7 +127,7 @@ public class MMPlayerLayer: AVPlayerLayer {
     }
     public var changeViewClearPlayer = true
     var clearURLWhenChangeView = true
-    public var autoHideCoverType = MMPlayerCoverAutoHideType.autoHide(after: 3.0) {
+    public var autoHideCoverType = MMPlayerLayer.CoverAutoHideType.autoHide(after: 3.0) {
         didSet {
             switch autoHideCoverType {
             case .disable:
@@ -120,7 +158,7 @@ public class MMPlayerLayer: AVPlayerLayer {
     }
     public var coverView: (UIView & MMPlayerCoverViewProtocol)?
     public var autoPlay = true
-    public var currentPlayStatus: MMPlayerPlayStatus = .unknown {
+    public var currentPlayStatus: PlayStatus = .unknown {
         didSet {
             if let block = self.playStatusBlock {
                 block(currentPlayStatus)
@@ -150,7 +188,7 @@ public class MMPlayerLayer: AVPlayerLayer {
     }
     fileprivate var asset: AVURLAsset?
 
-    public var cacheType: MMPlayerCacheType = .none
+    public var cacheType: PlayerCacheType = .none
     public var playUrl: URL? {
         willSet {
             self.currentPlayStatus = .unknown
@@ -180,7 +218,7 @@ public class MMPlayerLayer: AVPlayerLayer {
                                 }
                             }
                             
-                            let item = AVPlayerItem(asset: a)
+                            let item = MMPlayerItem(asset: a, delegate: self)
                             switch self?.cacheType {
                             case .some(.memory(let count)):
                                 self?.cahce.cacheCount = count
@@ -248,7 +286,6 @@ public class MMPlayerLayer: AVPlayerLayer {
         }
     }
     public func replace(cover: UIView & MMPlayerCoverViewProtocol) {
-//    public func replace<T: UIView>(cover:T) where T: MMPlayerCoverViewProtocol{
         if let c = self.coverView ,c.isMember(of: cover.classForCoder) {
             c.alpha = 1.0
             return
@@ -276,11 +313,15 @@ public class MMPlayerLayer: AVPlayerLayer {
             }
         }
     }
-    public func set(url: URL?, state: ((_ status: MMPlayerPlayStatus) -> Void)?) {
+    
+    public func set(url: URL?,
+                    lodDiskIfExist: Bool = true ,
+                    state: ((_ status: PlayStatus) -> Void)?) {
         self.playStatusBlock = state
         
         if let will = url ,
-            let real = MMPlayerDownloader.shared.localFileFrom(url: will) {
+            let real = MMPlayerDownloader.shared.localFileFrom(url: will),
+            lodDiskIfExist {
             switch real.type {
             case .hls:
                 var statle = false
@@ -313,191 +354,7 @@ public class MMPlayerLayer: AVPlayerLayer {
         default:
             break
         }
-//        if let will = willPlayUrl ,
-//           let real = MMPlayerDownloader.shared.localFileFrom(url: will) {
-//            switch real.type {
-//            case .hls:
-//                var statle = false
-//                let data = try? Data(contentsOf: real.localURL)
-//                self.willPlayUrl = try? URL(resolvingBookmarkData: data!, bookmarkDataIsStale: &statle)
-//            case .mp4:
-//                self.willPlayUrl = real.localURL
-//            }
-//        }
-        
         self.playUrl = willPlayUrl
-
-    }
-    
-    fileprivate func addPlayerObserver() {
-        NotificationCenter.default.removeObserver(self)
-        if timeObserver == nil {
-            timeObserver = self.player?.addPeriodicTimeObserver(forInterval: CMTimeMake(value: 1, timescale: 100), queue: DispatchQueue.main, using: { [weak self] (time) in
-                
-                if time.isIndefinite {
-                    return
-                }
-                if let cover = self?.coverView, cover.responds(to: #selector(cover.timerObserver(time:))) {
-                    cover.timerObserver!(time: time)
-                }
-            })
-        }
-        
-        NotificationCenter.default.addObserver(forName: UIApplication.willResignActiveNotification, object: nil, queue: nil, using: { [weak self] (nitification) in
-            switch self?.currentPlayStatus ?? .unknown {
-            case .pause:
-                self?.isBackgroundPause = true
-            default:
-                self?.isBackgroundPause = false
-            }
-            self?.player?.pause()
-        })
-        
-        NotificationCenter.default.addObserver(forName: UIApplication.didBecomeActiveNotification, object: nil, queue: nil, using: { [weak self] (nitification) in
-            if self?.isBackgroundPause == false {
-                self?.player?.play()
-            }
-            self?.isBackgroundPause = false
-        })
-        NotificationCenter.default.addObserver(forName: .AVPlayerItemDidPlayToEndTime, object: nil, queue: nil, using: { [weak self] (_) in
-            
-            if let s = self?.currentPlayStatus {
-                switch s {
-                case .playing, .pause:
-                    if let u = self?.playUrl {
-                        self?.cahce.removeCache(key: u)
-                    }
-                    self?.currentPlayStatus = .end
-                default: break
-                }
-            }
-        })
-        bgView.safeAdd(observer: self, forKeyPath: "frame", options: [.new,.old], context: nil)
-        bgView.safeAdd(observer: self, forKeyPath: "bounds", options: [.new,.old], context: nil)
-        self.safeAdd(observer: self, forKeyPath: "videoRect", options: [.new , .old], context: nil)
-        self.player?.safeAdd(observer: self, forKeyPath: "Muted", options: [.new, .old], context: nil)
-        self.player?.safeAdd(observer: self, forKeyPath: "rate", options: [.new, .old], context: nil)
-        self.player?.safeAdd(observer: self, forKeyPath: "currentItem", options: [.new , .old], context: nil)
-    }
-    
-    func removeAllObserver() {
-        bgView.safeRemove(observer: self, forKeyPath: "frame")
-        bgView.safeRemove(observer: self, forKeyPath: "bounds")
-        self.player?.replaceCurrentItem(with: nil)
-        self.player?.pause()
-        self.safeRemove(observer: self, forKeyPath: "videoRect")
-        self.player?.safeRemove(observer: self, forKeyPath: "Muted")
-        self.player?.safeRemove(observer: self, forKeyPath: "rate")
-        NotificationCenter.default.removeObserver(self)
-        self.player?.safeRemove(observer: self, forKeyPath: "currentItem")
-        coverView?.removeObserver()
-        if let t = timeObserver {
-            self.player?.removeTimeObserver(t)
-            timeObserver = nil
-        }
-    }
-    
-    override public func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
-        
-        if let k = keyPath {
-            switch k {
-            case "frame":
-                let old = (change?[.oldKey] as? CGRect) ?? .zero
-                if let new = change?[.newKey] as? CGRect , old != new && new != .zero {
-                    self.updateCoverConstraint()
-                }
-            case "bounds":
-                let old = (change?[.oldKey] as? CGRect) ?? .zero
-                if let new = change?[.newKey] as? CGRect ,old != new && new != .zero{
-                    self.updateCoverConstraint()
-                }
-            case "videoRect":
-                let old = (change?[.oldKey] as? CGRect) ?? .zero
-                
-                if let new = change?[.newKey] as? CGRect ,old != new {
-                    self.updateCoverConstraint()
-                }
-            case "Muted":
-                if let old = change?[.oldKey] as? Bool,
-                    let new = change?[.newKey] as? Bool , old != new{
-                    coverView?.player?(isMuted: new)
-                }
-                
-            case "rate":
-                switch self.currentPlayStatus {
-                case .playing, .pause, .ready:
-                    if let new = change?[.newKey] as? CGFloat {
-                        self.currentPlayStatus = (new == 0.0) ? .pause : .playing
-                    }
-                case .end:
-                    let total = self.player?.currentItem?.duration.seconds ?? 0.0
-                    let current = self.player?.currentItem?.currentTime().seconds ?? 0.0
-                    if let new = change?[.newKey] as? CGFloat , current < total {
-                        self.currentPlayStatus = (new == 0.0) ? .pause : .playing
-                    }
-                default:
-                    break
-                }
-            case "currentItem":
-                if let old = change?[.oldKey] as? AVPlayerItem {
-                    old.safeRemove(observer: self, forKeyPath: "playbackBufferEmpty")
-                    old.safeRemove(observer: self, forKeyPath: "playbackLikelyToKeepUp")
-                    old.safeRemove(observer: self, forKeyPath: "status")
-                }
-                
-                if let new = change?[.newKey] as? AVPlayerItem {
-                    new.safeAdd(observer: self, forKeyPath: "status", options: [.new], context: nil)
-                    new.safeAdd(observer: self, forKeyPath: "playbackLikelyToKeepUp", options: [.new], context: nil)
-                    new.safeAdd(observer: self, forKeyPath: "playbackBufferEmpty", options: [.new], context: nil)
-                }
-            case "playbackBufferEmpty":
-                if let c = change?[.newKey] as? Bool, c == true {
-                    self.startLoading(isStart: true)
-                }
-            case "playbackLikelyToKeepUp":
-                if let c = change?[.newKey] as? Bool, c == true {
-                    self.startLoading(isStart: false)
-                }
-            case "status":
-                let s = self.convertItemStatus()
-                
-                switch s {
-                case .failed(_) , .unknown:
-                    self.currentPlayStatus = s
-                case .ready:
-                    switch self.currentPlayStatus {
-                    case .ready:
-                        if self.isBackgroundPause {
-                            return
-                        }
-                        self.currentPlayStatus = s
-                    case .failed(_) ,.unknown:
-                        self.currentPlayStatus = s
-                    default:
-                        break
-                    }
-                default:
-                    break
-                }
-            default:
-                super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
-            }
-        }
-    }
-    
-    fileprivate func convertItemStatus() -> MMPlayerPlayStatus {
-        if let item = self.player?.currentItem {
-            switch item.status {
-            case .failed:
-                let msg =  item.error?.localizedDescription ??  ""
-                return .failed(err: msg)
-            case .readyToPlay:
-                return .ready
-            case .unknown:
-                return .unknown
-            }
-        }
-        return .unknown
     }
     
     @objc func touchAction(gesture: UITapGestureRecognizer) {
@@ -550,6 +407,178 @@ public class MMPlayerLayer: AVPlayerLayer {
     deinit {
         if !isInitLayer {
             self.removeAllObserver()
+        }
+    }
+}
+
+// Observer
+extension MMPlayerLayer {
+    
+    fileprivate func addPlayerObserver() {
+        NotificationCenter.default.removeObserver(self)
+        if timeObserver == nil {
+            timeObserver = self.player?.addPeriodicTimeObserver(forInterval: CMTimeMake(value: 1, timescale: 100), queue: DispatchQueue.main, using: { [weak self] (time) in
+                
+                if time.isIndefinite {
+                    return
+                }
+                if let cover = self?.coverView, cover.responds(to: #selector(cover.timerObserver(time:))) {
+                    cover.timerObserver!(time: time)
+                }
+            })
+        }
+        
+        NotificationCenter.default.addObserver(forName: UIApplication.willResignActiveNotification, object: nil, queue: nil, using: { [weak self] (nitification) in
+            switch self?.currentPlayStatus ?? .unknown {
+            case .pause:
+                self?.isBackgroundPause = true
+            default:
+                self?.isBackgroundPause = false
+            }
+            self?.player?.pause()
+        })
+        
+        NotificationCenter.default.addObserver(forName: UIApplication.didBecomeActiveNotification, object: nil, queue: nil, using: { [weak self] (nitification) in
+            if self?.isBackgroundPause == false {
+                self?.player?.play()
+            }
+            self?.isBackgroundPause = false
+        })
+        NotificationCenter.default.addObserver(forName: .AVPlayerItemDidPlayToEndTime, object: nil, queue: nil, using: { [weak self] (_) in
+            
+            if let s = self?.currentPlayStatus {
+                switch s {
+                case .playing, .pause:
+                    if let u = self?.playUrl {
+                        self?.cahce.removeCache(key: u)
+                    }
+                    self?.currentPlayStatus = .end
+                default: break
+                }
+            }
+        })
+        
+       
+        
+        frameObservation = bgView.observe(\.frame, options: [.new, .old], changeHandler: { [weak self] (view, change) in
+            if change.newValue != change.oldValue, change.newValue != .zero {
+                self?.updateCoverConstraint()
+            }
+        })
+        
+        boundsObservation = bgView.observe(\.bounds, options: [.new, .old], changeHandler: { [weak self] (view, change) in
+            if change.newValue != change.oldValue, change.newValue != .zero {
+                self?.updateCoverConstraint()
+            }
+        })
+        
+        videoRectObservation = self.observe(\.videoRect, options: [.new, .old]) { [weak self] (player, change) in
+            if change.newValue != change.oldValue {
+                self?.updateCoverConstraint()
+            }
+        }
+
+        mutedObservation = self.player?.observe(\.isMuted, options: [.new, .old], changeHandler: { [weak self] (play, change) in
+            if let new = change.newValue, new != change.oldValue {
+                self?.coverView?.player?(isMuted: new)
+            }
+        })
+
+        
+        rateObservation = self.player?.observe(\.rate, options: [.new, .old], changeHandler: { (play, change) in
+        
+            guard let new = change.newValue else {
+                return
+            }
+
+            switch self.currentPlayStatus {
+            case .playing, .pause, .ready:
+                self.currentPlayStatus = (new == 0.0) ? .pause : .playing
+            case .end:
+                let total = self.player?.currentItem?.duration.seconds ?? 0.0
+                let current = self.player?.currentItem?.currentTime().seconds ?? 0.0
+                if current < total {
+                    self.currentPlayStatus = (new == 0.0) ? .pause : .playing
+                }
+            default:
+                break
+            }
+
+        })
+    }
+    
+    func removeAllObserver() {
+        boundsObservation = nil
+        frameObservation = nil
+        videoRectObservation = nil
+        mutedObservation = nil
+        rateObservation = nil
+        
+        self.player?.replaceCurrentItem(with: nil)
+        self.player?.pause()
+        NotificationCenter.default.removeObserver(self)
+        coverView?.removeObserver()
+        if let t = timeObserver {
+            self.player?.removeTimeObserver(t)
+            timeObserver = nil
+        }
+    }
+
+    fileprivate func convertItemStatus() -> MMPlayerLayer.PlayStatus {
+        if let item = self.player?.currentItem {
+            switch item.status {
+            case .failed:
+                let msg =  item.error?.localizedDescription ??  ""
+                return .failed(err: msg)
+            case .readyToPlay:
+                return .ready
+            case .unknown:
+                return .unknown
+            }
+        }
+        return .unknown
+    }
+}
+
+
+// Download
+extension MMPlayerLayer {
+    
+
+}
+
+extension MMPlayerLayer: MMPlayerItemProtocol {
+    func status(change: AVPlayerItem.Status) {
+        let s = self.convertItemStatus()
+        switch s {
+        case .failed(_) , .unknown:
+            self.currentPlayStatus = s
+        case .ready:
+            switch self.currentPlayStatus {
+            case .ready:
+                if self.isBackgroundPause {
+                    return
+                }
+                self.currentPlayStatus = s
+            case .failed(_) ,.unknown:
+                self.currentPlayStatus = s
+            default:
+                break
+            }
+        default:
+            break
+        }
+    }
+    
+    func isPlaybackKeepUp(isKeepUp: Bool) {
+        if isKeepUp == true {
+            self.startLoading(isStart: false)
+        }
+    }
+    
+    func isPlaybackEmpty(isEmpty: Bool) {
+        if isEmpty {
+            self.startLoading(isStart: true)
         }
     }
 }

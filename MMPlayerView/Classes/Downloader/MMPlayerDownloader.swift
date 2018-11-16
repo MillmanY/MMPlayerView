@@ -10,14 +10,26 @@ import UIKit
 import AVFoundation
 typealias DownloaderPath = (fullPath: URL, subPath: String)
 private let videoExpireInterval = TimeInterval(60*60*12)
+
+extension MMPlayerDownloader {
+    public enum DownloadStatus {
+        case none
+        case downloading(value: Float)
+        case completed(info: MMPlayerDownLoadVideoInfo)
+        case failed(err: String)
+        case cancelled
+        case exist
+    }
+}
+
+
 public class MMPlayerDownloader: NSObject {
     fileprivate let hls = MMPlayerHLSManager()
     public static let shared: MMPlayerDownloader = {
-        NSTemporaryDirectory()
         let shared =  MMPlayerDownloader.init(subPath: "MMPlayerVideo/Share")
         return shared
     }()
-    fileprivate var downloadBLock = [URL: ((MMPlayerDownloadStatus) -> Void)]()
+    fileprivate var downloadBLock = [URL: ((DownloadStatus) -> Void)]()
     fileprivate var mapList = [URL: MMPlayerDownloadRequest]()
     fileprivate var plistPath: URL {
         return self.downloadPathInfo.fullPath.appendingPathComponent("Video")
@@ -63,7 +75,7 @@ public class MMPlayerDownloader: NSObject {
         }
     }
     
-    public func observe(downloadURL: URL, status: ((_ status: MMPlayerDownloadStatus) -> Void)?) {
+    public func observe(downloadURL: URL, status: ((_ status: MMPlayerDownloader.DownloadStatus) -> Void)?) {
         downloadBLock[downloadURL] = status
         if self.localFileFrom(url: downloadURL) != nil {
             self.downloadBLock[downloadURL]?(.exist)
@@ -91,7 +103,6 @@ public class MMPlayerDownloader: NSObject {
             switch $0 {
             case .completed(let info):
                 self?.downloadInfo.append(info)
-                self?.downloadBLock[url] = nil
                 self?.mapList[url] = nil
             case  .cancelled , .failed:
                 self?.mapList[url] = nil

@@ -19,59 +19,7 @@ import AVFoundation
 }
 
 public protocol MMPlayerCoverViewProtocol: MMPlayerBasePlayerProtocol {
-    func currentPlayer(status: MMPlayerPlayStatus)
-}
-
-public enum MMPlayerCoverAutoHideType {
-    case autoHide(after: TimeInterval)
-    case disable
-}
-
-public enum MMPlayerCacheType {
-    case none
-    case memory(count: Int)
-}
-
-public enum MMPlayerPlayStatus {
-    case ready
-    case unknown
-    case failed(err: String)
-    case playing
-    case pause
-    case end
-}
-
-public enum VideoType: Int, Codable {
-    case mp4 = 0
-    case hls
-}
-
-public enum MMPlayerDownloadStatus {
-    case none
-    case downloading(value: Float)
-    case completed(info: MMPlayerDownLoadVideoInfo)
-    case failed(err: String)
-    case cancelled
-    case exist
-}
-
-public enum HLSManagerStatus {
-    case none
-    case downloading(value: Float)
-    case completed(data: Data)
-    case failed(err: String)
-
-}
-
-public enum CoverViewFitType {
-    case fitToPlayerView
-    case fitToVideoRect
-}
-
-public enum ProgressType {
-    case `default`
-    case none
-    case custom(view: UIView & MMProgressProtocol)
+    func currentPlayer(status: MMPlayerLayer.PlayStatus)
 }
 
 public protocol MMProgressProtocol {

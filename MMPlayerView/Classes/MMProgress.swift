@@ -7,10 +7,17 @@
 //
 
 import UIKit
+extension MMProgress {
+    public enum ProgressType {
+        case `default`
+        case none
+        case custom(view: UIView & MMProgressProtocol)
+    }
+}
 
-class MMProgress: UIView {
+public class MMProgress: UIView {
     var disable = false
-    override var frame: CGRect {
+    override public var frame: CGRect {
         didSet {
             self.isHidden = frame.isEmpty
         }
@@ -31,7 +38,7 @@ class MMProgress: UIView {
         }
     }
     
-    func set(progress: ProgressType) {
+    func set(progress: MMProgress.ProgressType) {
         switch progress {
         case .default:
             custom = nil

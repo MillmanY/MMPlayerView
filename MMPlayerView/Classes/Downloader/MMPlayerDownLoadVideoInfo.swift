@@ -6,7 +6,13 @@
 //
 
 import Foundation
+
 public struct MMPlayerDownLoadVideoInfo: Codable, Equatable {
+    public enum VideoType: Int, Codable {
+        case mp4 = 0
+        case hls
+    }
+
     let url: URL
     let type: VideoType
     let fileName: String

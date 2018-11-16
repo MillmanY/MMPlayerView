@@ -10,7 +10,7 @@ import AVFoundation
 class MMPlayerDownloadRequest {
     unowned let asset: AVURLAsset
     fileprivate var timer: Timer?
-    var statusBlock: ((_ status: MMPlayerDownloadStatus)->Void)?
+    var statusBlock: ((_ status: MMPlayerDownloader.DownloadStatus)->Void)?
     let videoPath: (current: URL, hide: URL)
     let pathInfo: DownloaderPath
     let fileName: String
@@ -24,7 +24,7 @@ class MMPlayerDownloadRequest {
         self.manager = manager
     }
     
-    func start(status:((_ status: MMPlayerDownloadStatus)->Void)?) {
+    func start(status:((_ status: MMPlayerDownloader.DownloadStatus)->Void)?) {
         try? FileManager.default.removeItem(at: self.videoPath.hide)
         try? FileManager.default.removeItem(at: self.videoPath.current)
         self.statusBlock = status
@@ -89,7 +89,6 @@ class MMPlayerDownloadRequest {
                 self.timer?.invalidate()
                 self.timer = nil
                 try? FileManager.default.moveItem(at: self.videoPath.hide, to: self.videoPath.current)
-                
                 let info = MMPlayerDownLoadVideoInfo(url: downloadURL,
                                                      type: .mp4,
                                                      fileName: self.fileName,

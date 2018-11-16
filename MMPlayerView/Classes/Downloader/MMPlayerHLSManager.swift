@@ -7,22 +7,30 @@
 
 import UIKit
 import AVFoundation
+
+extension MMPlayerHLSManager {
+    public enum Status {
+        case none
+        case downloading(value: Float)
+        case completed(data: Data)
+        case failed(err: String)
+    }
+
+}
+
 class MMPlayerHLSManager: NSObject {
     static let shared = MMPlayerHLSManager()
 
     fileprivate var willDownloadToUrlMap = [AVAggregateAssetDownloadTask: URL]()
-    fileprivate var taskMap = [AVAggregateAssetDownloadTask: (HLSManagerStatus)->Void]()
+    fileprivate var taskMap = [AVAggregateAssetDownloadTask: (Status)->Void]()
 
     lazy var downloadSession: AVAssetDownloadURLSession = {
         let backgroundConfiguration = URLSessionConfiguration.background(withIdentifier: "Download-Identifier")
         return AVAssetDownloadURLSession.init(configuration: backgroundConfiguration, assetDownloadDelegate: self, delegateQueue: OperationQueue.main)
     }()
     
-    func start(asset: AVURLAsset,fileName: String, status:((_ status: HLSManagerStatus)->Void)?) {
-        
-        
+    func start(asset: AVURLAsset,fileName: String, status:((_ status: Status)->Void)?) {
         let preferredMediaSelection = asset.preferredMediaSelection
-        
         guard let task = downloadSession.aggregateAssetDownloadTask(with: asset,
                                                               mediaSelections: [preferredMediaSelection],
                                                               assetTitle: fileName,
@@ -38,7 +46,6 @@ class MMPlayerHLSManager: NSObject {
         status?(.none)
     }
 }
-
 
 extension MMPlayerHLSManager: AVAssetDownloadDelegate {
     

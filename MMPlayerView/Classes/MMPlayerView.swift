@@ -49,7 +49,7 @@ public class MMPlayerView: UIView {
         }
     }
     
-    public var progressType: ProgressType {
+    public var progressType: MMProgress.ProgressType {
         set {
             self.playerLayer.progressType = newValue
         } get {
@@ -57,7 +57,7 @@ public class MMPlayerView: UIView {
         }
     }
     
-    public var coverFitType: CoverViewFitType {
+    public var coverFitType: MMPlayerLayer.CoverFitType {
         set {
             self.playerLayer.coverFitType = newValue
         } get {
@@ -65,7 +65,7 @@ public class MMPlayerView: UIView {
         }
     }
     
-    public var autoHideCoverType: MMPlayerCoverAutoHideType {
+    public var autoHideCoverType: MMPlayerLayer.CoverAutoHideType {
         set {
             self.playerLayer.autoHideCoverType = newValue
         } get {
@@ -95,7 +95,7 @@ public class MMPlayerView: UIView {
         }
     }
     
-    public var cacheType: MMPlayerCacheType {
+    public var cacheType: MMPlayerLayer.PlayerCacheType {
         set {
             self.playerLayer.cacheType = newValue
         } get {
@@ -111,11 +111,11 @@ public class MMPlayerView: UIView {
         self.playerLayer.replace(cover: cover)
     }
     
-    public func set(url: URL?, state: ((_ status: MMPlayerPlayStatus) -> Void)?) {
+    public func set(url: URL?, state: ((_ status: MMPlayerLayer.PlayStatus) -> Void)?) {
         self.playerLayer.set(url: url, state: state)
     }
     
-    public func set(url: URL?, thumbImage: UIImage, state: ((_ status: MMPlayerPlayStatus) -> Void)?) {
+    public func set(url: URL?, thumbImage: UIImage, state: ((_ status: MMPlayerLayer.PlayStatus) -> Void)?) {
         self.playerLayer.thumbImageView.image = thumbImage
         self.playerLayer.set(url: url, state: state)
     }
@@ -128,7 +128,7 @@ public class MMPlayerView: UIView {
         self.playerLayer.startLoading()
     }
 
-    public func set(progress: ProgressType) {
+    public func set(progress: MMProgress.ProgressType) {
         self.playerLayer.progressType = progress
     }
     
