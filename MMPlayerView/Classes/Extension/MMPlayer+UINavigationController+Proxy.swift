@@ -8,19 +8,7 @@
 import Foundation
 var enableCustomTransitionKey = "enableCustomTransition"
 extension UINavigationController {
-    
-//    public var enableCustomTransition: Bool {
-//        set {
-//            objc_setAssociatedObject(self, &enableCustomTransitionKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-//        } get {
-//            if let value = objc_getAssociatedObject(self, &enableCustomTransitionKey) as? Bool {
-//                return value
-//            }
-//            self.enableCustomTransition = false
-//            return false
-//        }
-//    }
-    
+
     static func installProxyDelegate() {
         DispatchQueue.once(token: "navigationDelegateProxy") {
             let from = #selector(setter: UINavigationController.delegate)

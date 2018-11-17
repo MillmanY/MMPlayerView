@@ -24,19 +24,14 @@ class MMPlayerItem: AVPlayerItem {
         self.init(asset: asset, automaticallyLoadedAssetKeys: nil)
         self.delegate = delegate
       
-        statusObservation = self.observe(\.status, changeHandler: { (item, _) in
-            self.delegate?.status(change: item.status)
-
+        statusObservation = self.observe(\.status, changeHandler: { [weak self] (item, _) in
+            self?.delegate?.status(change: item.status)
         })
-        keepUpObservation = self.observe(\.isPlaybackLikelyToKeepUp, changeHandler: { (item, change) in
-            self.delegate?.isPlaybackKeepUp(isKeepUp: item.isPlaybackLikelyToKeepUp)
+        keepUpObservation = self.observe(\.isPlaybackLikelyToKeepUp, changeHandler: { [weak self] (item, change) in
+            self?.delegate?.isPlaybackKeepUp(isKeepUp: item.isPlaybackLikelyToKeepUp)
         })
-        emptyObservation = self.observe(\.isPlaybackBufferEmpty, changeHandler: { (item, change) in
-            self.delegate?.isPlaybackEmpty(isEmpty: item.isPlaybackBufferEmpty)
+        emptyObservation = self.observe(\.isPlaybackBufferEmpty, changeHandler: { [weak self] (item, change) in
+            self?.delegate?.isPlaybackEmpty(isEmpty: item.isPlaybackBufferEmpty)
         })
-    }
-    
-    deinit {
-        print("MMPlayerItem deinit")
     }
 }

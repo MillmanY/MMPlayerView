@@ -88,10 +88,10 @@ class MMPlayerDownloadRequest {
             case .completed:
                 self.timer?.invalidate()
                 self.timer = nil
-                try? FileManager.default.moveItem(at: self.videoPath.hide, to: self.videoPath.current)
+                try? FileManager.default.moveItem(at: self.videoPath.hide, to: self.videoPath.current.appendingPathExtension("mp4"))
                 let info = MMPlayerDownLoadVideoInfo(url: downloadURL,
                                                      type: .mp4,
-                                                     fileName: self.fileName,
+                                                     fileName: "\(self.fileName).mp4",
                                                      fileSubPath: self.pathInfo.subPath)
                 self.statusBlock?(.completed(info: info))
             case .failed:

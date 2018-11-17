@@ -9,6 +9,7 @@
 import UIKit
 import MMPlayerView
 class DetailViewController: UIViewController {
+    var downloadObservation: MMPlayerObservation?
     var data: DataObj?
     fileprivate var playerLayer: MMPlayerLayer?
     @IBOutlet weak var textView: UITextView!
@@ -33,8 +34,9 @@ class DetailViewController: UIViewController {
         guard let downloadURL = self.data?.play_Url else {
             return
         }
-        
-        MMPlayerDownloader.shared.observe(downloadURL: downloadURL) { [weak self] (status) in
+
+       downloadObservation = MMPlayerDownloader.shared.observe(downloadURL: downloadURL) { [weak self] (status) in
+            print("Subscribe 1")
             switch status {
             case .cancelled:
                 print("Download")
@@ -53,7 +55,7 @@ class DetailViewController: UIViewController {
                 DispatchQueue.main.async {
                     self?.downloadBtn.setTitle("Download", for: .normal)
                 }
-                
+
                 self?.downloadBtn.isHidden = false
                 self?.progress.isHidden = true
                 print("Download Failed \(err)")
@@ -71,14 +73,13 @@ class DetailViewController: UIViewController {
                 self?.progress.isHidden = true
             }
         }
-        // Do any additional setup after loading the view.
     }
     
     @IBAction func shrinkVideoAction() {
         (self.presentationController as? MMPlayerPassViewPresentatinController)?.shrinkView()
     }
 
-    @IBAction func dismiss() {        
+    @IBAction func dismiss() {
         self.dismiss(animated: true, completion: nil)
     }
     

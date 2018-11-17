@@ -11,6 +11,7 @@ import AVFoundation
 import MMPlayerView
 
 class ViewController: UIViewController {
+    var offsetObservation: NSKeyValueObservation?
     lazy var mmPlayerLayer: MMPlayerLayer = {
         let l = MMPlayerLayer()
         l.cacheType = .memory(count: 5)
@@ -22,16 +23,18 @@ class ViewController: UIViewController {
     @IBOutlet weak var playerCollect: UICollectionView!
     override func viewDidLoad() {
         super.viewDidLoad()
-//        self.navigationController?.mmPlayerTransition.push.pass(setting: { (_) in
-//
-//        })
-        
-        playerCollect.addObserver(self, forKeyPath: "contentOffset", options: [.new], context: nil)
-        playerCollect.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 200, right:0)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+        offsetObservation = playerCollect.observe(\.contentOffset, options: [.new]) { [weak self] (_, value) in
+            guard let self = self else {return}
             self.updateByContentOffset()
-            self.startLoading()
+            NSObject.cancelPreviousPerformRequests(withTarget: self)
+            self.perform(#selector(self.startLoading), with: nil, afterDelay: 0.3)
         }
+        playerCollect.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 200, right:0)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+            self?.updateByContentOffset()
+            self?.startLoading()
+        }
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -64,15 +67,8 @@ class ViewController: UIViewController {
         }
     }
     
-    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
-        if keyPath == "contentOffset" {
-            self.updateByContentOffset()
-            NSObject.cancelPreviousPerformRequests(withTarget: self)
-            self.perform(#selector(startLoading), with: nil, afterDelay: 0.3)
-            
-        } else {
-            super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
-        }
+    deinit {
+        print("Deinit")
     }
 }
 
@@ -118,7 +114,7 @@ extension ViewController: UICollectionViewDelegateFlowLayout {
         return CGSize.init(width: m, height: m*0.75)
     }
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        DispatchQueue.main.async { [unowned self] in
+       DispatchQueue.main.async { [unowned self] in
             if self.presentedViewController != nil {
                 self.playerCollect.scrollToItem(at: indexPath, at: .centeredVertically, animated: true)
                 self.updateDetail(at: indexPath)
@@ -167,17 +163,12 @@ extension ViewController: UICollectionViewDelegateFlowLayout {
                 mmPlayerLayer.playView = cell.imgView
             }
             
-//            var statle = false
-//
-//            let data = try? Data.init(contentsOf: real)
-//            let url = try? URL.init(resolvingBookmarkData: data!, bookmarkDataIsStale: &statle)
-            
-            mmPlayerLayer.set(url: playURL, state: { (status) in
+            mmPlayerLayer.set(url: playURL, state: { [weak self] (status) in
                 switch status {
                 case .failed(let err):
                     let alert = UIAlertController(title: "err", message: err.description, preferredStyle: .alert)
                     alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-                    self.present(alert, animated: true, completion: nil)
+                    self?.present(alert, animated: true, completion: nil)
                 case .ready:
                     print("Ready to Play")
                 case .playing:
@@ -200,6 +191,7 @@ extension ViewController: UICollectionViewDelegateFlowLayout {
         mmPlayerLayer.startLoading()
         self.landscapeAction()
     }
+    
 }
 
 extension ViewController: UICollectionViewDataSource {
@@ -215,5 +207,4 @@ extension ViewController: UICollectionViewDataSource {
         return UICollectionViewCell()
     }
 }
-
 

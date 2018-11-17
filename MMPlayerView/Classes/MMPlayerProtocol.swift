@@ -14,8 +14,8 @@ import AVFoundation
     
     @objc optional func timerObserver(time: CMTime)
     @objc optional func coverView(isShow: Bool)
-    func removeObserver()
-    func addObserver()
+    @objc optional func removeObserver()
+    @objc optional func addObserver()
 }
 
 public protocol MMPlayerCoverViewProtocol: MMPlayerBasePlayerProtocol {

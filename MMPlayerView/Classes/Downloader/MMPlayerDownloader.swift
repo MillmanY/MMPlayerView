@@ -24,12 +24,13 @@ extension MMPlayerDownloader {
 
 
 public class MMPlayerDownloader: NSObject {
-    fileprivate let hls = MMPlayerHLSManager()
+    let downloadObserverManager = MMPlayerMapObserverManager<URL,((DownloadStatus) -> Void)>()
+
+    fileprivate let hls: MMPlayerHLSManager
     public static let shared: MMPlayerDownloader = {
         let shared =  MMPlayerDownloader.init(subPath: "MMPlayerVideo/Share")
         return shared
     }()
-    fileprivate var downloadBLock = [URL: ((DownloadStatus) -> Void)]()
     fileprivate var mapList = [URL: MMPlayerDownloadRequest]()
     fileprivate var plistPath: URL {
         return self.downloadPathInfo.fullPath.appendingPathComponent("Video")
@@ -50,6 +51,7 @@ public class MMPlayerDownloader: NSObject {
     
     public init(subPath sub: String) {
         self.downloadPathInfo = (URL.init(fileURLWithPath: VideoBasePath).appendingPathComponent(sub), sub)
+        self.hls = MMPlayerHLSManager(identifier: sub)
         super.init()
         self.create(path: self.downloadPathInfo.fullPath.path)
         self.createPlist(path: plistPath.path)
@@ -62,7 +64,7 @@ public class MMPlayerDownloader: NSObject {
         downloadInfo.removeAll { (info) -> Bool in
             if info == videoInfo {
                 try? FileManager.default.removeItem(at: info.localURL)
-                self.downloadBLock[info.url]?(.none)
+                self.downloadObserverManager[info.url].forEach({ $0(.none) })
                 return true
             }
             return false
@@ -75,16 +77,17 @@ public class MMPlayerDownloader: NSObject {
         }
     }
     
-    public func observe(downloadURL: URL, status: ((_ status: MMPlayerDownloader.DownloadStatus) -> Void)?) {
-        downloadBLock[downloadURL] = status
+    public func observe(downloadURL: URL, status: @escaping ((_ status: MMPlayerDownloader.DownloadStatus) -> Void)) -> MMPlayerObservation {
+        let value = self.downloadObserverManager.add(key: downloadURL, observer: status)
         if self.localFileFrom(url: downloadURL) != nil {
-            self.downloadBLock[downloadURL]?(.exist)
+            self.downloadObserverManager[downloadURL].forEach({ $0(.exist) })
         }
+        return value
     }
     
     public func download(url: URL, fileName: String? = nil) {
         if url.isFileURL {
-            fatalError("Input fileURL is Invalid \(url.absoluteString)")
+            fatalError("Input fileURL are Invalid \(url.absoluteString)")
         }
         
         if mapList[url] != nil { return }
@@ -99,14 +102,15 @@ public class MMPlayerDownloader: NSObject {
                                                manager: hls)
         
         mapList[url]?.start(status: { [weak self] in
-            self?.downloadBLock[url]?($0)
-            switch $0 {
+            let status = $0
+            self?.downloadObserverManager[url].forEach({ $0(status) })
+            switch status {
             case .completed(let info):
                 self?.downloadInfo.append(info)
                 self?.mapList[url] = nil
             case  .cancelled , .failed:
                 self?.mapList[url] = nil
-                self?.downloadBLock[url] = nil
+                self?.downloadObserverManager.remove(key: url)
             default:
                 break
             }

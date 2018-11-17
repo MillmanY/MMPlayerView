@@ -11,14 +11,8 @@ import UIKit
 public typealias T = MMPlayerNavConfig
 public class MMPlayerPushAnimator: NSObject, UINavigationControllerDelegate {
     public var config: T?
-    
-//    lazy var shrinkControl: MMPlayerShrinkControl = {
-//        let control = MMPlayerShrinkControl(containerView: self.base.view.superview!, config: config!)
-//        return control
-//    }()
     unowned let base: UINavigationController
     var transition: UIViewControllerAnimatedTransitioning?
-    //    public var enableCustomTransition: Bool = false
     lazy var _proxy: NavigationDelegateProxy = {
         return NavigationDelegateProxy(parent: self, forward: self.base.delegate)
     }()
@@ -75,18 +69,5 @@ public class MMPlayerPushAnimator: NSObject, UINavigationControllerDelegate {
     public func navigationController(_ navigationController: UINavigationController, interactionControllerFor animationController: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
         return nil
     }
-
-//    public func shrinkView() {
-//        let count = self.base.viewControllers.count
-//        if count <= 1 {
-//            return
-//        }
-//
-//        shrinkControl.to  = self.base.viewControllers.last
-//        shrinkControl.from = self.base.viewControllers[count-2]
-//        shrinkControl.shrinkView()
-////        self.base.topViewController
-//    }
-
 }
 

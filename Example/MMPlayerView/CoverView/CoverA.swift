@@ -84,14 +84,6 @@ class CoverA: UIView, MMPlayerCoverViewProtocol {
     func player(isMuted: Bool) {
         
     }
-
-    func removeObserver() {
-        
-    }
-    
-    func addObserver() {
-        
-    }
 }
 
 extension Date {

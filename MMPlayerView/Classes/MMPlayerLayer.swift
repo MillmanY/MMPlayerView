@@ -294,11 +294,11 @@ public class MMPlayerLayer: AVPlayerLayer {
         cover.backgroundColor = UIColor.clear
         cover.layoutIfNeeded()
         coverView?.removeFromSuperview()
-        coverView?.removeObserver()
+        coverView?.removeObserver?()
         coverView = cover
         coverView?.playLayer = self
         bgView.insertSubview(cover, belowSubview: indicator)
-        cover.addObserver()
+        cover.addObserver?()
         self.updateCoverConstraint()
         if let m = self.player?.isMuted {
             cover.player?(isMuted: m)
@@ -336,7 +336,6 @@ public class MMPlayerLayer: AVPlayerLayer {
             }
         } else {
             self.willPlayUrl = url
-
         }
     }
 
@@ -345,7 +344,6 @@ public class MMPlayerLayer: AVPlayerLayer {
     }
     
     public func startLoading(localFirst: Bool = true) {
-
         switch self.currentPlayStatus {
         case .playing , .pause:
             if self.playUrl == willPlayUrl {
@@ -445,7 +443,6 @@ extension MMPlayerLayer {
             self?.isBackgroundPause = false
         })
         NotificationCenter.default.addObserver(forName: .AVPlayerItemDidPlayToEndTime, object: nil, queue: nil, using: { [weak self] (_) in
-            
             if let s = self?.currentPlayStatus {
                 switch s {
                 case .playing, .pause:
@@ -457,8 +454,6 @@ extension MMPlayerLayer {
                 }
             }
         })
-        
-       
         
         frameObservation = bgView.observe(\.frame, options: [.new, .old], changeHandler: { [weak self] (view, change) in
             if change.newValue != change.oldValue, change.newValue != .zero {
@@ -485,20 +480,18 @@ extension MMPlayerLayer {
         })
 
         
-        rateObservation = self.player?.observe(\.rate, options: [.new, .old], changeHandler: { (play, change) in
-        
-            guard let new = change.newValue else {
+        rateObservation = self.player?.observe(\.rate, options: [.new, .old], changeHandler: { [weak self] (play, change) in
+            guard let new = change.newValue, let status = self?.currentPlayStatus else {
                 return
             }
-
-            switch self.currentPlayStatus {
+            switch status {
             case .playing, .pause, .ready:
-                self.currentPlayStatus = (new == 0.0) ? .pause : .playing
+                self?.currentPlayStatus = (new == 0.0) ? .pause : .playing
             case .end:
-                let total = self.player?.currentItem?.duration.seconds ?? 0.0
-                let current = self.player?.currentItem?.currentTime().seconds ?? 0.0
+                let total = self?.player?.currentItem?.duration.seconds ?? 0.0
+                let current = self?.player?.currentItem?.currentTime().seconds ?? 0.0
                 if current < total {
-                    self.currentPlayStatus = (new == 0.0) ? .pause : .playing
+                    self?.currentPlayStatus = (new == 0.0) ? .pause : .playing
                 }
             default:
                 break
@@ -517,7 +510,7 @@ extension MMPlayerLayer {
         self.player?.replaceCurrentItem(with: nil)
         self.player?.pause()
         NotificationCenter.default.removeObserver(self)
-        coverView?.removeObserver()
+        coverView?.removeObserver?()
         if let t = timeObserver {
             self.player?.removeTimeObserver(t)
             timeObserver = nil

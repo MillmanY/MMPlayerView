@@ -19,13 +19,18 @@ extension MMPlayerHLSManager {
 }
 
 class MMPlayerHLSManager: NSObject {
-    static let shared = MMPlayerHLSManager()
+    let bgIdentifier: String
+    static let shared = MMPlayerHLSManager(identifier: "Shared-Identifier")
+    
+    init(identifier: String) {
+        self.bgIdentifier = identifier
+    }
 
     fileprivate var willDownloadToUrlMap = [AVAggregateAssetDownloadTask: URL]()
     fileprivate var taskMap = [AVAggregateAssetDownloadTask: (Status)->Void]()
 
     lazy var downloadSession: AVAssetDownloadURLSession = {
-        let backgroundConfiguration = URLSessionConfiguration.background(withIdentifier: "Download-Identifier")
+        let backgroundConfiguration = URLSessionConfiguration.background(withIdentifier: self.bgIdentifier)
         return AVAssetDownloadURLSession.init(configuration: backgroundConfiguration, assetDownloadDelegate: self, delegateQueue: OperationQueue.main)
     }()
     
