@@ -41,7 +41,6 @@ class MMPlayerPassViewPresentTransition: MMPlayerBasePresentTransition, UIViewCo
             let convertRect:CGRect = passLayer.superlayer?.convert(passLayer.superlayer!.frame, to: nil) ?? .zero
             let finalFrame = transitionContext.finalFrame(for: toVC)
             let originalColor = toVC.view.backgroundColor
-            passLayer.clearURLWhenChangeView = false
             let pass = UIView(frame: convertRect)
             passLayer.playView = pass
             toVC.view.backgroundColor = UIColor.clear
@@ -56,7 +55,6 @@ class MMPlayerPassViewPresentTransition: MMPlayerBasePresentTransition, UIViewCo
                 toVC.view.backgroundColor = originalColor
                 pass.translatesAutoresizingMaskIntoConstraints = false
                 passLayer.playView = passContainer
-                passLayer.clearURLWhenChangeView = true
                 pass.removeFromSuperview()
                 transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
                 toProtocol.transitionCompleted(player: passLayer)
@@ -80,7 +78,6 @@ class MMPlayerPassViewPresentTransition: MMPlayerBasePresentTransition, UIViewCo
                     return
             }
             
-            config.playLayer?.clearURLWhenChangeView = false
             pass.translatesAutoresizingMaskIntoConstraints = true
             let superV = source.backReplaceSuperView?(original: config.passOriginalSuper) ?? config.passOriginalSuper
             let original:CGRect = pass.convert(pass.frame, to: nil)
@@ -95,12 +92,11 @@ class MMPlayerPassViewPresentTransition: MMPlayerBasePresentTransition, UIViewCo
                 pass.removeFromSuperview()
                 from?.view.removeFromSuperview()                
                 config.playLayer?.playView = nil
-                config.playLayer?.needRefreshFrame = true
+                CATransaction.setDisableActions(true)
                 transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
-            
                 source.dismissViewFromGesture?()
                 source.transitionCompleted()
-                config.playLayer?.clearURLWhenChangeView = true
+                CATransaction.setDisableActions(false)
                 return
             }
             
@@ -117,7 +113,6 @@ class MMPlayerPassViewPresentTransition: MMPlayerBasePresentTransition, UIViewCo
                 
                 transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
                 source.transitionCompleted()
-                config.playLayer?.clearURLWhenChangeView = true
             })
         }
     }    

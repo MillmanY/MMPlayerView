@@ -13,11 +13,9 @@ protocol MMPlayerPointerProtocol {
 }
 
 extension MMPlayerObservation: MMPlayerPointerProtocol {
-    
     var unmanaged: Unmanaged<MMPlayerObservation> {
         get {
             return Unmanaged.passUnretained(self)
-            
         }
     }
     

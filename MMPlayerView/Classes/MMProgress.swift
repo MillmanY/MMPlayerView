@@ -94,7 +94,6 @@ public class MMProgress: UIView {
         if disable {
             return
         }
-
         self.isHidden = true
 
         if (custom != nil) {

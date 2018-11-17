@@ -54,24 +54,9 @@ public class MMPlayerLayer: AVPlayerLayer {
         "hasProtectedContent",
         ]
     lazy var tapGesture: UITapGestureRecognizer = {
-        let g = UITapGestureRecognizer.init(target: self, action: #selector(MMPlayerLayer.touchAction(gesture:)))
+        let g = UITapGestureRecognizer(target: self, action: #selector(MMPlayerLayer.touchAction(gesture:)))
         return g
     }()
-    // prevent set frame frequently
-    override public var frame: CGRect {
-        set {
-            if newValue == frame {
-                return
-            }
-            super.frame = newValue
-            if newValue != .zero && needRefreshFrame {
-                CATransaction.commit()
-                needRefreshFrame = false
-            }
-        } get {
-            return super.frame
-        }
-    }
     
     lazy var  bgView: UIView = {
         let v = UIView()
@@ -84,7 +69,6 @@ public class MMPlayerLayer: AVPlayerLayer {
         v.backgroundColor = UIColor.clear
         return v
     }()
-    var needRefreshFrame = false
     weak fileprivate var _playView: UIView? {
         willSet {
             bgView.removeFromSuperview()
@@ -118,8 +102,6 @@ public class MMPlayerLayer: AVPlayerLayer {
             self.updateCoverConstraint()
         }
     }
-    public var changeViewClearPlayer = true
-    var clearURLWhenChangeView = true
     public var autoHideCoverType = MMPlayerLayer.CoverAutoHideType.autoHide(after: 3.0) {
         didSet {
             switch autoHideCoverType {
@@ -140,9 +122,6 @@ public class MMPlayerLayer: AVPlayerLayer {
         set {
             if self.playView != newValue {
                 self._playView = newValue
-                if clearURLWhenChangeView && changeViewClearPlayer {
-                   self.playUrl = nil
-                }
             }
         } get {
             return _playView
@@ -179,7 +158,6 @@ public class MMPlayerLayer: AVPlayerLayer {
         }
     }
     fileprivate var asset: AVURLAsset?
-
     public var cacheType: PlayerCacheType = .none
     public var playUrl: URL? {
         willSet {
@@ -328,12 +306,10 @@ public class MMPlayerLayer: AVPlayerLayer {
                 case .mp4:
                     self.willPlayUrl = real.localURL
                 }
-            } else {
-                self.willPlayUrl = url
+                return
             }
-        } else {
-            self.willPlayUrl = url
         }
+        self.willPlayUrl = url
     }
 
     public func invalidate() {
@@ -343,9 +319,7 @@ public class MMPlayerLayer: AVPlayerLayer {
     public func resume() {
         switch self.currentPlayStatus {
         case .playing , .pause:
-            if self.playUrl == willPlayUrl {
-                return
-            }
+            if self.playUrl == willPlayUrl { return }
         default:
             break
         }
@@ -378,7 +352,6 @@ public class MMPlayerLayer: AVPlayerLayer {
             default: break
             }
         }
-        
         
         if let cover = self.coverView ,
             cover.responds(to: #selector(cover.coverView(isShow:))) {
@@ -439,6 +412,7 @@ extension MMPlayerLayer {
             }
             self?.isBackgroundPause = false
         })
+        
         NotificationCenter.default.addObserver(forName: .AVPlayerItemDidPlayToEndTime, object: nil, queue: nil, using: { [weak self] (_) in
             if let s = self?.currentPlayStatus {
                 switch s {
@@ -451,7 +425,7 @@ extension MMPlayerLayer {
                 }
             }
         })
-
+        
         videoRectObservation = self.observe(\.videoRect, options: [.new, .old]) { [weak self] (player, change) in
             if change.newValue != change.oldValue {
                 self?.updateCoverConstraint()
@@ -502,7 +476,6 @@ extension MMPlayerLayer {
             self.removeObserver(observer, forKeyPath: "videoRect")
             self.videoRectObservation = nil
         }
-
         videoRectObservation = nil
         boundsObservation = nil
         frameObservation = nil

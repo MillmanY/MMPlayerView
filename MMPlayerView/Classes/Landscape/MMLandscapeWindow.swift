@@ -26,7 +26,6 @@ public class MMLandscapeWindow: UIWindow {
         currentPlayLayer = playLayer
         originalPlayView = playLayer.playView
         self.rootViewController = root
-        self.currentPlayLayer?.clearURLWhenChangeView = false
         currentPlayLayer?.playView = root.view
         self.completed = completed
         self.makeKeyAndVisible()
@@ -71,7 +70,6 @@ public class MMLandscapeWindow: UIWindow {
             
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.3, execute: { [unowned self] in
                 self.currentPlayLayer?.playView = self.originalPlayView
-                self.currentPlayLayer?.clearURLWhenChangeView = true
                 self.makeDisable()
             })
         default:

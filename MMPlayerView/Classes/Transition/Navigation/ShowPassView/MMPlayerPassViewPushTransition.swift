@@ -46,7 +46,6 @@ public class MMPlayerPassViewPushTransition: MMPlayerBaseNavTransition, UIViewCo
             let convertRect:CGRect = passLayer.superlayer?.convert(passLayer.superlayer!.frame, to: nil) ?? .zero
             let finalFrame = transitionContext.finalFrame(for: toVC)
             let originalColor = toVC.view.backgroundColor
-            passLayer.clearURLWhenChangeView = false
             let pass = UIView(frame: convertRect)
             passLayer.playView = pass
             toVC.view.backgroundColor = UIColor.clear
@@ -63,7 +62,6 @@ public class MMPlayerPassViewPushTransition: MMPlayerBaseNavTransition, UIViewCo
                 transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
                 passLayer.playView = passContainer
                 toProtocol.transitionCompleted(player: passLayer)
-                passLayer.clearURLWhenChangeView = true
             })
         case .pop:
             let from = transitionContext.viewController(forKey: .from)
@@ -85,7 +83,6 @@ public class MMPlayerPassViewPushTransition: MMPlayerBaseNavTransition, UIViewCo
                     return
             }
 
-            config.playLayer?.clearURLWhenChangeView = false
             pass.translatesAutoresizingMaskIntoConstraints = true
             let superV = source.backReplaceSuperView?(original: config.passOriginalSuper) ?? config.passOriginalSuper
             let original:CGRect = pass.convert(pass.frame, to: nil)
@@ -107,7 +104,6 @@ public class MMPlayerPassViewPushTransition: MMPlayerBaseNavTransition, UIViewCo
                 pass.removeFromSuperview()
                 from?.view.removeFromSuperview()
                 transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
-                config.playLayer?.clearURLWhenChangeView = true
                 source.transitionCompleted()
             })
         default:

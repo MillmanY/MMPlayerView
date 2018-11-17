@@ -11,7 +11,7 @@ import UIKit
 import AVFoundation
 
 public class MMPlayerView: UIView {
-    fileprivate unowned let playerLayer: MMPlayerLayer
+    fileprivate let playerLayer: MMPlayerLayer
     
     convenience init() {
         self.init(frame: .zero)
@@ -111,21 +111,27 @@ public class MMPlayerView: UIView {
         self.playerLayer.replace(cover: cover)
     }
     
-    public func set(url: URL?, state: ((_ status: MMPlayerLayer.PlayStatus) -> Void)?) {
-        self.playerLayer.set(url: url, state: state)
+    public func set(url: URL?, status: ((_ status: MMPlayerLayer.PlayStatus) -> Void)?) {
+        self.playerLayer.set(url: url)
+        self.playerLayer.getStatusBlock(value: status)
     }
     
-    public func set(url: URL?, thumbImage: UIImage, state: ((_ status: MMPlayerLayer.PlayStatus) -> Void)?) {
+    public func set(url: URL?, thumbImage: UIImage, status: ((_ status: MMPlayerLayer.PlayStatus) -> Void)?) {
         self.playerLayer.thumbImageView.image = thumbImage
-        self.playerLayer.set(url: url, state: state)
+        self.playerLayer.set(url: url)
+        self.playerLayer.getStatusBlock(value: status)
     }
     
     public func showCover(isShow: Bool) {
         self.playerLayer.showCover(isShow: isShow)
     }
     
-    public func startLoading() {
-        self.playerLayer.startLoading()
+    public func resume() {
+        self.playerLayer.resume()
+    }
+
+    public func invalidate() {
+        self.playerLayer.invalidate()
     }
 
     public func set(progress: MMProgress.ProgressType) {

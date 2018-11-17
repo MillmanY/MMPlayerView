@@ -14,9 +14,10 @@ class ViewController: UIViewController {
     var offsetObservation: NSKeyValueObservation?
     lazy var mmPlayerLayer: MMPlayerLayer = {
         let l = MMPlayerLayer()
+        
         l.cacheType = .memory(count: 5)
         l.coverFitType = .fitToPlayerView
-        l.videoGravity = AVLayerVideoGravity.resizeAspectFill
+        l.videoGravity = AVLayerVideoGravity.resizeAspect
         l.replace(cover: CoverA.instantiateFromNib())
         return l
     }()
@@ -155,8 +156,11 @@ extension ViewController: UICollectionViewDelegateFlowLayout {
     }
     
     fileprivate func updateDetail(at indexPath: IndexPath) {
-        
-        self.mmPlayerLayer.thumbImageView.image = DemoSource.shared.demoData[indexPath.row].image
+        let value = DemoSource.shared.demoData[indexPath.row]
+        if let detail = self.presentedViewController as? DetailViewController {
+            detail.data = value
+        }
+        self.mmPlayerLayer.thumbImageView.image = value.image
         self.mmPlayerLayer.set(url: DemoSource.shared.demoData[indexPath.row].play_Url)
         self.mmPlayerLayer.resume()
     }
