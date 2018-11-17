@@ -10,7 +10,7 @@ import UIKit
 import AVFoundation
 typealias DownloaderPath = (fullPath: URL, subPath: String)
 private let videoExpireInterval = TimeInterval(60*60*12)
-
+@available(iOS 11.0, *)
 extension MMPlayerDownloader {
     public enum DownloadStatus {
         case none
@@ -22,8 +22,9 @@ extension MMPlayerDownloader {
     }
 }
 
-
+@available(iOS 11.0, *)
 public class MMPlayerDownloader: NSObject {
+    
     let downloadObserverManager = MMPlayerMapObserverManager<URL,((DownloadStatus) -> Void)>()
 
     fileprivate let hls: MMPlayerHLSManager

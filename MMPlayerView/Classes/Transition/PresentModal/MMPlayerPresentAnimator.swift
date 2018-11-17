@@ -45,6 +45,7 @@ public class MMPlayerPresentAnimator: NSObject , UIViewControllerTransitioningDe
         if let c = config {
             switch c {
             case let c as MMPlayerPassViewPresentConfig:
+                
                 let pass = MMPlayerPassViewPresentTransition(config: c, isPresent: isPresent)
                 c.source = source
                 return pass

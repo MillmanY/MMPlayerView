@@ -69,10 +69,12 @@ public class MMPlayerPassViewPushTransition: MMPlayerBaseNavTransition, UIViewCo
             let from = transitionContext.viewController(forKey: .from)
             
             guard let config = self.config as? MMPlayerPassViewPushConfig else {
+                transitionContext.completeTransition(true)
                 return
             }
-            
+    
             guard let pass = config.playLayer?.playView else {
+                transitionContext.completeTransition(true)
                 return
             }
             

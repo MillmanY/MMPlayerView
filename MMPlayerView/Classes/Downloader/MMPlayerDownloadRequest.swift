@@ -7,6 +7,7 @@
 
 import Foundation
 import AVFoundation
+@available(iOS 11.0, *)
 class MMPlayerDownloadRequest {
     unowned let asset: AVURLAsset
     fileprivate var timer: Timer?
@@ -14,7 +15,9 @@ class MMPlayerDownloadRequest {
     let videoPath: (current: URL, hide: URL)
     let pathInfo: DownloaderPath
     let fileName: String
+    
     let manager: MMPlayerHLSManager
+    
     public init(asset: AVURLAsset, pathInfo: DownloaderPath, fileName: String, manager: MMPlayerHLSManager) {
         self.asset = asset
         self.pathInfo =  pathInfo
@@ -98,7 +101,7 @@ class MMPlayerDownloadRequest {
                 self.timer?.invalidate()
                 self.timer = nil
                 try? FileManager.default.removeItem(at: self.videoPath.hide)
-                self.statusBlock?(.failed(err: ""))
+                self.statusBlock?(.failed(err: export.error?.localizedDescription ?? "Unknown error"))
             case .unknown , .waiting:
                 self.timer?.invalidate()
                 self.timer = nil

@@ -8,6 +8,7 @@
 import UIKit
 import AVFoundation
 
+@available(iOS 11.0, *)
 extension MMPlayerHLSManager {
     public enum Status {
         case none
@@ -15,9 +16,8 @@ extension MMPlayerHLSManager {
         case completed(data: Data)
         case failed(err: String)
     }
-
 }
-
+@available(iOS 11.0, *)
 class MMPlayerHLSManager: NSObject {
     let bgIdentifier: String
     static let shared = MMPlayerHLSManager(identifier: "Shared-Identifier")
@@ -51,7 +51,7 @@ class MMPlayerHLSManager: NSObject {
         status?(.none)
     }
 }
-
+@available(iOS 11.0, *)
 extension MMPlayerHLSManager: AVAssetDownloadDelegate {
     
     func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {

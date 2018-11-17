@@ -54,7 +54,7 @@ public class MMPlayerPushAnimator: NSObject, UINavigationControllerDelegate {
         if let proxy = self.base.navigationController?.delegate as? NavigationDelegateProxy,
             let childTransition = proxy.forward?.navigationController?(navigationController, animationControllerFor: operation, from: fromVC, to: toVC) {
             return childTransition
-        } else if self.enableCustomTransition == false {
+        } else if self.enableCustomTransition == false || fromVC.fromProtocolVC == nil || toVC.toProtocolVC == nil {
             return nil
         }
         if let t = self.transition as? MMPlayerBaseNavTransition {

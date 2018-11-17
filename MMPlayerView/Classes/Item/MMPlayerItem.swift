@@ -34,4 +34,10 @@ class MMPlayerItem: AVPlayerItem {
             self?.delegate?.isPlaybackEmpty(isEmpty: item.isPlaybackBufferEmpty)
         })
     }
+    
+    deinit {
+        statusObservation = nil
+        emptyObservation = nil
+        keepUpObservation = nil
+    }
 }

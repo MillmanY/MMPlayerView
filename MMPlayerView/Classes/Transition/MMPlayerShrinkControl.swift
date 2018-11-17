@@ -82,7 +82,7 @@ class MMPlayerShrinkControl {
         var rect = self.config.playLayer?.playView?.frame ?? .zero
         let size = UIScreen.main.bounds
         
-        let safe = UIApplication.shared.keyWindow?.safeAreaInsets
+        let safe = UIApplication.shared.keyWindow?.realSafe
         
         var safeTop: CGFloat = 0
         var safeBottom: CGFloat = 0

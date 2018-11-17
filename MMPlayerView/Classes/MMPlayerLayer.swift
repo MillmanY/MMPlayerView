@@ -34,20 +34,25 @@ public extension MMPlayerLayer {
         case autoHide(after: TimeInterval)
         case disable
     }
-    
-    public enum MMplayerDownloadOption {
-        case autoDownload(isAuto: Bool)
-        case loadDisk(ifExist: Bool)
-    }
 }
 
 public class MMPlayerLayer: AVPlayerLayer {
-    var frameObservation: NSKeyValueObservation?
-    var boundsObservation: NSKeyValueObservation?
-    var videoRectObservation: NSKeyValueObservation?
-    var mutedObservation: NSKeyValueObservation?
-    var rateObservation: NSKeyValueObservation?
-
+    fileprivate var frameObservation: NSKeyValueObservation?
+    fileprivate var boundsObservation: NSKeyValueObservation?
+    fileprivate var videoRectObservation: NSKeyValueObservation?
+    fileprivate var mutedObservation: NSKeyValueObservation?
+    fileprivate var rateObservation: NSKeyValueObservation?
+    fileprivate var isCoverShow = false
+    fileprivate var timeObserver: Any?
+    fileprivate var isBackgroundPause = false
+    fileprivate var cahce = MMPlayerCache()
+    fileprivate var playStatusBlock: ((_ status: PlayStatus) ->Void)?
+    fileprivate var indicator = MMProgress()
+    fileprivate let assetKeysRequiredToPlay = [
+        "duration",
+        "playable",
+        "hasProtectedContent",
+        ]
     lazy var tapGesture: UITapGestureRecognizer = {
         let g = UITapGestureRecognizer.init(target: self, action: #selector(MMPlayerLayer.touchAction(gesture:)))
         return g
@@ -58,7 +63,6 @@ public class MMPlayerLayer: AVPlayerLayer {
             if newValue == frame {
                 return
             }
-            
             super.frame = newValue
             if newValue != .zero && needRefreshFrame {
                 CATransaction.commit()
@@ -69,17 +73,6 @@ public class MMPlayerLayer: AVPlayerLayer {
         }
     }
     
-    fileprivate var isCoverShow = false
-    fileprivate var timeObserver: Any?
-    fileprivate var isBackgroundPause = false
-    fileprivate var cahce = MMPlayerCache()
-    fileprivate var playStatusBlock: ((_ status: PlayStatus) ->Void)?
-    fileprivate let assetKeysRequiredToPlay = [
-        "duration",
-        "playable",
-        "hasProtectedContent",
-    ]
-    fileprivate var indicator = MMProgress()
     lazy var  bgView: UIView = {
         let v = UIView()
         v.translatesAutoresizingMaskIntoConstraints = false
@@ -147,7 +140,6 @@ public class MMPlayerLayer: AVPlayerLayer {
         set {
             if self.playView != newValue {
                 self._playView = newValue
-                
                 if clearURLWhenChangeView && changeViewClearPlayer {
                    self.playUrl = nil
                 }
@@ -313,37 +305,42 @@ public class MMPlayerLayer: AVPlayerLayer {
             }
         }
     }
+
+    public func getStatusBlock(value: ((_ status: PlayStatus) -> Void)?) {
+        self.playStatusBlock = value
+    }
     
     public func set(url: URL?,
-                    lodDiskIfExist: Bool = true ,
-                    state: ((_ status: PlayStatus) -> Void)?) {
-        self.playStatusBlock = state
-        
-        if let will = url ,
-            let real = MMPlayerDownloader.shared.localFileFrom(url: will),
-            lodDiskIfExist {
-            switch real.type {
-            case .hls:
-                var statle = false
-                if let data = try? Data(contentsOf: real.localURL),
-                   let convert = try? URL(resolvingBookmarkData: data, bookmarkDataIsStale: &statle) {
-                    self.willPlayUrl = convert
-                } else {
-                    self.willPlayUrl = url
+                    lodDiskIfExist: Bool = true ) {
+        if #available(iOS 11.0, *) {
+            if let will = url ,
+                let real = MMPlayerDownloader.shared.localFileFrom(url: will),
+                lodDiskIfExist {
+                switch real.type {
+                case .hls:
+                    var statle = false
+                    if let data = try? Data(contentsOf: real.localURL),
+                        let convert = try? URL(resolvingBookmarkData: data, bookmarkDataIsStale: &statle) {
+                        self.willPlayUrl = convert
+                    } else {
+                        self.willPlayUrl = url
+                    }
+                case .mp4:
+                    self.willPlayUrl = real.localURL
                 }
-            case .mp4:
-                self.willPlayUrl = real.localURL
+            } else {
+                self.willPlayUrl = url
             }
         } else {
             self.willPlayUrl = url
         }
     }
 
-    public func stopLoading() {
+    public func invalidate() {
         self.willPlayUrl = nil
     }
     
-    public func startLoading(localFirst: Bool = true) {
+    public func resume() {
         switch self.currentPlayStatus {
         case .playing , .pause:
             if self.playUrl == willPlayUrl {
@@ -454,7 +451,13 @@ extension MMPlayerLayer {
                 }
             }
         })
-        
+
+        videoRectObservation = self.observe(\.videoRect, options: [.new, .old]) { [weak self] (player, change) in
+            if change.newValue != change.oldValue {
+                self?.updateCoverConstraint()
+            }
+        }
+
         frameObservation = bgView.observe(\.frame, options: [.new, .old], changeHandler: { [weak self] (view, change) in
             if change.newValue != change.oldValue, change.newValue != .zero {
                 self?.updateCoverConstraint()
@@ -467,19 +470,12 @@ extension MMPlayerLayer {
             }
         })
         
-        videoRectObservation = self.observe(\.videoRect, options: [.new, .old]) { [weak self] (player, change) in
-            if change.newValue != change.oldValue {
-                self?.updateCoverConstraint()
-            }
-        }
-
         mutedObservation = self.player?.observe(\.isMuted, options: [.new, .old], changeHandler: { [weak self] (play, change) in
             if let new = change.newValue, new != change.oldValue {
                 self?.coverView?.player?(isMuted: new)
             }
         })
 
-        
         rateObservation = self.player?.observe(\.rate, options: [.new, .old], changeHandler: { [weak self] (play, change) in
             guard let new = change.newValue, let status = self?.currentPlayStatus else {
                 return
@@ -501,12 +497,17 @@ extension MMPlayerLayer {
     }
     
     func removeAllObserver() {
+        if let observer = videoRectObservation {
+            observer.invalidate()
+            self.removeObserver(observer, forKeyPath: "videoRect")
+            self.videoRectObservation = nil
+        }
+
+        videoRectObservation = nil
         boundsObservation = nil
         frameObservation = nil
-        videoRectObservation = nil
         mutedObservation = nil
         rateObservation = nil
-        
         self.player?.replaceCurrentItem(with: nil)
         self.player?.pause()
         NotificationCenter.default.removeObserver(self)
@@ -535,9 +536,24 @@ extension MMPlayerLayer {
 
 
 // Download
+@available(iOS 11.0, *)
 extension MMPlayerLayer {
+    public func download(observer status: @escaping ((MMPlayerDownloader.DownloadStatus)->Void)) -> MMPlayerObservation? {
+        guard let url = self.playUrl else {
+            status(.failed(err: "URL empty"))
+            return nil
+        }
+        MMPlayerDownloader.shared.download(url: url)
+        return self.observerDownload(status: status)
+    }
     
-
+    public func observerDownload(status: @escaping ((MMPlayerDownloader.DownloadStatus)->Void)) -> MMPlayerObservation? {
+        guard let url = self.playUrl else {
+            status(.failed(err: "URL empty"))
+            return nil
+        }
+        return MMPlayerDownloader.shared.observe(downloadURL: url, status: status)
+    }
 }
 
 extension MMPlayerLayer: MMPlayerItemProtocol {

@@ -23,6 +23,9 @@ class ViewController: UIViewController {
     @IBOutlet weak var playerCollect: UICollectionView!
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.navigationController?.mmPlayerTransition.push.pass(setting: { (_) in
+            
+        })
         offsetObservation = playerCollect.observe(\.contentOffset, options: [.new]) { [weak self] (_, value) in
             guard let self = self else {return}
             self.updateByContentOffset()
@@ -30,11 +33,28 @@ class ViewController: UIViewController {
             self.perform(#selector(self.startLoading), with: nil, afterDelay: 0.3)
         }
         playerCollect.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 200, right:0)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
             self?.updateByContentOffset()
             self?.startLoading()
         }
         
+        mmPlayerLayer.getStatusBlock { [weak self] (status) in
+            switch status {
+            case .failed(let err):
+                let alert = UIAlertController(title: "err", message: err.description, preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                self?.present(alert, animated: true, completion: nil)
+            case .ready:
+                print("Ready to Play")
+            case .playing:
+                print("Playing")
+            case .pause:
+                print("Pause")
+            case .end:
+                print("End")
+            default: break
+            }
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -62,13 +82,14 @@ class ViewController: UIViewController {
             let full = UIStoryboard.init(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "FullScreenViewController") as! FullScreenViewController
             MMLandscapeWindow.shared.makeKey(root: full, playLayer: self.mmPlayerLayer, completed: {
                 print("landscape completed")
-                //                    self.playerCollect.isScrollEnabled = true
             })
         }
     }
     
     deinit {
-        print("Deinit")
+        offsetObservation?.invalidate()
+        offsetObservation = nil
+        print("ViewController deinit")
     }
 }
 
@@ -92,13 +113,13 @@ extension ViewController: MMPlayerFromProtocol {
     func transitionCompleted() {
         self.mmPlayerLayer.playView?.isHidden = false
     }
-    
+
     func dismissViewFromGesture() {
         mmPlayerLayer.thumbImageView.image = nil
         self.updateByContentOffset()
         self.startLoading()
     }
-    
+
     func presentedView(isShrinkVideo: Bool) {
         self.playerCollect.visibleCells.forEach {
             if ($0 as? PlayerCell)?.imgView.isHidden == true && isShrinkVideo {
@@ -136,18 +157,13 @@ extension ViewController: UICollectionViewDelegateFlowLayout {
     fileprivate func updateDetail(at indexPath: IndexPath) {
         
         self.mmPlayerLayer.thumbImageView.image = DemoSource.shared.demoData[indexPath.row].image
-        self.mmPlayerLayer.set(url: DemoSource.shared.demoData[indexPath.row].play_Url, state: { (status) in
-            
-        })
-        self.mmPlayerLayer.startLoading()
+        self.mmPlayerLayer.set(url: DemoSource.shared.demoData[indexPath.row].play_Url)
+        self.mmPlayerLayer.resume()
     }
     
     fileprivate func presentDetail(at indexPath: IndexPath) {
         self.updateCell(at: indexPath)
         self.startLoading()
-        self.navigationController?.mmPlayerTransition.push.pass(setting: { (_) in
-            
-        })
         if let vc = UIStoryboard.init(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "DetailViewController") as? DetailViewController {
             vc.data = DemoSource.shared.demoData[indexPath.row]
             self.present(vc, animated: true, completion: nil)
@@ -163,23 +179,7 @@ extension ViewController: UICollectionViewDelegateFlowLayout {
                 mmPlayerLayer.playView = cell.imgView
             }
             
-            mmPlayerLayer.set(url: playURL, state: { [weak self] (status) in
-                switch status {
-                case .failed(let err):
-                    let alert = UIAlertController(title: "err", message: err.description, preferredStyle: .alert)
-                    alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-                    self?.present(alert, animated: true, completion: nil)
-                case .ready:
-                    print("Ready to Play")
-                case .playing:
-                    print("Playing")
-                case .pause:
-                    print("Pause")
-                case .end:
-                    print("End")
-                default: break
-                }
-            })
+            mmPlayerLayer.set(url: playURL)
         }
     }
     
@@ -188,7 +188,7 @@ extension ViewController: UICollectionViewDelegateFlowLayout {
             return
         }
         // start loading video
-        mmPlayerLayer.startLoading()
+        mmPlayerLayer.resume()
         self.landscapeAction()
     }
     

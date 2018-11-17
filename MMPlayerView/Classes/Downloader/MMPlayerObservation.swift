@@ -26,7 +26,6 @@ public class MMPlayerObservation: NSObject {
 }
 
 public class MMPlayerMapObserverManager<Key: Hashable, Observer>: NSObject {
-
     private var map = [Key: [(subscribe: Observer, observation: Unmanaged<MMPlayerObservation>)]]()
     
     public subscript(key: Key) -> [Observer] {
@@ -52,10 +51,32 @@ public class MMPlayerMapObserverManager<Key: Hashable, Observer>: NSObject {
     fileprivate func generateObservation(key: Key) -> MMPlayerObservation {
         let observation = MMPlayerObservation()
         observation.invalidateBlock = { [weak self] in
-            self?.map[key] = nil
+        
+            self?.map[key]?.removeAll(where: { $0.observation.takeUnretainedValue() == observation })
+            if self?.map[key]?.count == 0 {
+                self?.map[key] = nil
+            }
         }
         return observation
     }
 }
 
 
+public class MMPlayerListObserverManager<Observer>: NSObject {
+    var list = [(subscribe: Observer, observation: Unmanaged<MMPlayerObservation>)]()
+    
+    public func append(observer: Observer) -> MMPlayerObservation {
+        let observation = self.generateObservation()
+        let appendValue = (observer, observation.unmanaged)
+        self.list.append(appendValue)
+        return observation
+    }
+    
+    fileprivate func generateObservation() -> MMPlayerObservation {
+        let observation = MMPlayerObservation()
+        observation.invalidateBlock = { [weak self] in
+            self?.list.removeAll(where: { $0.observation.takeUnretainedValue() == observation })
+        }
+        return observation
+    }
+}
