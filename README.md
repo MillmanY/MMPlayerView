@@ -87,7 +87,9 @@
     // if touch out of videoRect will not trigger show/hide cover view event
     public protocol MMPlayerLayerProtocol: class {
     
-    func touchInVideoRect(contain: Bool) // 
+    func touchInVideoRect(contain: 
+    
+    ) // 
     }
  
 ## Parameter
@@ -114,7 +116,6 @@
     public var autoHideCoverType = MMPlayerCoverAutoHideType.autoHide(after: 3.0) // Default hide after 3.0 , set disable to close auto hide cover            
     public var progressType: MMPlayerView.ProgressType  
     public var coverFitType: MMPlayerView.CoverViewFitType
-    public var changeViewClearPlayer: Bool // rest url when change view 
     lazy public var thumbImageView: UIImageView 
     public var playView: UIView?
     public var coverView: UIView? { get }
@@ -127,14 +128,58 @@
     public func delayHideCover()
     public func replace<T: UIView>(cover:T) where T: CoverViewProtocol
     public func set(url: URL?, state: ((MMPlayerView.MMPlayerPlayStatus) -> Swift.Void)?)
-    public func startLoading() // if loading finish autoPlay = false, need call playerLayer.player.play() where you want
+    public func resume() // if loading finish autoPlay = false, need call playerLayer.player.play() where you want
     public weak var mmDelegate: MMPlayerLayerProtocol?
+    public func download(observer status: @escaping ((MMPlayerDownloader.DownloadStatus)->Void)) -> MMPlayerObservation? //Downlaod and observer
+
+## Downloader
+            var downloadObservation: MMPlayerObservation?
+
+            downloadObservation = MMPlayerDownloader.shared.observe(downloadURL: downloadURL) { [weak self] (status) in
+                switch status {
+                case .cancelled:
+                    print("Canceld")
+                case .completed:
+                    DispatchQueue.main.async {
+                        self?.downloadBtn.setTitle("Delete", for: .normal)
+                        self?.downloadBtn.isHidden = false
+                        self?.progress.isHidden = true
+                    }
+                case .downloading(let value):
+                    self?.downloadBtn.isHidden = true
+                    self?.progress.isHidden = false
+                    self?.progress.progress = value
+                    print("Exporting \(value) \(downloadURL)")
+                case .failed(let err):
+                    DispatchQueue.main.async {
+                        self?.downloadBtn.setTitle("Download", for: .normal)
+                    }
+                    
+                    self?.downloadBtn.isHidden = false
+                    self?.progress.isHidden = true
+                    print("Download Failed \(err)")
+                case .none:
+                    DispatchQueue.main.async {
+                        self?.downloadBtn.setTitle("Download", for: .normal)
+                    }
+                    self?.downloadBtn.isHidden = false
+                    self?.progress.isHidden = true
+                case .exist:
+                    DispatchQueue.main.async {
+                        self?.downloadBtn.setTitle("Delete", for: .normal)
+                    }
+                    self?.downloadBtn.isHidden = false
+                    self?.progress.isHidden = true
+                }
+## Delete
+            if let info = MMPlayerDownloader.shared.localFileFrom(url: downloadURL)  {
+                MMPlayerDownloader.shared.deleteVideo(info)
+            }
 
 ## Requirements
 
-    iOS 8.0+
-    Xcode 8.0+
-    Swift 3.0+, 4.0+
+    iOS 10.0+
+    Swift 4.0+
     
 ## Installation
 
