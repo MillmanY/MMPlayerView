@@ -75,7 +75,7 @@ class CoverA: UIView, MMPlayerCoverViewProtocol {
     }
     
     @objc func delaySeekTime() {
-        let time =  CMTimeMake(Int64(self.playSlider.value), 1)
+        let time =  CMTimeMake(value: Int64(self.playSlider.value), timescale: 1)
         self.playLayer?.player?.seek(to: time, completionHandler: { [unowned self] (finish) in
             self.isUpdateTime = false
         })
