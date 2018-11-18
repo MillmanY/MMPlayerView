@@ -17,9 +17,12 @@
     ex. use when change player view frequently like tableView / collectionView
     import MMPlayerView
     mmPlayerLayer.playView = cell.imgView
-    mmPlayerLayer.set(url: cell.data?.play_Url, state: { (status) in 
-    })
-    mmPlayerLayer.startLoading()
+    mmPlayerLayer.getStatusBlock { [weak self] (status) in
+
+    }
+    self.mmPlayerLayer.set(url: DemoSource.shared.demoData[indexPath.row].play_Url)
+    self.mmPlayerLayer.resume()
+
 
 ## MMPlayerView
     let url = URL.init(string: "http://www.html5videoplayer.net/videos/toystory.mp4")!
@@ -29,6 +32,8 @@
            case ....
         }
     }
+    
+    
     playView.startLoading()
 ## Transition
     
