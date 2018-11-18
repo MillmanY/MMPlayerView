@@ -22,7 +22,6 @@ class MMPlayerShrinkControl {
     init(containerView: UIView, config: MMPlayerPresentConfig) {
         self.config = config
         self.containerView = containerView
-    
     }
     
     public func shrinkView() {
@@ -135,5 +134,9 @@ class MMPlayerShrinkControl {
             self.containerView.isUserInteractionEnabled = true
             self.config.playLayer?.setCoverView(enable: true)
         }
+    }
+    
+    deinit {
+        print("Deinit")
     }
 }

@@ -8,9 +8,8 @@
 
 import UIKit
 
-public typealias T = MMPlayerNavConfig
 public class MMPlayerPushAnimator: NSObject, UINavigationControllerDelegate {
-    public var config: T?
+    public var config: MMPlayerNavConfig?
     unowned let base: UINavigationController
     var transition: UIViewControllerAnimatedTransitioning?
     lazy var _proxy: NavigationDelegateProxy = {

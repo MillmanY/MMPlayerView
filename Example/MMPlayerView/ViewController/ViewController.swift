@@ -28,7 +28,7 @@ class ViewController: UIViewController {
             
         })
         offsetObservation = playerCollect.observe(\.contentOffset, options: [.new]) { [weak self] (_, value) in
-            guard let self = self else {return}
+            guard let self = self, self.presentedViewController != nil else {return}
             self.updateByContentOffset()
             NSObject.cancelPreviousPerformRequests(withTarget: self)
             self.perform(#selector(self.startLoading), with: nil, afterDelay: 0.3)

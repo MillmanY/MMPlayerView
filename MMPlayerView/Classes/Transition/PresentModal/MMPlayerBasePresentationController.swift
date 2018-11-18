@@ -41,8 +41,9 @@ public class MMPlayerBasePresentationController: UIPresentationController {
     
     public override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
 
-        coordinator.animate(alongsideTransition: { (context) in
+        coordinator.animate(alongsideTransition: { [weak self] (context) in
             // Prevent Scale error
+            guard let self = self else {return}
             if let c = self.containerView {
                 self.presentingViewController.view.transform = .identity
                 self.presentingViewController.view.frame = c.bounds

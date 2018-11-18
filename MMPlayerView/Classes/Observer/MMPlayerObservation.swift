@@ -12,10 +12,12 @@ public class MMPlayerObservation: NSObject {
     public enum Status {
         case pause
         case resume
+        case invalidate
     }
     public var status: Status = .resume
     
     fileprivate func invalidate() {
+        self.status = .invalidate
         self.invalidateBlock?()
         self.invalidateBlock = nil
     }
@@ -26,20 +28,19 @@ public class MMPlayerObservation: NSObject {
 }
 
 public class MMPlayerMapObserverManager<Key: Hashable, Observer>: NSObject {
-    private var map = [Key: [(subscribe: Observer, observation: Unmanaged<MMPlayerObservation>)]]()
-    
+    private var map = [Key: [(subscribe: Observer, observation: WeakBox<MMPlayerObservation>)]]()
     public subscript(key: Key) -> [Observer] {
         return map[key]?.compactMap({
-            $0.observation.takeUnretainedValue().status == .resume ? $0.subscribe : nil
+            $0.observation.value?.status == .resume ? $0.subscribe : nil
         }) ?? [Observer]()
     }
     
     public func add(key: Key, observer: Observer) -> MMPlayerObservation {
         if map[key] == nil {
-            map[key] = [(subscribe: Observer, observation: Unmanaged<MMPlayerObservation>)]()
+            map[key] = [(subscribe: Observer, observation: WeakBox<MMPlayerObservation>)]()
         }
         let observation = self.generateObservation(key: key)
-        let appendValue = (observer, observation.unmanaged)
+        let appendValue = (observer, WeakBox(observation))
         map[key]?.append(appendValue)
         return observation
     }
@@ -50,9 +51,9 @@ public class MMPlayerMapObserverManager<Key: Hashable, Observer>: NSObject {
     
     fileprivate func generateObservation(key: Key) -> MMPlayerObservation {
         let observation = MMPlayerObservation()
-        observation.invalidateBlock = { [weak self] in
         
-            self?.map[key]?.removeAll(where: { $0.observation.takeUnretainedValue() == observation })
+        observation.invalidateBlock = { [weak self, weak observation] in
+            self?.map[key]?.removeAll(where: { $0.observation.value == observation })
             if self?.map[key]?.count == 0 {
                 self?.map[key] = nil
             }
@@ -63,19 +64,19 @@ public class MMPlayerMapObserverManager<Key: Hashable, Observer>: NSObject {
 
 
 public class MMPlayerListObserverManager<Observer>: NSObject {
-    var list = [(subscribe: Observer, observation: Unmanaged<MMPlayerObservation>)]()
+    var list = [(subscribe: Observer, observation: WeakBox<MMPlayerObservation>)]()
     
     public func append(observer: Observer) -> MMPlayerObservation {
         let observation = self.generateObservation()
-        let appendValue = (observer, observation.unmanaged)
+        let appendValue = (observer, WeakBox(observation))
         self.list.append(appendValue)
         return observation
     }
     
     fileprivate func generateObservation() -> MMPlayerObservation {
         let observation = MMPlayerObservation()
-        observation.invalidateBlock = { [weak self] in
-            self?.list.removeAll(where: { $0.observation.takeUnretainedValue() == observation })
+        observation.invalidateBlock = { [weak self, weak observation] in
+            self?.list.removeAll(where: { $0.observation.value == observation })
         }
         return observation
     }

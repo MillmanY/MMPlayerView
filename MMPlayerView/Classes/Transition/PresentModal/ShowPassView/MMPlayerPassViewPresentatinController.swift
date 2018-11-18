@@ -27,8 +27,8 @@ public class MMPlayerPassViewPresentatinController: MMPlayerBasePresentationCont
     public override func dismissalTransitionWillBegin() {
         super.dismissalTransitionWillBegin()
         
-        self.presentingViewController.transitionCoordinator?.animate(alongsideTransition: { (context) in
-            self.presentingViewController.view.transform = .identity
+        self.presentingViewController.transitionCoordinator?.animate(alongsideTransition: { [weak self] (context) in
+            self?.presentingViewController.view.transform = .identity
         }, completion: nil)
     }
     

@@ -48,10 +48,9 @@ class DetailViewController: UIViewController {
         
         if #available(iOS 11.0, *) {
             downloadObservation = MMPlayerDownloader.shared.observe(downloadURL: downloadURL) { [weak self] (status) in
-                print("Subscribe 1")
                 switch status {
                 case .cancelled:
-                    print("Download")
+                    print("Canceld")
                 case .completed:
                     DispatchQueue.main.async {
                         self?.downloadBtn.setTitle("Delete", for: .normal)
