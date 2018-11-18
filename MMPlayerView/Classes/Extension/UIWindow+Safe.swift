@@ -6,7 +6,7 @@
 //
 
 import Foundation
-
+import UIKit
 extension UIWindow {
     var realSafe: UIEdgeInsets {
         get {
