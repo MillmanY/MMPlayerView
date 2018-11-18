@@ -84,9 +84,6 @@ class DetailViewController: UIViewController {
                     self?.progress.isHidden = true
                 }
             }
-            self.playerLayer?.download(observer: { (status) in
-                
-            })
         } else {
             let alert = UIAlertController(title: "download only for ios 11", message: "", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))

@@ -88,7 +88,7 @@ public class MMPlayerDownloader: NSObject {
     
     public func download(url: URL, fileName: String? = nil) {
         if url.isFileURL {
-            fatalError("Input fileURL are Invalid \(url.absoluteString)")
+            fatalError("Input fileURL are Invalid")
         }
         
         if mapList[url] != nil { return }

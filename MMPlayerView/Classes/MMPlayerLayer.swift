@@ -288,8 +288,7 @@ public class MMPlayerLayer: AVPlayerLayer {
         self.playStatusBlock = value
     }
     
-    public func set(url: URL?,
-                    lodDiskIfExist: Bool = true ) {
+    public func set(url: URL?, lodDiskIfExist: Bool = true ) {
         if #available(iOS 11.0, *) {
             if let will = url ,
                 let real = MMPlayerDownloader.shared.localFileFrom(url: will),
@@ -516,6 +515,11 @@ extension MMPlayerLayer {
             status(.failed(err: "URL empty"))
             return nil
         }
+        if url.isFileURL {
+            status(.failed(err: "Input fileURL are Invalid"))
+            return nil
+        }
+        
         MMPlayerDownloader.shared.download(url: url)
         return self.observerDownload(status: status)
     }
