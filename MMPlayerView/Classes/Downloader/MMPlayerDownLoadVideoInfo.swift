@@ -22,7 +22,21 @@ public struct MMPlayerDownLoadVideoInfo: Codable, Equatable {
         get {
             return URL.init(fileURLWithPath: VideoBasePath)
                       .appendingPathComponent(fileSubPath)
-                      .appendingPathComponent(fileName)
+                      .appendingPathComponent(convrtFileName)
+        }
+    }
+    
+    fileprivate var convrtFileName: String {
+        get {
+            var name = fileName.isEmpty ? url.absoluteString.base64 : fileName
+            switch self.type {
+            case .hls:
+                break
+            case .mp4:
+                name += ".mp4"
+            }
+            
+            return name
         }
     }
     

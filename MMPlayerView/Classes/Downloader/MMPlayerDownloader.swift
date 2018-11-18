@@ -78,6 +78,12 @@ public class MMPlayerDownloader: NSObject {
         }
     }
     
+    public func localFileFrom(name: String) -> MMPlayerDownLoadVideoInfo? {
+        return downloadInfo.first { (info) -> Bool in
+            return info.fileName == name
+        }
+    }
+    
     public func observe(downloadURL: URL, status: @escaping ((_ status: MMPlayerDownloader.DownloadStatus) -> Void)) -> MMPlayerObservation {
         let value = self.downloadObserverManager.add(key: downloadURL, observer: status)
         if self.localFileFrom(url: downloadURL) != nil {
@@ -94,12 +100,12 @@ public class MMPlayerDownloader: NSObject {
         if mapList[url] != nil { return }
         
         self.downloadInfo.removeAll { $0.url == url }
-        let name = fileName ?? url.absoluteString.base64
+//        let name = fileName ?? url.absoluteString.base64
         let asset = AVURLAsset(url: url)
         
         mapList[url] = MMPlayerDownloadRequest(asset: asset,
                                                pathInfo: downloadPathInfo,
-                                               fileName: name,
+                                               fileName: fileName,
                                                manager: hls)
         
         mapList[url]?.start(status: { [weak self] in

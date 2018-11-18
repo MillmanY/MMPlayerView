@@ -18,12 +18,15 @@ class MMPlayerDownloadRequest {
     
     let manager: MMPlayerHLSManager
     
-    public init(asset: AVURLAsset, pathInfo: DownloaderPath, fileName: String, manager: MMPlayerHLSManager) {
+    public init(asset: AVURLAsset, pathInfo: DownloaderPath, fileName: String?, manager: MMPlayerHLSManager) {
         self.asset = asset
         self.pathInfo =  pathInfo
-        self.fileName = fileName
-        self.videoPath = (pathInfo.fullPath.appendingPathComponent(fileName),
-                          pathInfo.fullPath.appendingPathComponent(".\(fileName)"))
+        self.fileName = fileName ?? ""
+        
+        let lastPath = fileName ?? asset.url.absoluteString.base64
+        
+        self.videoPath = (pathInfo.fullPath.appendingPathComponent(lastPath),
+                          pathInfo.fullPath.appendingPathComponent(".\(lastPath)"))
         self.manager = manager
     }
     
@@ -76,7 +79,7 @@ class MMPlayerDownloadRequest {
             return
         }
         
-        let path = self.pathInfo.fullPath.appendingPathComponent(".\(fileName)")
+        let path = self.videoPath.hide
         export.outputURL = path
         export.outputFileType = .mp4
         export.exportAsynchronously(completionHandler: { [unowned self] in
@@ -94,7 +97,7 @@ class MMPlayerDownloadRequest {
                 try? FileManager.default.moveItem(at: self.videoPath.hide, to: self.videoPath.current.appendingPathExtension("mp4"))
                 let info = MMPlayerDownLoadVideoInfo(url: downloadURL,
                                                      type: .mp4,
-                                                     fileName: "\(self.fileName).mp4",
+                                                     fileName: self.fileName,
                                                      fileSubPath: self.pathInfo.subPath)
                 self.statusBlock?(.completed(info: info))
             case .failed:
