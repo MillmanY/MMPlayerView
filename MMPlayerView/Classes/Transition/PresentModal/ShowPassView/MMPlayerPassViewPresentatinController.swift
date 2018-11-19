@@ -8,13 +8,6 @@
 
 import UIKit
 
-enum VideoPositionType {
-    case leftTop
-    case rightTop
-    case leftBottom
-    case rightBottom
-}
-
 public class MMPlayerPassViewPresentatinController: MMPlayerBasePresentationController {
 
     lazy var shrinkControl: MMPlayerShrinkControl = {

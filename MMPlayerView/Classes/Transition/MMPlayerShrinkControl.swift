@@ -7,12 +7,26 @@
 
 import Foundation
 class MMPlayerShrinkControl {
+    enum VideoPositionType {
+        case leftTop
+        case rightTop
+        case leftBottom
+        case rightBottom
+    }
+
+    var videoRectObserver: NSKeyValueObservation?
     lazy var  containerGesture: UIPanGestureRecognizer = {
         let g = UIPanGestureRecognizer.init(target: self, action: #selector(pan(gesture:)))
         g.isEnabled = false
         return g
     }()
 
+    lazy var shrinkPlayView: UIView = {
+        let view = UIView(frame: CGRect(origin: .zero, size: self.config.defaultShrinkSize))
+        view.setShadow(offset: CGSize(width: 2, height: 2), opacity: 0.5)
+        return view
+    }()
+    var currentQuadrant: VideoPositionType = .rightBottom
     var lastPoint: CGPoint = .zero
     weak var originalPlayView:UIView?
     weak var from: UIViewController?
@@ -22,25 +36,26 @@ class MMPlayerShrinkControl {
     init(containerView: UIView, config: MMPlayerPresentConfig) {
         self.config = config
         self.containerView = containerView
+        let g = UITapGestureRecognizer(target: self, action: #selector(self.tapVideo(gesture:)))
+        shrinkPlayView.addGestureRecognizer(g)
+        shrinkPlayView.addGestureRecognizer(containerGesture)
     }
     
     public func shrinkView() {
-        self.containerView.isUserInteractionEnabled = false
+        containerView.isUserInteractionEnabled = false
         containerGesture.isEnabled = true
-        
-        self.config.playLayer?.setCoverView(enable: false)
-        originalPlayView = self.config.playLayer?.playView
-        var rect = self.containerView.frame
-        rect.size = self.config.shrinkSize
-        let view = UIView(frame: CGRect(origin: .zero, size: self.config.shrinkSize))
-        view.setShadow(offset: CGSize.init(width: 2, height: 2), opacity: 0.5)
-        let g = UITapGestureRecognizer.init(target: self, action: #selector(self.tapVideo(gesture:)))
-        view.addGestureRecognizer(g)
-        from?.view.addSubview(view)
-        self.config.playLayer?.playView = view
-        view.addGestureRecognizer(containerGesture)
-        self.setFrameWith(quadrant: .rightBottom, dismissVideo: false)
-        (self.config.source as? MMPlayerFromProtocol)?.presentedView?(isShrinkVideo: true)
+        config.playLayer?.setCoverView(enable: false)
+        originalPlayView = config.playLayer?.playView
+        from?.view.addSubview(shrinkPlayView)
+        UIApplication.shared.keyWindow?.addSubview(shrinkPlayView)
+        config.playLayer?.playView = shrinkPlayView
+        (config.source as? MMPlayerFromProtocol)?.presentedView?(isShrinkVideo: true)
+        videoRectObserver = config.playLayer?.observe(\.videoRect, options: [.new, .old, .initial], changeHandler: { [weak self] (_, value) in
+            guard let current = self?.currentQuadrant, let new = value.newValue, (new != value.oldValue) else {
+                return
+            }
+            self?.setFrameWith(quadrant: current, dismissVideo: false)
+        })
     }
     
     @objc func pan(gesture: UIPanGestureRecognizer) {
@@ -76,18 +91,26 @@ class MMPlayerShrinkControl {
     }
     
     fileprivate func setFrameWith(quadrant: VideoPositionType, dismissVideo: Bool) {
+        self.currentQuadrant = quadrant
+        var rect = shrinkPlayView.frame
+        let maxWidth = self.config.shrinkMaxWidth
         let margin = self.config.margin
-        var rect = self.config.playLayer?.playView?.frame ?? .zero
         let size = UIScreen.main.bounds
-        
-        let safe = UIApplication.shared.keyWindow?.realSafe
-        
-        var safeTop: CGFloat = 0
-        var safeBottom: CGFloat = 0
-        if self.config.isMarginNeedArea {
-            safeTop = safe?.top ?? 0
-            safeBottom = safe?.bottom ?? 0
+        let safe = UIApplication.shared.keyWindow?.realSafe ?? .zero
+        let safeTop: CGFloat = self.config.isMarginNeedArea ? safe.top : 0
+        let safeBottom: CGFloat = self.config.isMarginNeedArea ?  safe.bottom : 0
+        if let videoRectSize = self.config.playLayer?.videoRect.size, videoRectSize != .zero {
+            if videoRectSize.width > videoRectSize.height {
+                let height = maxWidth*videoRectSize.height/videoRectSize.width
+                rect.size = CGSize(width: maxWidth, height: height)
+            } else {
+                let width = videoRectSize.width/videoRectSize.height*maxWidth
+                rect.size = CGSize(width: width, height: maxWidth)
+            }
+        } else {
+            rect.size = config.defaultShrinkSize
         }
+
         switch quadrant {
         case .leftTop:
             rect.origin.x = dismissVideo ? -rect.size.width : margin
@@ -111,7 +134,7 @@ class MMPlayerShrinkControl {
             self.config.playLayer?.playView?.frame = rect
         }) { [unowned self] (_) in
             if dismissVideo {
-                
+                self.removeVideoRectObserver()
                 (self.config as? MMPlayerPassViewPresentConfig)?._dismissGesture = true
                 self.config.playLayer?.setCoverView(enable: true)
                 self.to?.dismiss(animated: true, completion: nil)
@@ -120,6 +143,7 @@ class MMPlayerShrinkControl {
     }
     
     @objc func tapVideo(gesture: UITapGestureRecognizer) {
+        self.removeVideoRectObserver()
         containerGesture.isEnabled = false
         if let p = self.config.playLayer?.playView {
             self.containerView.addSubview(p)
@@ -136,7 +160,14 @@ class MMPlayerShrinkControl {
         }
     }
     
+    fileprivate func removeVideoRectObserver() {
+        if let observer = videoRectObserver {
+            observer.invalidate()
+            self.videoRectObserver = nil
+        }
+    }
+    
     deinit {
-        print("Deinit")
+        self.removeVideoRectObserver()
     }
 }

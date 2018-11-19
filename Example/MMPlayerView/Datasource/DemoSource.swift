@@ -21,12 +21,15 @@ class DemoSource: NSObject {
     
     
     override init() {
-        
         demoData += [
             DataObj(image: #imageLiteral(resourceName: "seven"),
                     play_Url: URL(string: "http://mirrors.standaloneinstaller.com/video-sample/dolbycanyon.mp4")!,
                     title: "Blessings (Reprise)",
                     content: "“Blessings (Reprise)” is Chance the Rapper shedding the skin he used to wear as an average human being. In his words: “The people’s champ must be everything the people can’t be.” He uses Coloring Book’s outro as an opportunity to step into the glimmering suit of optimism he’s been threading together since 2013’s Acid Rap, which shone light on more dark days than bright ones. His positive outlook on life in the present has been hard-fought, but rewarding; it’s apparent in his clarity that he’s exactly where he wants to be. With minimal vocals underscoring his single verse, the Chi-Town golden child spits bar after bar of faithfulness, letting it be known that he’s not afraid to talk to and about God in public. Chancellor Bennett is clearly a found man, and he’s doing his best to lead his fans to the promised land of happiness and well-being.\r\n\r\n"),
+            DataObj(image: #imageLiteral(resourceName: "vertical.png"),
+            play_Url: URL(string: "http://www.exit109.com/~dnn/clips/RW20seconds_1.mp4")!,
+            title: "Vertical Video",
+            content: "This is a Vertical Video"),
             
             DataObj(image: #imageLiteral(resourceName: "two"),
                     play_Url: URL(string: "https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8")!,

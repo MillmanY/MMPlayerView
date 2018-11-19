@@ -16,11 +16,12 @@ public protocol MMPlayerConfig {
 
 public protocol MMPlayerPresentConfig: MMPlayerConfig {
     var margin: CGFloat { set get }
-    var shrinkSize: CGSize { set get }
+    var defaultShrinkSize: CGSize { set get }
     var dismissGesture: Bool { get }
     var source: UIViewController? { set get }
     var isMarginNeedArea: Bool { get set }
 
+    var shrinkMaxWidth: CGFloat { get set }
 }
 
 public protocol MMPlayerNavConfig: MMPlayerConfig {
