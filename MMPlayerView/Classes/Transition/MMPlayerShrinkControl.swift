@@ -47,7 +47,7 @@ class MMPlayerShrinkControl {
         config.playLayer?.setCoverView(enable: false)
         originalPlayView = config.playLayer?.playView
         from?.view.addSubview(shrinkPlayView)
-        UIApplication.shared.keyWindow?.addSubview(shrinkPlayView)
+//        UIApplication.shared.keyWindow?.addSubview(shrinkPlayView)
         config.playLayer?.playView = shrinkPlayView
         (config.source as? MMPlayerFromProtocol)?.presentedView?(isShrinkVideo: true)
         videoRectObserver = config.playLayer?.observe(\.videoRect, options: [.new, .old, .initial], changeHandler: { [weak self] (_, value) in
