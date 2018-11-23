@@ -45,10 +45,9 @@ class MMPlayerHLSManager: NSObject {
                 status?(.failed(err: "Task Init error"))
                 return
         }
-    
+        
         task.resume()
         self.taskMap[task] = status
-        status?(.none)
     }
 }
 @available(iOS 11.0, *)

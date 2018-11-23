@@ -78,7 +78,6 @@ public class MMPlayerLayer: AVPlayerLayer {
             guard let new = _playView else {
                 return
             }
-
             new.addSubview(self.bgView)
             self.bgView.mPlayFit.layoutFitSuper()
             self.bgView.layoutIfNeeded()

@@ -14,6 +14,7 @@ private let videoExpireInterval = TimeInterval(60*60*12)
 extension MMPlayerDownloader {
     public enum DownloadStatus {
         case none
+        case downloadWillStart
         case downloading(value: Float)
         case completed(info: MMPlayerDownLoadVideoInfo)
         case failed(err: String)
@@ -24,22 +25,22 @@ extension MMPlayerDownloader {
 
 @available(iOS 11.0, *)
 public class MMPlayerDownloader: NSObject {
-    
-    let downloadObserverManager = MMPlayerMapObserverManager<URL,((DownloadStatus) -> Void)>()
-
+    fileprivate var _downloadInfo = [MMPlayerDownLoadVideoInfo]()
+    fileprivate let queue = DispatchQueue(label: "MMPlayerDownloader.Request")
     fileprivate let hls: MMPlayerHLSManager
-    public static let shared: MMPlayerDownloader = {
-        let shared =  MMPlayerDownloader.init(subPath: "MMPlayerVideo/Share")
-        return shared
-    }()
     fileprivate var mapList = [URL: MMPlayerDownloadRequest]()
     fileprivate var plistPath: URL {
         return self.downloadPathInfo.fullPath.appendingPathComponent("Video")
     }
 
+    let downloadObserverManager = MMPlayerMapObserverManager<URL,((DownloadStatus) -> Void)>()
     let downloadPathInfo: DownloaderPath
 
-    fileprivate var _downloadInfo = [MMPlayerDownLoadVideoInfo]()
+    public static let shared: MMPlayerDownloader = {
+        let shared =  MMPlayerDownloader.init(subPath: "MMPlayerVideo/Share")
+        return shared
+    }()
+
     public private(set) var downloadInfo: [MMPlayerDownLoadVideoInfo] {
         set {
             let data = try? JSONEncoder().encode(newValue)
@@ -98,30 +99,26 @@ public class MMPlayerDownloader: NSObject {
         }
         
         if mapList[url] != nil { return }
-        
         self.downloadInfo.removeAll { $0.url == url }
-//        let name = fileName ?? url.absoluteString.base64
-        let asset = AVURLAsset(url: url)
-        
-        mapList[url] = MMPlayerDownloadRequest(asset: asset,
-                                               pathInfo: downloadPathInfo,
-                                               fileName: fileName,
-                                               manager: hls)
-        
-        mapList[url]?.start(status: { [weak self] in
-            let status = $0
-            self?.downloadObserverManager[url].forEach({ $0(status) })
-            switch status {
-            case .completed(let info):
-                self?.downloadInfo.append(info)
-                self?.mapList[url] = nil
-            case  .cancelled , .failed:
-                self?.mapList[url] = nil
-                self?.downloadObserverManager.remove(key: url)
-            default:
-                break
-            }
-        })
+        self.mapList[url] = MMPlayerDownloadRequest(url: url,
+                                                    pathInfo: self.downloadPathInfo,
+                                                    fileName: fileName,
+                                                    manager: self.hls)
+
+            self.mapList[url]?.start(status: { [weak self] in
+                let status = $0
+                self?.downloadObserverManager[url].forEach({ $0(status) })
+                switch status {
+                case .completed(let info):
+                    self?.downloadInfo.append(info)
+                    self?.mapList[url] = nil
+                case  .cancelled , .failed:
+                    self?.mapList[url] = nil
+                    self?.downloadObserverManager.remove(key: url)
+                default:
+                    break
+                }
+            })
     }
     
     fileprivate func create(path: String) {

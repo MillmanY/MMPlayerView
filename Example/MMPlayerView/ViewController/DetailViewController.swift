@@ -49,6 +49,10 @@ class DetailViewController: UIViewController {
         if #available(iOS 11.0, *) {
             downloadObservation = MMPlayerDownloader.shared.observe(downloadURL: downloadURL) { [weak self] (status) in
                 switch status {
+                case .downloadWillStart:
+                    self?.downloadBtn.isHidden = true
+                    self?.progress.isHidden = false
+                    self?.progress.progress = 0
                 case .cancelled:
                     print("Canceld")
                 case .completed:

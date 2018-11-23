@@ -9,7 +9,7 @@ import Foundation
 import AVFoundation
 @available(iOS 11.0, *)
 class MMPlayerDownloadRequest {
-    unowned let asset: AVURLAsset
+    let asset: AVURLAsset
     fileprivate var timer: Timer?
     var statusBlock: ((_ status: MMPlayerDownloader.DownloadStatus)->Void)?
     let videoPath: (current: URL, hide: URL)
@@ -18,12 +18,12 @@ class MMPlayerDownloadRequest {
     
     let manager: MMPlayerHLSManager
     
-    public init(asset: AVURLAsset, pathInfo: DownloaderPath, fileName: String?, manager: MMPlayerHLSManager) {
-        self.asset = asset
+    public init(url: URL, pathInfo: DownloaderPath, fileName: String?, manager: MMPlayerHLSManager) {
+        self.asset = AVURLAsset.init(url: url)
         self.pathInfo =  pathInfo
         self.fileName = fileName ?? ""
         
-        let lastPath = fileName ?? asset.url.absoluteString.base64
+        let lastPath = fileName ?? url.absoluteString.base64
         
         self.videoPath = (pathInfo.fullPath.appendingPathComponent(lastPath),
                           pathInfo.fullPath.appendingPathComponent(".\(lastPath)"))
@@ -34,11 +34,13 @@ class MMPlayerDownloadRequest {
         try? FileManager.default.removeItem(at: self.videoPath.hide)
         try? FileManager.default.removeItem(at: self.videoPath.current)
         self.statusBlock = status
-        
-        if asset.isExportable {
-            self.export()
-        } else {
-            self.hls()
+        self.statusBlock?(.downloadWillStart)
+        DispatchQueue.main.async { [weak self] in
+            if self?.asset.isExportable == true {
+                self?.export()
+            } else {
+                self?.hls()
+            }
         }
     }
     
@@ -72,13 +74,13 @@ class MMPlayerDownloadRequest {
         } catch {
             return
         }
-        
+
         let finalComposition = composition.copy() as! AVComposition
-        
+
         guard let export = AVAssetExportSession(asset: finalComposition, presetName: AVAssetExportPresetPassthrough) else {
             return
         }
-        
+
         let path = self.videoPath.hide
         export.outputURL = path
         export.outputFileType = .mp4
