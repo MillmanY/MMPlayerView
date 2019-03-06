@@ -507,7 +507,6 @@ extension MMPlayerLayer {
 
 
 // Download
-@available(iOS 11.0, *)
 extension MMPlayerLayer {
     public func download(observer status: @escaping ((MMPlayerDownloader.DownloadStatus)->Void)) -> MMPlayerObservation? {
         guard let url = self.playUrl else {

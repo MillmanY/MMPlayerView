@@ -9,12 +9,13 @@
 /* Begin PBXBuildFile section */
 		139987C7DC290D6BA15D5C71A6F2F31F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6604A7D69453B4569E4E4827FB9155A9 /* Foundation.framework */; };
 		179DFFF5A41590159B910EB208055F9F /* MMPlayerView-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 15A6BD688A2D656904144E5B76D1FB4D /* MMPlayerView-dummy.m */; };
+		2708187F222FCBB100003A16 /* MMPlayerDownloaderDefine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2708187E222FCBB100003A16 /* MMPlayerDownloaderDefine.swift */; };
 		27160EB221A1255500B8A746 /* WeakBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27160EB121A1255500B8A746 /* WeakBox.swift */; };
 		2717E199219D388600DCC8CB /* MMPlayerDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2717E197219D388600DCC8CB /* MMPlayerDownloader.swift */; };
 		2717E19D219DA46800DCC8CB /* MMPlayerDownLoadVideoInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2717E19C219DA46800DCC8CB /* MMPlayerDownLoadVideoInfo.swift */; };
 		2717E19F219DB17000DCC8CB /* MMPlayer+Codable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2717E19E219DB17000DCC8CB /* MMPlayer+Codable.swift */; };
 		27874357219E7522001B98F9 /* MMPlayer+String+Encode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27874356219E7522001B98F9 /* MMPlayer+String+Encode.swift */; };
-		27874359219E774A001B98F9 /* MMPlayerHLSManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27874358219E774A001B98F9 /* MMPlayerHLSManager.swift */; };
+		27874359219E774A001B98F9 /* MMPlayerDownloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27874358219E774A001B98F9 /* MMPlayerDownloadManager.swift */; };
 		2787435B219E7966001B98F9 /* MMPlayerDownloadRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2787435A219E7966001B98F9 /* MMPlayerDownloadRequest.swift */; };
 		2787435F219E9F70001B98F9 /* MMPlayerItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2787435E219E9F70001B98F9 /* MMPlayerItem.swift */; };
 		27874361219EB538001B98F9 /* MMPlayer+DispatchQueue+Once.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27874360219EB537001B98F9 /* MMPlayer+DispatchQueue+Once.swift */; };
@@ -69,12 +70,13 @@
 		1273E7E377854BBD33F951FFB70186DD /* MMPlayerView-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "MMPlayerView-umbrella.h"; sourceTree = "<group>"; };
 		15A6BD688A2D656904144E5B76D1FB4D /* MMPlayerView-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "MMPlayerView-dummy.m"; sourceTree = "<group>"; };
 		1E3C9876962EA1DCB602AE70C4C5EB03 /* Pods-MMPlayerView_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-MMPlayerView_Example.release.xcconfig"; sourceTree = "<group>"; };
+		2708187E222FCBB100003A16 /* MMPlayerDownloaderDefine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MMPlayerDownloaderDefine.swift; sourceTree = "<group>"; };
 		27160EB121A1255500B8A746 /* WeakBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeakBox.swift; sourceTree = "<group>"; };
 		2717E197219D388600DCC8CB /* MMPlayerDownloader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MMPlayerDownloader.swift; sourceTree = "<group>"; };
 		2717E19C219DA46800DCC8CB /* MMPlayerDownLoadVideoInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MMPlayerDownLoadVideoInfo.swift; sourceTree = "<group>"; };
 		2717E19E219DB17000DCC8CB /* MMPlayer+Codable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MMPlayer+Codable.swift"; sourceTree = "<group>"; };
 		27874356219E7522001B98F9 /* MMPlayer+String+Encode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MMPlayer+String+Encode.swift"; sourceTree = "<group>"; };
-		27874358219E774A001B98F9 /* MMPlayerHLSManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MMPlayerHLSManager.swift; sourceTree = "<group>"; };
+		27874358219E774A001B98F9 /* MMPlayerDownloadManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MMPlayerDownloadManager.swift; sourceTree = "<group>"; };
 		2787435A219E7966001B98F9 /* MMPlayerDownloadRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MMPlayerDownloadRequest.swift; sourceTree = "<group>"; };
 		2787435E219E9F70001B98F9 /* MMPlayerItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MMPlayerItem.swift; sourceTree = "<group>"; };
 		27874360219EB537001B98F9 /* MMPlayer+DispatchQueue+Once.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "MMPlayer+DispatchQueue+Once.swift"; sourceTree = "<group>"; };
@@ -172,10 +174,11 @@
 		2717E196219D386D00DCC8CB /* Downloader */ = {
 			isa = PBXGroup;
 			children = (
+				2708187E222FCBB100003A16 /* MMPlayerDownloaderDefine.swift */,
 				2717E19C219DA46800DCC8CB /* MMPlayerDownLoadVideoInfo.swift */,
 				2717E197219D388600DCC8CB /* MMPlayerDownloader.swift */,
 				2787435A219E7966001B98F9 /* MMPlayerDownloadRequest.swift */,
-				27874358219E774A001B98F9 /* MMPlayerHLSManager.swift */,
+				27874358219E774A001B98F9 /* MMPlayerDownloadManager.swift */,
 			);
 			path = Downloader;
 			sourceTree = "<group>";
@@ -550,6 +553,7 @@
 				5E9A1B731F4D80E600746E5B /* MMPlayerBasePresentationController.swift in Sources */,
 				5E9A1B6F1F4D80E600746E5B /* MMPlayerPushAnimator.swift in Sources */,
 				2717E19D219DA46800DCC8CB /* MMPlayerDownLoadVideoInfo.swift in Sources */,
+				2708187F222FCBB100003A16 /* MMPlayerDownloaderDefine.swift in Sources */,
 				5E862B1C20629F06000EAC20 /* MMPlayerShrinkControl.swift in Sources */,
 				5E4F8A8B206245E200A2B19D /* MMPlayer+NSObject+Replace.swift in Sources */,
 				5E3E68EE1F4FF77900122F6C /* MMPlayer+UIView+Shadow.swift in Sources */,
@@ -569,7 +573,7 @@
 				5EC40F441F4EA47100510EDF /* MMLandscapeWindow.swift in Sources */,
 				5E9A1B6B1F4D80E600746E5B /* MMPlayerBaseTransition.swift in Sources */,
 				27160EB221A1255500B8A746 /* WeakBox.swift in Sources */,
-				27874359219E774A001B98F9 /* MMPlayerHLSManager.swift in Sources */,
+				27874359219E774A001B98F9 /* MMPlayerDownloadManager.swift in Sources */,
 				5E562DA11EF9556900025869 /* MMPlayerProtocol.swift in Sources */,
 				179DFFF5A41590159B910EB208055F9F /* MMPlayerView-dummy.m in Sources */,
 				2787435B219E7966001B98F9 /* MMPlayerDownloadRequest.swift in Sources */,
@@ -677,7 +681,7 @@
 				GCC_NO_COMMON_BLOCKS = YES;
 				INFOPLIST_FILE = "Target Support Files/Pods-MMPlayerView_Example/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MACH_O_TYPE = staticlib;
 				MODULEMAP_FILE = "Target Support Files/Pods-MMPlayerView_Example/Pods-MMPlayerView_Example.modulemap";
@@ -716,7 +720,7 @@
 				GCC_NO_COMMON_BLOCKS = YES;
 				INFOPLIST_FILE = "Target Support Files/Pods-MMPlayerView_Tests/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MACH_O_TYPE = staticlib;
 				MODULEMAP_FILE = "Target Support Files/Pods-MMPlayerView_Tests/Pods-MMPlayerView_Tests.modulemap";
@@ -753,7 +757,7 @@
 				GCC_NO_COMMON_BLOCKS = YES;
 				INFOPLIST_FILE = "Target Support Files/Pods-MMPlayerView_Example/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MACH_O_TYPE = staticlib;
 				MODULEMAP_FILE = "Target Support Files/Pods-MMPlayerView_Example/Pods-MMPlayerView_Example.modulemap";
@@ -849,7 +853,7 @@
 				GCC_PREFIX_HEADER = "Target Support Files/MMPlayerView/MMPlayerView-prefix.pch";
 				INFOPLIST_FILE = "Target Support Files/MMPlayerView/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MODULEMAP_FILE = "Target Support Files/MMPlayerView/MMPlayerView.modulemap";
 				MTL_ENABLE_DEBUG_INFO = NO;
@@ -883,7 +887,7 @@
 				GCC_NO_COMMON_BLOCKS = YES;
 				INFOPLIST_FILE = "Target Support Files/Pods-MMPlayerView_Tests/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MACH_O_TYPE = staticlib;
 				MODULEMAP_FILE = "Target Support Files/Pods-MMPlayerView_Tests/Pods-MMPlayerView_Tests.modulemap";
@@ -922,7 +926,7 @@
 				GCC_PREFIX_HEADER = "Target Support Files/MMPlayerView/MMPlayerView-prefix.pch";
 				INFOPLIST_FILE = "Target Support Files/MMPlayerView/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MODULEMAP_FILE = "Target Support Files/MMPlayerView/MMPlayerView.modulemap";
 				MTL_ENABLE_DEBUG_INFO = YES;

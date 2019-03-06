@@ -10,7 +10,6 @@ import UIKit
 import AVFoundation
 typealias DownloaderPath = (fullPath: URL, subPath: String)
 private let videoExpireInterval = TimeInterval(60*60*12)
-@available(iOS 11.0, *)
 extension MMPlayerDownloader {
     public enum DownloadStatus {
         case none
@@ -23,11 +22,10 @@ extension MMPlayerDownloader {
     }
 }
 
-@available(iOS 11.0, *)
 public class MMPlayerDownloader: NSObject {
     fileprivate var _downloadInfo = [MMPlayerDownLoadVideoInfo]()
     fileprivate let queue = DispatchQueue(label: "MMPlayerDownloader.Request")
-    fileprivate let hls: MMPlayerHLSManager
+    fileprivate let download: MMPlayerDownloadManager
     fileprivate var mapList = [URL: MMPlayerDownloadRequest]()
     fileprivate var plistPath: URL {
         return self.downloadPathInfo.fullPath.appendingPathComponent("Video")
@@ -53,7 +51,7 @@ public class MMPlayerDownloader: NSObject {
     
     public init(subPath sub: String) {
         self.downloadPathInfo = (URL.init(fileURLWithPath: VideoBasePath).appendingPathComponent(sub), sub)
-        self.hls = MMPlayerHLSManager(identifier: sub)
+        self.download = MMPlayerDownloadManager(identifier: sub)
         super.init()
         self.create(path: self.downloadPathInfo.fullPath.path)
         self.createPlist(path: plistPath.path)
@@ -97,28 +95,31 @@ public class MMPlayerDownloader: NSObject {
         if url.isFileURL {
             fatalError("Input fileURL are Invalid")
         }
-        
         if mapList[url] != nil { return }
-        self.downloadInfo.removeAll { $0.url == url }
-        self.mapList[url] = MMPlayerDownloadRequest(url: url,
-                                                    pathInfo: self.downloadPathInfo,
-                                                    fileName: fileName,
-                                                    manager: self.hls)
-
-            self.mapList[url]?.start(status: { [weak self] in
-                let status = $0
-                self?.downloadObserverManager[url].forEach({ $0(status) })
-                switch status {
-                case .completed(let info):
-                    self?.downloadInfo.append(info)
-                    self?.mapList[url] = nil
-                case  .cancelled , .failed:
-                    self?.mapList[url] = nil
-                    self?.downloadObserverManager.remove(key: url)
-                default:
-                    break
+        queue.async { [weak self] in
+            guard let self = self else {return}
+            self.downloadInfo.removeAll { $0.url == url }
+            self.mapList[url] = MMPlayerDownloadRequest(url: url,
+                                                        pathInfo: self.downloadPathInfo,
+                                                        fileName: fileName,
+                                                        manager: self.download)
+            self.mapList[url]?.start(status: { (status) in
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else {return}
+                    self.downloadObserverManager[url].forEach({ $0(status) })
+                    switch status {
+                    case .completed(let info):
+                        self.downloadInfo.append(info)
+                        self.mapList[url] = nil
+                    case  .cancelled , .failed:
+                        self.mapList[url] = nil
+                        self.downloadObserverManager.remove(key: url)
+                    default:
+                        break
+                    }
                 }
             })
+        }
     }
     
     fileprivate func create(path: String) {
@@ -127,7 +128,6 @@ public class MMPlayerDownloader: NSObject {
         if !manager.fileExists(atPath: path, isDirectory: &dir) {
             do {
                 try manager.createDirectory(atPath: path, withIntermediateDirectories: true, attributes: nil)
-                
             } catch {
                 print("Error create Dire")
             }
@@ -140,9 +140,6 @@ public class MMPlayerDownloader: NSObject {
         if !manager.fileExists(atPath: path, isDirectory: &dir) {
             manager.createFile(atPath: path, contents: nil, attributes: nil)
         }
-    }
-    fileprivate func writeVideoInfo(data: Data? = nil, url: URL) {
-        try? data?.write(to: url, options: .atomic)
     }
 }
 
