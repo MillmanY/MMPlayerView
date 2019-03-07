@@ -185,7 +185,7 @@ extension ViewController: UICollectionViewDelegateFlowLayout {
                 mmPlayerLayer.playView = cell.imgView
             }
             
-            MMPlayerDownloader.shared.download(url: playURL)
+//            MMPlayerDownloader.shared.download(url: playURL)
 
             mmPlayerLayer.set(url: playURL)
         }

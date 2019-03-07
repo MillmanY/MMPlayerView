@@ -129,7 +129,6 @@ public class MMPlayerDownloader: NSObject {
                         self.mapList[url] = nil
                     case  .cancelled , .failed:
                         self.mapList[url] = nil
-                        self.downloadObserverManager.remove(key: url)
                     default:
                         break
                     }

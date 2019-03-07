@@ -19,15 +19,14 @@ extension MMPlayerDownloadManager {
 
 class MMPlayerDownloadManager: NSObject {
     static let shared = MMPlayerDownloadManager(identifier: "Shared-Identifier")
-    private var downloadSession: AVAssetDownloadURLSession!
+    private var hlsSession: AVAssetDownloadURLSession!
     private var fileSession: URLSession!
 
     init(identifier: String) {
         let config: URLSessionConfiguration = URLSessionConfiguration.background(withIdentifier: identifier)
         super.init()
-        self.downloadSession = AVAssetDownloadURLSession.init(configuration: config, assetDownloadDelegate: self, delegateQueue: OperationQueue.main)
-
-        self.fileSession = URLSession.init(configuration: .default, delegate: self, delegateQueue: OperationQueue.main)
+        self.hlsSession = AVAssetDownloadURLSession(configuration: config, assetDownloadDelegate: self, delegateQueue: OperationQueue.main)
+        self.fileSession = URLSession(configuration: .default, delegate: self, delegateQueue: OperationQueue.main)
     }
 
     fileprivate var willDownloadToUrlMap = [AVAggregateAssetDownloadTask: URL]()
@@ -36,7 +35,7 @@ class MMPlayerDownloadManager: NSObject {
     func start(asset: AVURLAsset,fileName: String, status:((_ status: Status)->Void)?) {
         if asset.url.lastPathComponent.contains("m3u8") {
             let preferredMediaSelection = asset.preferredMediaSelection
-            guard let task = downloadSession.aggregateAssetDownloadTask(with: asset,
+            guard let task = hlsSession.aggregateAssetDownloadTask(with: asset,
                                                                         mediaSelections: [preferredMediaSelection],
                                                                         assetTitle: fileName,
                                                                         assetArtworkData: nil,
@@ -55,14 +54,9 @@ class MMPlayerDownloadManager: NSObject {
     }
 }
 
-// for normal file
-extension MMPlayerDownloadManager: URLSessionDownloadDelegate {
+extension MMPlayerDownloadManager: AVAssetDownloadDelegate, URLSessionDownloadDelegate {
+    // normal file
     func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
-        if let err = downloadTask.error {
-            self.taskMap[downloadTask]?(.failed(err: err.localizedDescription))
-            self.taskMap[downloadTask] = nil
-            return
-        }
         do {
             let data = try Data(contentsOf: location)
             self.taskMap[downloadTask]?(.completed(data: data, type: .mp4))
@@ -77,11 +71,34 @@ extension MMPlayerDownloadManager: URLSessionDownloadDelegate {
         let percentComplete = Float(totalBytesWritten)/Float(totalBytesExpectedToWrite)
         self.taskMap[downloadTask]?(.downloading(value: percentComplete))
     }
-}
-
-extension MMPlayerDownloadManager: AVAssetDownloadDelegate {
     
     func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
+        if session == fileSession {
+            self.fileError(session: session, task: task, didCompleteWithError: error)
+        } else if session == hlsSession {
+            self.aggregateError(session: session, task: task, didCompleteWithError: error)
+        }
+    }
+    // hls file
+    func urlSession(_ session: URLSession, aggregateAssetDownloadTask: AVAggregateAssetDownloadTask,
+                    willDownloadTo location: URL) {
+        willDownloadToUrlMap[aggregateAssetDownloadTask] = location
+    }
+    
+    func urlSession(_ session: URLSession, aggregateAssetDownloadTask: AVAggregateAssetDownloadTask,
+                    didLoad timeRange: CMTimeRange, totalTimeRangesLoaded loadedTimeRanges: [NSValue],
+                    timeRangeExpectedToLoad: CMTimeRange, for mediaSelection: AVMediaSelection) {
+        
+        let percentComplete = loadedTimeRanges.reduce(0) { (rc, value) -> Float in
+            let loadedTimeRange: CMTimeRange = value.timeRangeValue
+            return rc + Float((loadedTimeRange.duration.seconds / timeRangeExpectedToLoad.duration.seconds))
+        }
+        self.taskMap[aggregateAssetDownloadTask]?(.downloading(value: percentComplete))
+    }
+}
+
+extension MMPlayerDownloadManager {
+    private func aggregateError(session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
         guard let task = task as? AVAggregateAssetDownloadTask else { return }
         if let err = error as NSError? {
             switch (err.domain, err.code) {
@@ -105,19 +122,11 @@ extension MMPlayerDownloadManager: AVAssetDownloadDelegate {
         }
     }
     
-    func urlSession(_ session: URLSession, aggregateAssetDownloadTask: AVAggregateAssetDownloadTask,
-                    willDownloadTo location: URL) {
-        willDownloadToUrlMap[aggregateAssetDownloadTask] = location
-    }
-    
-    func urlSession(_ session: URLSession, aggregateAssetDownloadTask: AVAggregateAssetDownloadTask,
-                    didLoad timeRange: CMTimeRange, totalTimeRangesLoaded loadedTimeRanges: [NSValue],
-                    timeRangeExpectedToLoad: CMTimeRange, for mediaSelection: AVMediaSelection) {
-        
-        let percentComplete = loadedTimeRanges.reduce(0) { (rc, value) -> Float in
-            let loadedTimeRange: CMTimeRange = value.timeRangeValue
-            return rc + Float((loadedTimeRange.duration.seconds / timeRangeExpectedToLoad.duration.seconds))
+    private func fileError(session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
+        if let err = error?.localizedDescription {
+            self.taskMap[task]?(.failed(err: err))
         }
-        self.taskMap[aggregateAssetDownloadTask]?(.downloading(value: percentComplete))
+        self.taskMap[task] = nil
     }
+
 }
