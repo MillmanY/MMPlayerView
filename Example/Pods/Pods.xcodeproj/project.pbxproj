@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		139987C7DC290D6BA15D5C71A6F2F31F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6604A7D69453B4569E4E4827FB9155A9 /* Foundation.framework */; };
 		179DFFF5A41590159B910EB208055F9F /* MMPlayerView-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 15A6BD688A2D656904144E5B76D1FB4D /* MMPlayerView-dummy.m */; };
-		2708187F222FCBB100003A16 /* MMPlayerDownloaderDefine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2708187E222FCBB100003A16 /* MMPlayerDownloaderDefine.swift */; };
 		27160EB221A1255500B8A746 /* WeakBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27160EB121A1255500B8A746 /* WeakBox.swift */; };
 		2717E199219D388600DCC8CB /* MMPlayerDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2717E197219D388600DCC8CB /* MMPlayerDownloader.swift */; };
 		2717E19D219DA46800DCC8CB /* MMPlayerDownLoadVideoInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2717E19C219DA46800DCC8CB /* MMPlayerDownLoadVideoInfo.swift */; };
@@ -70,7 +69,6 @@
 		1273E7E377854BBD33F951FFB70186DD /* MMPlayerView-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "MMPlayerView-umbrella.h"; sourceTree = "<group>"; };
 		15A6BD688A2D656904144E5B76D1FB4D /* MMPlayerView-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "MMPlayerView-dummy.m"; sourceTree = "<group>"; };
 		1E3C9876962EA1DCB602AE70C4C5EB03 /* Pods-MMPlayerView_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-MMPlayerView_Example.release.xcconfig"; sourceTree = "<group>"; };
-		2708187E222FCBB100003A16 /* MMPlayerDownloaderDefine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MMPlayerDownloaderDefine.swift; sourceTree = "<group>"; };
 		27160EB121A1255500B8A746 /* WeakBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeakBox.swift; sourceTree = "<group>"; };
 		2717E197219D388600DCC8CB /* MMPlayerDownloader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MMPlayerDownloader.swift; sourceTree = "<group>"; };
 		2717E19C219DA46800DCC8CB /* MMPlayerDownLoadVideoInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MMPlayerDownLoadVideoInfo.swift; sourceTree = "<group>"; };
@@ -174,11 +172,10 @@
 		2717E196219D386D00DCC8CB /* Downloader */ = {
 			isa = PBXGroup;
 			children = (
-				2708187E222FCBB100003A16 /* MMPlayerDownloaderDefine.swift */,
-				2717E19C219DA46800DCC8CB /* MMPlayerDownLoadVideoInfo.swift */,
 				2717E197219D388600DCC8CB /* MMPlayerDownloader.swift */,
 				2787435A219E7966001B98F9 /* MMPlayerDownloadRequest.swift */,
 				27874358219E774A001B98F9 /* MMPlayerDownloadManager.swift */,
+				2717E19C219DA46800DCC8CB /* MMPlayerDownLoadVideoInfo.swift */,
 			);
 			path = Downloader;
 			sourceTree = "<group>";
@@ -553,7 +550,6 @@
 				5E9A1B731F4D80E600746E5B /* MMPlayerBasePresentationController.swift in Sources */,
 				5E9A1B6F1F4D80E600746E5B /* MMPlayerPushAnimator.swift in Sources */,
 				2717E19D219DA46800DCC8CB /* MMPlayerDownLoadVideoInfo.swift in Sources */,
-				2708187F222FCBB100003A16 /* MMPlayerDownloaderDefine.swift in Sources */,
 				5E862B1C20629F06000EAC20 /* MMPlayerShrinkControl.swift in Sources */,
 				5E4F8A8B206245E200A2B19D /* MMPlayer+NSObject+Replace.swift in Sources */,
 				5E3E68EE1F4FF77900122F6C /* MMPlayer+UIView+Shadow.swift in Sources */,

@@ -34,7 +34,6 @@ class MMPlayerDownloadManager: NSObject {
     fileprivate var taskMap = [URLSessionTask: (Status)->Void]()
     
     func start(asset: AVURLAsset,fileName: String, status:((_ status: Status)->Void)?) {
-        
         if asset.url.lastPathComponent.contains("m3u8") {
             let preferredMediaSelection = asset.preferredMediaSelection
             guard let task = downloadSession.aggregateAssetDownloadTask(with: asset,

@@ -7,6 +7,11 @@
 
 import Foundation
 
+public enum VideoType: Int, Codable {
+    case mp4 = 0
+    case hls
+}
+
 public struct MMPlayerDownLoadVideoInfo: Codable, Equatable {
     let url: URL
     let type: VideoType

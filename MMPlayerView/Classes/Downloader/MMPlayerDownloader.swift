@@ -83,6 +83,16 @@ public class MMPlayerDownloader: NSObject {
         }
     }
     
+    public func cleanTmpFile() {
+        guard let items = try? FileManager.default.contentsOfDirectory(atPath: NSTemporaryDirectory()) else {
+            return
+        }
+        let pathURL = items.compactMap { $0.contains(".tmp") ? URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent($0, isDirectory: false) : nil }
+        pathURL.forEach {
+            try? FileManager.default.removeItem(at: $0)
+        }
+    }
+    
     public func observe(downloadURL: URL, status: @escaping ((_ status: MMPlayerDownloader.DownloadStatus) -> Void)) -> MMPlayerObservation {
         let value = self.downloadObserverManager.add(key: downloadURL, observer: status)
         if self.localFileFrom(url: downloadURL) != nil {
@@ -91,13 +101,19 @@ public class MMPlayerDownloader: NSObject {
         return value
     }
     
-    public func download(url: URL, fileName: String? = nil) {
-        if url.isFileURL {
-            fatalError("Input fileURL are Invalid")
-        }
-        if mapList[url] != nil { return }
+    public func download(url: URL, fileName: String? = nil, coverExist: Bool = false) {
         queue.async { [weak self] in
             guard let self = self else {return}
+            if url.isFileURL {
+                fatalError("Input fileURL are Invalid")
+            }
+            
+            if !coverExist, let _ = self.localFileFrom(url: url) {
+                self.downloadObserverManager[url].forEach({ $0(.exist) })
+                return
+            }
+            
+            if self.mapList[url] != nil { return }
             self.downloadInfo.removeAll { $0.url == url }
             self.mapList[url] = MMPlayerDownloadRequest(url: url,
                                                         pathInfo: self.downloadPathInfo,

@@ -24,6 +24,8 @@ class ViewController: UIViewController {
     @IBOutlet weak var playerCollect: UICollectionView!
     override func viewDidLoad() {
         super.viewDidLoad()
+        // remove previous download fails file
+        MMPlayerDownloader.shared.cleanTmpFile()
         self.navigationController?.mmPlayerTransition.push.pass(setting: { (_) in
             
         })
@@ -183,6 +185,8 @@ extension ViewController: UICollectionViewDelegateFlowLayout {
                 mmPlayerLayer.playView = cell.imgView
             }
             
+            MMPlayerDownloader.shared.download(url: playURL)
+
             mmPlayerLayer.set(url: playURL)
         }
     }
