@@ -38,6 +38,16 @@ public class MMPlayerDownloader: NSObject {
         let shared =  MMPlayerDownloader.init(subPath: "MMPlayerVideo/Share")
         return shared
     }()
+    
+    static public func cleanTmpFile() {
+        guard let items = try? FileManager.default.contentsOfDirectory(atPath: NSTemporaryDirectory()) else {
+            return
+        }
+        let pathURL = items.compactMap { $0.contains(".tmp") ? URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent($0, isDirectory: false) : nil }
+        pathURL.forEach {
+            try? FileManager.default.removeItem(at: $0)
+        }
+    }
 
     public private(set) var downloadInfo: [MMPlayerDownLoadVideoInfo] {
         set {
@@ -80,16 +90,6 @@ public class MMPlayerDownloader: NSObject {
     public func localFileFrom(name: String) -> MMPlayerDownLoadVideoInfo? {
         return downloadInfo.first { (info) -> Bool in
             return info.fileName == name
-        }
-    }
-    
-    public func cleanTmpFile() {
-        guard let items = try? FileManager.default.contentsOfDirectory(atPath: NSTemporaryDirectory()) else {
-            return
-        }
-        let pathURL = items.compactMap { $0.contains(".tmp") ? URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent($0, isDirectory: false) : nil }
-        pathURL.forEach {
-            try? FileManager.default.removeItem(at: $0)
         }
     }
     
