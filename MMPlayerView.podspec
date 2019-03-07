@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'MMPlayerView'
-  s.version          = '4.1.7'
+  s.version          = '4.2.0'
   s.summary          = 'Custom Video Player view'
 
 # This description is used to generate tags and improve search results.
@@ -26,7 +26,7 @@ Pod::Spec.new do |s|
   s.source           = { :git => 'https://github.com/MillmanY/MMPlayerView.git', :tag => s.version.to_s }
   # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
 
-  s.ios.deployment_target = '10.0'
+  s.ios.deployment_target = '11.0'
 
   s.source_files = 'MMPlayerView/Classes/**/*'
   
