@@ -119,19 +119,17 @@ public class MMPlayerDownloader: NSObject {
                                                         pathInfo: self.downloadPathInfo,
                                                         fileName: fileName,
                                                         manager: self.download)
-            self.mapList[url]?.start(status: { (status) in
-                DispatchQueue.main.async { [weak self] in
-                    guard let self = self else {return}
-                    self.downloadObserverManager[url].forEach({ $0(status) })
-                    switch status {
-                    case .completed(let info):
-                        self.downloadInfo.append(info)
-                        self.mapList[url] = nil
-                    case  .cancelled , .failed:
-                        self.mapList[url] = nil
-                    default:
-                        break
-                    }
+            self.mapList[url]?.start(status: { [weak self] (status) in
+                guard let self = self else {return}
+                self.downloadObserverManager[url].forEach({ $0(status) })
+                switch status {
+                case .completed(let info):
+                    self.downloadInfo.append(info)
+                    self.mapList[url] = nil
+                case  .cancelled , .failed:
+                    self.mapList[url] = nil
+                default:
+                    break
                 }
             })
         }

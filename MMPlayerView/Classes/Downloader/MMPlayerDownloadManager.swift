@@ -44,6 +44,7 @@ class MMPlayerDownloadManager: NSObject {
                     status?(.failed(err: "Task Init error"))
                     return
             }
+            
             task.resume()
             self.taskMap[task] = status
         } else {
@@ -128,5 +129,4 @@ extension MMPlayerDownloadManager {
         }
         self.taskMap[task] = nil
     }
-
 }

@@ -45,56 +45,47 @@ class DetailViewController: UIViewController {
         guard let downloadURL = self.data?.play_Url else {
             return
         }
-        
-        if #available(iOS 11.0, *) {
-            downloadObservation = MMPlayerDownloader.shared.observe(downloadURL: downloadURL) { [weak self] (status) in
-                switch status {
-                case .downloadWillStart:
-                    self?.downloadBtn.isHidden = true
-                    self?.progress.isHidden = false
-                    self?.progress.progress = 0
-                case .cancelled:
-                    print("Canceld")
-                case .completed:
-                    DispatchQueue.main.async {
-                        self?.downloadBtn.setTitle("Delete", for: .normal)
-                        self?.downloadBtn.isHidden = false
-                        self?.progress.isHidden = true
-                    }
-                case .downloading(let value):
-                    self?.downloadBtn.isHidden = true
-                    self?.progress.isHidden = false
-                    self?.progress.progress = value
-                    print("Exporting \(value) \(downloadURL)")
-                case .failed(let err):
-                    DispatchQueue.main.async {
-                        self?.downloadBtn.setTitle("Download", for: .normal)
-                    }
-                    
-                    self?.downloadBtn.isHidden = false
-                    self?.progress.isHidden = true
-                    print("Download Failed \(err)")
-                case .none:
-                    DispatchQueue.main.async {
-                        self?.downloadBtn.setTitle("Download", for: .normal)
-                    }
-                    self?.downloadBtn.isHidden = false
-                    self?.progress.isHidden = true
-                case .exist:
-                    DispatchQueue.main.async {
-                        self?.downloadBtn.setTitle("Delete", for: .normal)
-                    }
-                    self?.downloadBtn.isHidden = false
-                    self?.progress.isHidden = true
-                }
+        downloadObservation = MMPlayerDownloader.shared.observe(downloadURL: downloadURL) { [weak self] (status) in
+            DispatchQueue.main.async {
+                self?.setWith(status: status)
             }
-        } else {
-            let alert = UIAlertController(title: "download only for ios 11", message: "", preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-            self.present(alert, animated: true, completion: nil)
         }
     }
     
+    func setWith(status: MMPlayerDownloader.DownloadStatus) {
+        switch status {
+        case .downloadWillStart:
+            self.downloadBtn.isHidden = true
+            self.progress.isHidden = false
+            self.progress.progress = 0
+        case .cancelled:
+            print("Canceld")
+        case .completed:
+            self.downloadBtn.setTitle("Delete", for: .normal)
+            self.downloadBtn.isHidden = false
+            self.progress.isHidden = true
+        case .downloading(let value):
+            self.downloadBtn.isHidden = true
+            self.progress.isHidden = false
+            self.progress.progress = value
+        case .failed(let err):
+            self.downloadBtn.setTitle("Download", for: .normal)
+            let alert = UIAlertController(title: err, message: "", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+            self.downloadBtn.isHidden = false
+            self.progress.isHidden = true
+        case .none:
+            self.downloadBtn.setTitle("Download", for: .normal)
+            self.downloadBtn.isHidden = false
+            self.progress.isHidden = true
+        case .exist:
+            self.downloadBtn.setTitle("Delete", for: .normal)
+            self.downloadBtn.isHidden = false
+            self.progress.isHidden = true
+        }
+
+    }
     
     @IBAction func shrinkVideoAction() {
         (self.presentationController as? MMPlayerPassViewPresentatinController)?.shrinkView()
