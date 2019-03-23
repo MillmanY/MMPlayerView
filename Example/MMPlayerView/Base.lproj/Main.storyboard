@@ -207,7 +207,7 @@
                     </view>
                     <connections>
                         <outlet property="downloadBtn" destination="Hly-Ck-eLn" id="opc-6i-mfa"/>
-                        <outlet property="playerContainer" destination="DIh-0A-AkF" id="eA6-qv-iLg"/>
+                        <outlet property="playerContainer" destination="DIh-0A-AkF" id="5oS-Wd-SFq"/>
                         <outlet property="progress" destination="anm-1o-5ix" id="6hK-Zn-Z2w"/>
                         <outlet property="textView" destination="r8d-5Y-NJU" id="7zM-kM-BkE"/>
                     </connections>
