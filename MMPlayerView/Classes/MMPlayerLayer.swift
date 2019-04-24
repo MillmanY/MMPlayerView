@@ -10,12 +10,12 @@ import UIKit
 import AVFoundation
 
 public extension MMPlayerLayer {
-    public enum PlayerCacheType {
+    enum PlayerCacheType {
         case none
         case memory(count: Int)
     }
     
-    public enum PlayStatus {
+    enum PlayStatus {
         case ready
         case unknown
         case failed(err: String)
@@ -24,13 +24,13 @@ public extension MMPlayerLayer {
         case end
     }
     
-    public enum CoverFitType {
+    enum CoverFitType {
         case fitToPlayerView
         case fitToVideoRect
     }
     
     
-    public enum CoverAutoHideType {
+    enum CoverAutoHideType {
         case autoHide(after: TimeInterval)
         case disable
     }
@@ -498,6 +498,8 @@ extension MMPlayerLayer {
             case .readyToPlay:
                 return .ready
             case .unknown:
+                return .unknown
+            @unknown default:
                 return .unknown
             }
         }

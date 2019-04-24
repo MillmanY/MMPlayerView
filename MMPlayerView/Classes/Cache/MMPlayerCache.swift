@@ -29,7 +29,7 @@ class MMPlayerCache: NSObject {
     }
     
     func removeCache(key: URL) {
-        if let idx = queueURL.index(of: key) {
+        if let idx = queueURL.firstIndex(of: key) {
             queueURL.remove(at: idx)
         }
         cache.removeValue(forKey: key)

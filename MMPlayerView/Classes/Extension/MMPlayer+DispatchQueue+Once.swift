@@ -8,7 +8,7 @@
 import Foundation
 public extension DispatchQueue {
     private static var _onceTokens = [String]()
-    public class func once(token: String, block:(()->Void)) {
+    class func once(token: String, block:(()->Void)) {
         objc_sync_enter(self)
         defer { objc_sync_exit(self) }
         
@@ -19,8 +19,8 @@ public extension DispatchQueue {
         block()
     }
     
-    public class func clear(token: String) {
-        if let index = _onceTokens.index(of: token) {
+    class func clear(token: String) {
+        if let index = _onceTokens.firstIndex(of: token) {
             _onceTokens.remove(at: index)
         }
     }

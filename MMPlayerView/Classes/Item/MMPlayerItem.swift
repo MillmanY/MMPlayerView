@@ -23,7 +23,10 @@ class MMPlayerItem: AVPlayerItem {
     convenience init(asset: AVAsset, delegate: MMPlayerItemProtocol?) {
         self.init(asset: asset, automaticallyLoadedAssetKeys: nil)
         self.delegate = delegate
-      
+        self.setup()
+    }
+    
+    func setup() {
         statusObservation = self.observe(\.status, changeHandler: { [weak self] (item, _) in
             self?.delegate?.status(change: item.status)
         })
