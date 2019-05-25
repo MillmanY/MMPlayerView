@@ -38,7 +38,8 @@ class MMPlayerPassViewPresentTransition: MMPlayerBasePresentTransition, UIViewCo
                 c.playLayer = passLayer
             }
             fromProtocol.transitionWillStart()
-            let convertRect:CGRect = passLayer.superlayer?.convert(passLayer.superlayer!.frame, to: nil) ?? .zero
+
+            let convertRect:CGRect = passLayer.superlayer?.convert(passLayer.frame, to: nil) ?? .zero
             let convertTo = passContainer.superview?.convert(passContainer.frame, to: container) ?? .zero
 
             let finalFrame = transitionContext.finalFrame(for: toVC)
@@ -86,7 +87,7 @@ class MMPlayerPassViewPresentTransition: MMPlayerBasePresentTransition, UIViewCo
                 return
             }
             pass.translatesAutoresizingMaskIntoConstraints = true
-            let original:CGRect = pass.convert(pass.frame, to: nil)
+            let original:CGRect = pass.superview?.convert(pass.frame, to: nil) ?? .zero
             let convertRect: CGRect = superV.superview?.convert(superV.frame, to: container) ?? .zero
 
             pass.removeFromSuperview()

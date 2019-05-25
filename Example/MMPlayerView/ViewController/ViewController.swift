@@ -173,6 +173,7 @@ extension ViewController: UICollectionViewDelegateFlowLayout {
         if let vc = UIStoryboard.init(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "DetailViewController") as? DetailViewController {
             vc.data = DemoSource.shared.demoData[indexPath.row]
             self.present(vc, animated: true, completion: nil)
+//            self.navigationController?.pushViewController(vc, animated: true)
         }
     }
     
