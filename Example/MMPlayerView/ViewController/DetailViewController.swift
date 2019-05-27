@@ -96,26 +96,19 @@ class DetailViewController: UIViewController {
     }
     
     @IBAction func downloadAction() {
-        if #available(iOS 11.0, *) {
-            guard let downloadURL = self.data?.play_Url else {
-                return
-            }
-            if let info = MMPlayerDownloader.shared.localFileFrom(url: downloadURL)  {
-                MMPlayerDownloader.shared.deleteVideo(info)
-                let alert = UIAlertController(title: "Delete completed", message: "", preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-                self.present(alert, animated: true, completion: nil)
-                return
-            }
-            
-            DispatchQueue.main.async {
-                MMPlayerDownloader.shared.download(url: downloadURL)
-            }
+        guard let downloadURL = self.data?.play_Url else {
+            return
         }
-        else {
-            let alert = UIAlertController(title: "download only for ios 11", message: "", preferredStyle: .alert)
+        if let info = MMPlayerDownloader.shared.localFileFrom(url: downloadURL)  {
+            MMPlayerDownloader.shared.deleteVideo(info)
+            let alert = UIAlertController(title: "Delete completed", message: "", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
             self.present(alert, animated: true, completion: nil)
+            return
+        }
+        
+        DispatchQueue.main.async {
+            MMPlayerDownloader.shared.download(url: downloadURL)
         }
     }
     deinit {

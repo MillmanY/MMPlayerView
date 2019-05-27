@@ -164,12 +164,6 @@ public class MMPlayerLayer: AVPlayerLayer {
                 self.thumbImageView.isHidden = false
                 self.coverView?.isHidden = true
                 self.startLoading(isStart: false)
-            case .end:
-                break
-                //                if repeatWhenEnd == true {
-//                    self.player?.seek(to: CMTime.zero)
-//                    self.player?.play()
-//                }
             default:
                 self.thumbImageView.isHidden = true
                 self.coverView?.isHidden = false
@@ -190,7 +184,7 @@ public class MMPlayerLayer: AVPlayerLayer {
                 return
             }
             self.startLoading(isStart: true)
-            if let cacheItem = self.cahce.getItem(key: url) , cacheItem.status == .readyToPlay{
+            if let cacheItem = self.cahce.getItem(key: url) , cacheItem.status == .readyToPlay {
                 self.asset = (cacheItem.asset as? AVURLAsset)
                 self.player?.replaceCurrentItem(with: cacheItem)
             } else {
@@ -309,24 +303,22 @@ public class MMPlayerLayer: AVPlayerLayer {
     }
     
     public func set(url: URL?, lodDiskIfExist: Bool = true ) {
-        if #available(iOS 11.0, *) {
-            if let will = url ,
-                let real = MMPlayerDownloader.shared.localFileFrom(url: will),
-                lodDiskIfExist {
-                switch real.type {
-                case .hls:
-                    var statle = false
-                    if let data = try? Data(contentsOf: real.localURL),
-                        let convert = try? URL(resolvingBookmarkData: data, bookmarkDataIsStale: &statle) {
-                        self.willPlayUrl = convert
-                    } else {
-                        self.willPlayUrl = url
-                    }
-                case .mp4:
-                    self.willPlayUrl = real.localURL
+        if let will = url ,
+            let real = MMPlayerDownloader.shared.localFileFrom(url: will),
+            lodDiskIfExist {
+            switch real.type {
+            case .hls:
+                var statle = false
+                if let data = try? Data(contentsOf: real.localURL),
+                    let convert = try? URL(resolvingBookmarkData: data, bookmarkDataIsStale: &statle) {
+                    self.willPlayUrl = convert
+                } else {
+                    self.willPlayUrl = url
                 }
-                return
+            case .mp4:
+                self.willPlayUrl = real.localURL
             }
+            return
         }
         self.willPlayUrl = url
     }

@@ -96,7 +96,7 @@ class MMPlayerShrinkControl {
         let maxWidth = self.config.shrinkMaxWidth
         let margin = self.config.margin
         let size = UIScreen.main.bounds
-        let safe = UIApplication.shared.keyWindow?.realSafe ?? .zero
+        let safe = UIApplication.shared.keyWindow?.safeAreaInsets ?? .zero
         let safeTop: CGFloat = self.config.isMarginNeedArea ? safe.top : 0
         let safeBottom: CGFloat = self.config.isMarginNeedArea ?  safe.bottom : 0
         if let videoRectSize = self.config.playLayer?.videoRect.size, videoRectSize != .zero {
