@@ -16,7 +16,7 @@ public class MMPlayerObservation: NSObject {
     }
     public var status: Status = .resume
     
-    fileprivate func invalidate() {
+    private func invalidate() {
         self.status = .invalidate
         self.invalidateBlock?()
         self.invalidateBlock = nil
@@ -49,7 +49,7 @@ public class MMPlayerMapObserverManager<Key: Hashable, Observer>: NSObject {
         self.map[key] = nil
     }
     
-    fileprivate func generateObservation(key: Key) -> MMPlayerObservation {
+    private func generateObservation(key: Key) -> MMPlayerObservation {
         let observation = MMPlayerObservation()
         
         observation.invalidateBlock = { [weak self, weak observation] in
@@ -73,7 +73,7 @@ public class MMPlayerListObserverManager<Observer>: NSObject {
         return observation
     }
     
-    fileprivate func generateObservation() -> MMPlayerObservation {
+    private func generateObservation() -> MMPlayerObservation {
         let observation = MMPlayerObservation()
         observation.invalidateBlock = { [weak self, weak observation] in
             self?.list.removeAll(where: { $0.observation.value == observation })

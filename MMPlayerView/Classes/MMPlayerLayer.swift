@@ -22,6 +22,17 @@ public extension MMPlayerLayer {
         case playing
         case pause
         case end
+        
+        static func == (lhs: PlayStatus, rhs: PlayStatus) -> Bool {
+            switch (lhs, rhs) {
+            case (.ready, .ready), (.unknown, .unknown), (.playing, .playing), (.pause, .pause), (.end, .end):
+                return true
+            case (.failed(let l), .failed(let r)):
+                return l == r
+            default:
+                return false
+            }
+        }
     }
     
     enum CoverFitType {
@@ -37,18 +48,18 @@ public extension MMPlayerLayer {
 }
 
 public class MMPlayerLayer: AVPlayerLayer {
-    fileprivate var frameObservation: NSKeyValueObservation?
-    fileprivate var boundsObservation: NSKeyValueObservation?
-    fileprivate var videoRectObservation: NSKeyValueObservation?
-    fileprivate var mutedObservation: NSKeyValueObservation?
-    fileprivate var rateObservation: NSKeyValueObservation?
-    fileprivate var isCoverShow = false
-    fileprivate var timeObserver: Any?
-    fileprivate var isBackgroundPause = false
-    fileprivate var cahce = MMPlayerCache()
-    fileprivate var playStatusBlock: ((_ status: PlayStatus) ->Void)?
-    fileprivate var indicator = MMProgress()
-    fileprivate let assetKeysRequiredToPlay = [
+    private var frameObservation: NSKeyValueObservation?
+    private var boundsObservation: NSKeyValueObservation?
+    private var videoRectObservation: NSKeyValueObservation?
+    private var mutedObservation: NSKeyValueObservation?
+    private var rateObservation: NSKeyValueObservation?
+    private var isCoverShow = false
+    private var timeObserver: Any?
+    private var isBackgroundPause = false
+    private var cahce = MMPlayerCache()
+    private var playStatusBlock: ((_ status: PlayStatus) ->Void)?
+    private var indicator = MMProgress()
+    private let assetKeysRequiredToPlay = [
         "duration",
         "playable",
         "hasProtectedContent",
@@ -69,7 +80,7 @@ public class MMPlayerLayer: AVPlayerLayer {
         v.backgroundColor = UIColor.clear
         return v
     }()
-    weak fileprivate var _playView: UIView? {
+    weak private var _playView: UIView? {
         willSet {
             bgView.removeFromSuperview()
             self.removeFromSuperlayer()
@@ -126,10 +137,14 @@ public class MMPlayerLayer: AVPlayerLayer {
             return _playView
         }
     }
+    public var repeatWhenEnd: Bool = false
     public var coverView: (UIView & MMPlayerCoverViewProtocol)?
     public var autoPlay = true
     public var currentPlayStatus: PlayStatus = .unknown {
         didSet {
+            if currentPlayStatus == oldValue {
+                return
+            }
             if let block = self.playStatusBlock {
                 block(currentPlayStatus)
             }
@@ -149,6 +164,12 @@ public class MMPlayerLayer: AVPlayerLayer {
                 self.thumbImageView.isHidden = false
                 self.coverView?.isHidden = true
                 self.startLoading(isStart: false)
+            case .end:
+                break
+                //                if repeatWhenEnd == true {
+//                    self.player?.seek(to: CMTime.zero)
+//                    self.player?.play()
+//                }
             default:
                 self.thumbImageView.isHidden = true
                 self.coverView?.isHidden = false
@@ -156,7 +177,7 @@ public class MMPlayerLayer: AVPlayerLayer {
             }
         }
     }
-    fileprivate var asset: AVURLAsset?
+    private var asset: AVURLAsset?
     public var cacheType: PlayerCacheType = .none
     public var playUrl: URL? {
         willSet {
@@ -209,7 +230,7 @@ public class MMPlayerLayer: AVPlayerLayer {
         self.tapGesture.isEnabled = enable
     }
     
-    fileprivate var isInitLayer = false
+    private var isInitLayer = false
     public override init(layer: Any) {
         isInitLayer = true
         super.init(layer: layer)
@@ -225,7 +246,7 @@ public class MMPlayerLayer: AVPlayerLayer {
         self.setup()
     }
     
-    fileprivate func setup() {
+    private func setup() {
         self.player = AVPlayer()
         self.backgroundColor = UIColor.black.cgColor
         self.progressType = .default
@@ -275,7 +296,7 @@ public class MMPlayerLayer: AVPlayerLayer {
         cover.currentPlayer(status: self.currentPlayStatus)
     }
     
-    fileprivate var willPlayUrl: URL? {
+    private var willPlayUrl: URL? {
         didSet {
             if oldValue != willPlayUrl {
                 self.playUrl = nil
@@ -362,7 +383,7 @@ public class MMPlayerLayer: AVPlayerLayer {
         })
     }
     
-    fileprivate func startLoading(isStart: Bool) {
+    private func startLoading(isStart: Bool) {
         if isStart {
             self.indicator.start()
         } else {
@@ -380,7 +401,7 @@ public class MMPlayerLayer: AVPlayerLayer {
 // Observer
 extension MMPlayerLayer {
     
-    fileprivate func addPlayerObserver() {
+    private func addPlayerObserver() {
         NotificationCenter.default.removeObserver(self)
         if timeObserver == nil {
             timeObserver = self.player?.addPeriodicTimeObserver(forInterval: CMTimeMake(value: 1, timescale: 100), queue: DispatchQueue.main, using: { [weak self] (time) in
@@ -412,7 +433,11 @@ extension MMPlayerLayer {
         })
         
         NotificationCenter.default.addObserver(forName: .AVPlayerItemDidPlayToEndTime, object: nil, queue: nil, using: { [weak self] (_) in
-            if let s = self?.currentPlayStatus {
+          
+            if self?.repeatWhenEnd == true {
+                self?.player?.seek(to: CMTime.zero)
+                self?.player?.play()
+            } else if let s = self?.currentPlayStatus {
                 switch s {
                 case .playing, .pause:
                     if let u = self?.playUrl {
@@ -489,7 +514,7 @@ extension MMPlayerLayer {
         }
     }
 
-    fileprivate func convertItemStatus() -> MMPlayerLayer.PlayStatus {
+    private func convertItemStatus() -> MMPlayerLayer.PlayStatus {
         if let item = self.player?.currentItem {
             switch item.status {
             case .failed:

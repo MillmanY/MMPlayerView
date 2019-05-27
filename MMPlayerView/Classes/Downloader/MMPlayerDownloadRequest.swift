@@ -9,7 +9,7 @@ import Foundation
 import AVFoundation
 class MMPlayerDownloadRequest {
     let asset: AVURLAsset
-    fileprivate var timer: Timer?
+    private var timer: Timer?
     var statusBlock: ((_ status: MMPlayerDownloader.DownloadStatus)->Void)?
     let videoPath: (current: URL, hide: URL)
     let pathInfo: DownloaderPath

@@ -40,7 +40,7 @@ public class MMPlayerPresentAnimator: NSObject , UIViewControllerTransitioningDe
         return self.presentationController(config: config, forPresented: presented, presenting: presenting)
     }
     
-    fileprivate func transition(config:T? ,isPresent:Bool ,source: UIViewController?) -> UIViewControllerAnimatedTransitioning? {
+    private func transition(config:T? ,isPresent:Bool ,source: UIViewController?) -> UIViewControllerAnimatedTransitioning? {
         
         if let c = config {
             switch c {
@@ -55,7 +55,7 @@ public class MMPlayerPresentAnimator: NSObject , UIViewControllerTransitioningDe
         return nil
     }
     
-    fileprivate func presentationController(config:T? , forPresented presented: UIViewController, presenting: UIViewController?) -> UIPresentationController? {
+    private func presentationController(config:T? , forPresented presented: UIViewController, presenting: UIViewController?) -> UIPresentationController? {
         
         if let c = config {
             switch c {

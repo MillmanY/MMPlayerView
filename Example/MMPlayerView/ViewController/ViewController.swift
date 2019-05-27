@@ -19,6 +19,7 @@ class ViewController: UIViewController {
         l.coverFitType = .fitToPlayerView
         l.videoGravity = AVLayerVideoGravity.resizeAspect
         l.replace(cover: CoverA.instantiateFromNib())
+        l.repeatWhenEnd = true
         return l
     }()
     @IBOutlet weak var playerCollect: UICollectionView!

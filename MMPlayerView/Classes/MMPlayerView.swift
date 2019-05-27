@@ -11,7 +11,7 @@ import UIKit
 import AVFoundation
 
 public class MMPlayerView: UIView {
-    fileprivate let playerLayer: MMPlayerLayer
+    private let playerLayer: MMPlayerLayer
     
     convenience init() {
         self.init(frame: .zero)
@@ -29,7 +29,7 @@ public class MMPlayerView: UIView {
         self.setup()
     }
     
-    fileprivate func setup() {
+    private func setup() {
         self.playerLayer.playView = self
     }
     

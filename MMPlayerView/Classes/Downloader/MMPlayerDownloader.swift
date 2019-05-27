@@ -23,11 +23,11 @@ extension MMPlayerDownloader {
 }
 
 public class MMPlayerDownloader: NSObject {
-    fileprivate var _downloadInfo = [MMPlayerDownLoadVideoInfo]()
-    fileprivate let queue = DispatchQueue(label: "MMPlayerDownloader.Request")
-    fileprivate let download: MMPlayerDownloadManager
-    fileprivate var mapList = [URL: MMPlayerDownloadRequest]()
-    fileprivate var plistPath: URL {
+    private var _downloadInfo = [MMPlayerDownLoadVideoInfo]()
+    private let queue = DispatchQueue(label: "MMPlayerDownloader.Request")
+    private let download: MMPlayerDownloadManager
+    private var mapList = [URL: MMPlayerDownloadRequest]()
+    private var plistPath: URL {
         return self.downloadPathInfo.fullPath.appendingPathComponent("Video")
     }
 
@@ -135,7 +135,7 @@ public class MMPlayerDownloader: NSObject {
         }
     }
     
-    fileprivate func create(path: String) {
+    private func create(path: String) {
         let manager = FileManager.default
         var dir: ObjCBool = false
         if !manager.fileExists(atPath: path, isDirectory: &dir) {
@@ -147,7 +147,7 @@ public class MMPlayerDownloader: NSObject {
         }
     }
     
-    fileprivate func createPlist(path: String) {
+    private func createPlist(path: String) {
         let manager = FileManager.default
         var dir: ObjCBool = false
         if !manager.fileExists(atPath: path, isDirectory: &dir) {

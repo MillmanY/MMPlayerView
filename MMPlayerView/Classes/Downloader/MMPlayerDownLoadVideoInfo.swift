@@ -26,7 +26,7 @@ public struct MMPlayerDownLoadVideoInfo: Codable, Equatable {
         }
     }
     
-    fileprivate var convrtFileName: String {
+    private var convrtFileName: String {
         get {
             var name = fileName.isEmpty ? url.absoluteString.base64 : fileName
             switch self.type {

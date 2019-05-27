@@ -8,8 +8,8 @@
 
 import UIKit
 
-fileprivate var mmPresentKey = "MMPlayerPresentKey"
-fileprivate var mmPushKey = "MMPlayerPushKey"
+private var mmPresentKey = "MMPlayerPresentKey"
+private var mmPushKey = "MMPlayerPushKey"
 public extension MMPlayerTransition where T: UIViewController {
     var present: MMPlayerPresentAnimator {
         if let v = objc_getAssociatedObject(base, &mmPresentKey) {

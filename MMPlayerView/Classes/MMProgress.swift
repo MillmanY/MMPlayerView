@@ -23,11 +23,11 @@ public class MMProgress: UIView {
         }
     }
     
-    fileprivate lazy var defaultIndicator = {
+    private lazy var defaultIndicator = {
         return UIActivityIndicatorView()
     }()
     
-    fileprivate var custom: (UIView & MMProgressProtocol)? {
+    private var custom: (UIView & MMProgressProtocol)? {
         willSet {
             custom?.removeFromSuperview()
         } didSet {
