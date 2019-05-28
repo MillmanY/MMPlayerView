@@ -40,14 +40,25 @@ public extension MMPlayerLayer {
         case fitToVideoRect
     }
     
-    
     enum CoverAutoHideType {
         case autoHide(after: TimeInterval)
         case disable
     }
+    
+    enum OrientationStatus: Int {
+        case landscapeLeft
+        case landscapeRight
+        case protrait
+    }
 }
 
 public class MMPlayerLayer: AVPlayerLayer {
+    public var fullScreenWhenLandscape = true
+    public private(set) var orientation: OrientationStatus = .protrait {
+        didSet {
+            self.landscapeWindow.update()
+        }
+    }
     private var frameObservation: NSKeyValueObservation?
     private var boundsObservation: NSKeyValueObservation?
     private var videoRectObservation: NSKeyValueObservation?
@@ -67,6 +78,11 @@ public class MMPlayerLayer: AVPlayerLayer {
     lazy var tapGesture: UITapGestureRecognizer = {
         let g = UITapGestureRecognizer(target: self, action: #selector(MMPlayerLayer.touchAction(gesture:)))
         return g
+    }()
+    
+    lazy var landscapeWindow: MMLandscapeWindow = {
+        let window = MMLandscapeWindow(playerLayer: self)
+        return window
     }()
     
     lazy var  bgView: UIView = {
@@ -97,6 +113,10 @@ public class MMPlayerLayer: AVPlayerLayer {
             new.addGestureRecognizer(tapGesture)
             new.layer.insertSublayer(self, at: 0)
         }
+    }
+    
+    public func setOrientation(_ status: MMPlayerLayer.OrientationStatus) {
+        self.orientation = status
     }
     
     public weak var mmDelegate: MMPlayerLayerProtocol?
@@ -246,6 +266,19 @@ public class MMPlayerLayer: AVPlayerLayer {
         self.progressType = .default
         self.addPlayerObserver()
         CATransaction.setDisableActions(true)
+        NotificationCenter.default.addObserver(forName: UIDevice.orientationDidChangeNotification, object: nil, queue: nil) { [weak self] (_) in
+            guard let self = self, self.fullScreenWhenLandscape else {return}
+            
+            switch UIDevice.current.orientation {
+            case .landscapeLeft:
+                self.orientation = .landscapeLeft
+            case .landscapeRight:
+                self.orientation = .landscapeRight
+            case .portrait:
+                self.orientation = .protrait
+            default: break
+            }
+        }
     }
     
     func updateCoverConstraint() {
@@ -481,7 +514,6 @@ extension MMPlayerLayer {
             default:
                 break
             }
-
         })
     }
     
@@ -523,7 +555,6 @@ extension MMPlayerLayer {
         return .unknown
     }
 }
-
 
 // Download
 extension MMPlayerLayer {

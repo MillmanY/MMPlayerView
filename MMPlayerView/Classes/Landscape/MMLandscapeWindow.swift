@@ -9,72 +9,69 @@
 import UIKit
 
 public class MMLandscapeWindow: UIWindow {
-    
-    public static let shared =  MMLandscapeWindow()
-    weak var currentPlayLayer: MMPlayerLayer?
+    unowned let playerLayer: MMPlayerLayer
     weak var originalPlayView: UIView?
     var completed: (()->Void)?
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    
+    public init(playerLayer: MMPlayerLayer) {
+        self.playerLayer = playerLayer
+        super.init(frame: .zero)
+        self.setup()
     }
     
-    public func makeKey(root: UIViewController, playLayer: MMPlayerLayer, completed: (()-> Void)?) {
-        
-        if self.isKeyWindow {
-            return
-        }
-        currentPlayLayer = playLayer
-        originalPlayView = playLayer.playView
-        self.rootViewController = root
-        currentPlayLayer?.playView = root.view
-        self.completed = completed
-        self.makeKeyAndVisible()
-    }
-    
-    public func makeDisable() {
-        originalPlayView = nil
-        currentPlayLayer = nil
-        self.rootViewController = nil
-        DispatchQueue.main.async { [unowned self] in
-            self.isHidden = true
-            self.completed?()
-            self.completed = nil
-        }
-    }
-    
-    required public init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-    
-    override public func becomeKey() {
-        super.becomeKey()
-        self.backgroundColor = UIColor.clear
     }
 
     override public func layoutSubviews() {
         super.layoutSubviews()
-        
-        if !self.isKeyWindow {
-            return
-        }
-        
-        switch UIDevice.current.orientation {
+        self.frame = UIScreen.main.bounds
+        self.update()
+    }
+}
+
+extension MMLandscapeWindow {
+    private func setup() {
+        self.rootViewController = UIViewController()
+        self.backgroundColor = UIColor.clear
+ 
+    }
+
+    func update() {
+        switch self.playerLayer.orientation {
+        case .protrait:
+            if let o = self.originalPlayView {
+                UIView.animate(withDuration: 0.3, animations: {
+                    self.rootViewController?.view.layer.transform = CATransform3DIdentity
+                    self.rootViewController?.view.frame = o.superview?.convert(o.frame, to: self) ?? .zero
+                }) { (_) in
+                    self.playerLayer.playView = o
+                    self.originalPlayView = nil
+                    self.isHidden = true
+                }
+            }
         case .landscapeRight, .landscapeLeft:
-            self.frame = UIScreen.main.bounds
-            self.rootViewController?.view.frame = UIScreen.main.bounds
-        case .portrait:
-            let convertR = originalPlayView?.frame ?? .zero
-            let frame = originalPlayView?.convert(convertR, to: nil) ?? .zero
-            self.rootViewController?.view.frame = frame
-            
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3, execute: { [unowned self] in
-                self.currentPlayLayer?.playView = self.originalPlayView
-                self.makeDisable()
-            })
-        default:
-            break
+            if !self.isPlayOnSelf {
+                self.isHidden = false
+                self.originalPlayView = self.playerLayer.playView
+                self.makeKeyAndVisible()
+                self.playerLayer.playView = self.rootViewController?.view
+            }
+            let parameter: CGFloat = UIDevice.current.orientation == .landscapeRight ? -1 : 1
+            let isLand = UIScreen.main.bounds.width > UIScreen.main.bounds.height
+            UIView.animate(withDuration: 0.3) {
+                if !isLand {
+                    let transform = CATransform3DRotate(CATransform3DIdentity, parameter*CGFloat.pi/2, 0, 0, 1)
+                    self.rootViewController?.view.layer.transform = transform
+                } else {
+                    self.rootViewController?.view.layer.transform = CATransform3DIdentity
+                }
+                self.rootViewController?.view.frame = UIScreen.main.bounds
+            }
         }
-        UIViewController.attemptRotationToDeviceOrientation()
+    }
+    
+    private var isPlayOnSelf: Bool {
+        return self.playerLayer.playView == self.rootViewController?.view
     }
 }

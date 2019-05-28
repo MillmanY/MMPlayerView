@@ -13,8 +13,7 @@ import MMPlayerView
 class ViewController: UIViewController {
     var offsetObservation: NSKeyValueObservation?
     lazy var mmPlayerLayer: MMPlayerLayer = {
-        let l = MMPlayerLayer()
-        
+        let l = MMPlayerLayer()        
         l.cacheType = .memory(count: 5)
         l.coverFitType = .fitToPlayerView
         l.videoGravity = AVLayerVideoGravity.resizeAspect
@@ -22,6 +21,7 @@ class ViewController: UIViewController {
         l.repeatWhenEnd = true
         return l
     }()
+    
     @IBOutlet weak var playerCollect: UICollectionView!
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -59,13 +59,11 @@ class ViewController: UIViewController {
             default: break
             }
         }
+
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        NotificationCenter.default.addObserver(forName: UIDevice.orientationDidChangeNotification, object: nil, queue: nil) { [unowned self] (_) in
-            self.landscapeAction()
-        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -75,19 +73,6 @@ class ViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-    }
-    
-    fileprivate func landscapeAction() {
-        // just landscape when last result was finish
-        if self.playerCollect.isDragging || self.playerCollect.isTracking || self.presentedViewController != nil {
-            return
-        }
-        if UIDevice.current.orientation.isLandscape {
-            let full = UIStoryboard.init(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "FullScreenViewController") as! FullScreenViewController
-            MMLandscapeWindow.shared.makeKey(root: full, playLayer: self.mmPlayerLayer, completed: {
-                print("landscape completed")
-            })
-        }
     }
     
     deinit {
@@ -183,12 +168,7 @@ extension ViewController: UICollectionViewDelegateFlowLayout {
             // this thumb use when transition start and your video dosent start
             mmPlayerLayer.thumbImageView.image = cell.imgView.image
             // set video where to play
-            if !MMLandscapeWindow.shared.isKeyWindow {
-                mmPlayerLayer.playView = cell.imgView
-            }
-            
-//            MMPlayerDownloader.shared.download(url: playURL)
-
+            mmPlayerLayer.playView = cell.imgView
             mmPlayerLayer.set(url: playURL)
         }
     }
@@ -199,7 +179,6 @@ extension ViewController: UICollectionViewDelegateFlowLayout {
         }
         // start loading video
         mmPlayerLayer.resume()
-        self.landscapeAction()
     }
     
 }
