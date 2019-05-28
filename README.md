@@ -53,18 +53,13 @@
     ex. only set present transition can use shrink video
     (self.presentationController as? PassViewPresentatinController)?.shrinkView()
 ## Landscape
-    1.Set AppDelegate
-    func application(_ application: UIApplication, supportedInterfaceOrientationsFor window: UIWindow?) ->        
-        UIInterfaceOrientationMask {
-        if window == MMLandscapeWindow.shared {
-            return .allButUpsideDown
-        } else {
-            return ....
-        }
-     }
-    2. Observer orientation when landscape call function
-        MMLandscapeWindow.shared.makeKey(root: full, playLayer: self.mmPlayerLayer, completed: {
-        })
+    1.Set MMPlayerLayer
+       // roation screen to landscape can change player to fullscreen
+       mmplayerLayer.fullScreenWhenLandscape = true
+       
+    2. Set from code:
+       mmplayerLayer.setOrientation(.landsacpeLeft)
+ 
 ## Cover View
 ![landscape](https://github.com/MillmanY/MMPlayerView/blob/master/demo/cover.png)
 
@@ -136,7 +131,9 @@
     public func resume() // if loading finish autoPlay = false, need call playerLayer.player.play() where you want
     public weak var mmDelegate: MMPlayerLayerProtocol?
     public func download(observer status: @escaping ((MMPlayerDownloader.DownloadStatus)->Void)) -> MMPlayerObservation? //Downlaod and observer
-
+    public var fullScreenWhenLandscape = true
+    public private(set) var orientation: OrientationStatus = .protrait
+    public func setOrientation(_ status: MMPlayerLayer.OrientationStatus)
 ## Downloader
             var downloadObservation: MMPlayerObservation?
 
