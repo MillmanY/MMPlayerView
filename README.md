@@ -23,18 +23,6 @@
     self.mmPlayerLayer.set(url: DemoSource.shared.demoData[indexPath.row].play_Url)
     self.mmPlayerLayer.resume()
 
-
-## MMPlayerView
-    let url = URL.init(string: "http://www.html5videoplayer.net/videos/toystory.mp4")!
-    playView.replace(cover: CoverA.instantiateFromNib())
-    playView.set(url: url, thumbImage: #imageLiteral(resourceName: "seven")) { (status) in
-        switch status {
-           case ....
-        }
-    }
-    
-    
-    playView.startLoading()
 ## Transition
     
     ##PresentedViewController
@@ -57,8 +45,13 @@
        // roation screen to landscape can change player to fullscreen
        mmplayerLayer.fullScreenWhenLandscape = true
        
-    2. Set from code:
+    2. Set from code
        mmplayerLayer.setOrientation(.landsacpeLeft)
+       
+    3. Observer
+      mmPlayerLayer.getOrientationChange { (status) in
+            print("Player OrientationChange \(status)")
+      }
  
 ## Cover View
 ![landscape](https://github.com/MillmanY/MMPlayerView/blob/master/demo/cover.png)
@@ -134,6 +127,8 @@
     public var fullScreenWhenLandscape = true
     public private(set) var orientation: OrientationStatus = .protrait
     public func setOrientation(_ status: MMPlayerLayer.OrientationStatus)
+    public func getOrientationChange(status: ((_ status: OrientationStatus) ->Void)?)
+
 ## Downloader
             var downloadObservation: MMPlayerObservation?
 
@@ -189,10 +184,8 @@ MMPlayerView is available through [CocoaPods](http://cocoapods.org). To install
 it, simply add the following line to your Podfile:
 
 ```ruby
-Swift 3 
-pod 'MMPlayerView', '~> 2.1.8'
-Swift 4 (> 3.0.1)
-pod 'MMPlayerView'
+Swift 5 
+pod 'MMPlayerView
 ```
 ## Author
 
