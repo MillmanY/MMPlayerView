@@ -57,6 +57,9 @@ public class MMPlayerLayer: AVPlayerLayer {
     public private(set) var orientation: OrientationStatus = .protrait {
         didSet {
             self.landscapeWindow.update()
+            
+            if orientation == oldValue { return }
+            self.layerOrientationBlock?(orientation)
         }
     }
     private var frameObservation: NSKeyValueObservation?
@@ -69,6 +72,7 @@ public class MMPlayerLayer: AVPlayerLayer {
     private var isBackgroundPause = false
     private var cahce = MMPlayerCache()
     private var playStatusBlock: ((_ status: PlayStatus) ->Void)?
+    private var layerOrientationBlock: ((_ status: OrientationStatus) ->Void)?
     private var indicator = MMProgress()
     private let assetKeysRequiredToPlay = [
         "duration",
@@ -333,6 +337,10 @@ public class MMPlayerLayer: AVPlayerLayer {
 
     public func getStatusBlock(value: ((_ status: PlayStatus) -> Void)?) {
         self.playStatusBlock = value
+    }
+    
+    public func getOrientationChange(status: ((_ status: OrientationStatus) ->Void)?) {
+        self.layerOrientationBlock = status
     }
     
     public func set(url: URL?, lodDiskIfExist: Bool = true ) {

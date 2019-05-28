@@ -59,7 +59,10 @@ class ViewController: UIViewController {
             default: break
             }
         }
-
+        
+        mmPlayerLayer.getOrientationChange { (status) in
+            print("Player OrientationChange \(status)")
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {

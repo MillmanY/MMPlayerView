@@ -29,7 +29,6 @@
 		5E4F8A9320627FC100A2B19D /* MMPlayer+UIViewController+CheckProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E4F8A9220627FC100A2B19D /* MMPlayer+UIViewController+CheckProtocol.swift */; };
 		5E562DA11EF9556900025869 /* MMPlayerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E562D9D1EF9556900025869 /* MMPlayerProtocol.swift */; };
 		5E562DA21EF9556900025869 /* MMPlayerCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E562D9E1EF9556900025869 /* MMPlayerCache.swift */; };
-		5E562DA41EF9556900025869 /* MMPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E562DA01EF9556900025869 /* MMPlayerView.swift */; };
 		5E862B1C20629F06000EAC20 /* MMPlayerShrinkControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E862B1B20629F06000EAC20 /* MMPlayerShrinkControl.swift */; };
 		5E8FCFB11F57A7D7004A4E52 /* UIView+LayoutFit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E8FCFB01F57A7D7004A4E52 /* UIView+LayoutFit.swift */; };
 		5E9A1B421F4D2DAB00746E5B /* MMProgress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E9A1B411F4D2DAB00746E5B /* MMProgress.swift */; };
@@ -93,7 +92,6 @@
 		5E4F8A9220627FC100A2B19D /* MMPlayer+UIViewController+CheckProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MMPlayer+UIViewController+CheckProtocol.swift"; sourceTree = "<group>"; };
 		5E562D9D1EF9556900025869 /* MMPlayerProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MMPlayerProtocol.swift; sourceTree = "<group>"; };
 		5E562D9E1EF9556900025869 /* MMPlayerCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MMPlayerCache.swift; sourceTree = "<group>"; };
-		5E562DA01EF9556900025869 /* MMPlayerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MMPlayerView.swift; sourceTree = "<group>"; };
 		5E862B1B20629F06000EAC20 /* MMPlayerShrinkControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MMPlayerShrinkControl.swift; sourceTree = "<group>"; };
 		5E8FCFB01F57A7D7004A4E52 /* UIView+LayoutFit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+LayoutFit.swift"; sourceTree = "<group>"; };
 		5E9A1B411F4D2DAB00746E5B /* MMProgress.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MMProgress.swift; sourceTree = "<group>"; };
@@ -316,7 +314,6 @@
 				5E9A1B4E1F4D806D00746E5B /* Transition */,
 				5E9A1B491F4D804400746E5B /* Extension */,
 				5E0038561F4C4CC90012A096 /* MMPlayerLayer.swift */,
-				5E562DA01EF9556900025869 /* MMPlayerView.swift */,
 				5E9A1B411F4D2DAB00746E5B /* MMProgress.swift */,
 				5E562D9D1EF9556900025869 /* MMPlayerProtocol.swift */,
 			);
@@ -571,7 +568,6 @@
 				179DFFF5A41590159B910EB208055F9F /* MMPlayerView-dummy.m in Sources */,
 				2787435B219E7966001B98F9 /* MMPlayerDownloadRequest.swift in Sources */,
 				5E562DA21EF9556900025869 /* MMPlayerCache.swift in Sources */,
-				5E562DA41EF9556900025869 /* MMPlayerView.swift in Sources */,
 				5E9A1B701F4D80E600746E5B /* MMPlayerPassViewPushConfig.swift in Sources */,
 				2717E199219D388600DCC8CB /* MMPlayerDownloader.swift in Sources */,
 				5E9A1B7D1F4D80E600746E5B /* MMPlayerPassViewPresentTransition.swift in Sources */,
