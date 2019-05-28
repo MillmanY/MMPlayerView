@@ -53,11 +53,27 @@ public extension MMPlayerLayer {
 }
 
 public class MMPlayerLayer: AVPlayerLayer {
+ 
+    /**
+     If true, player will fullscreen when roatate to landscape
+     ```
+     mmplayerLayer.fullScreenWhenLandscape = true
+     ```
+     */
     public var fullScreenWhenLandscape = true
+   
+    /**
+     Player current orientation
+     
+     ```
+     mmplayerLayer.orientation = .protrait
+     mmplayerLayer.orientation = .landscapeLeft
+     mmplayerLayer.orientation = .landscapeRight
+     ```
+     */
     public private(set) var orientation: OrientationStatus = .protrait {
         didSet {
             self.landscapeWindow.update()
-            
             if orientation == oldValue { return }
             self.layerOrientationBlock?(orientation)
         }
@@ -118,24 +134,59 @@ public class MMPlayerLayer: AVPlayerLayer {
             new.layer.insertSublayer(self, at: 0)
         }
     }
+
     
+    /**
+     Set player current Orientation
+
+     ```
+     mmplayerLayer.setOrientation(.protrait)
+     ```
+     */
     public func setOrientation(_ status: MMPlayerLayer.OrientationStatus) {
         self.orientation = status
     }
     
     public weak var mmDelegate: MMPlayerLayerProtocol?
+
+    /**
+     Set progress type on player center
+
+     ```
+     mmplayerLayer.progressType = .custom(view: UIView & MMProgressProtocol)
+     ```
+     */
     public var progressType: MMProgress.ProgressType = .default {
         didSet {
             indicator.set(progress: progressType)
         }
     }
-    
+    /**
+     Set progress type on player center
+     
+     ```
+     // Cover view fit to videoRect
+     mmplayerLayer.coverFitType = .fitToVideoRect
+     // Cover view fit to playerLayer frame
+     mmplayerLayer.coverFitType = .fitToPlayerView
+     ```
+     */
     public var coverFitType: MMPlayerLayer.CoverFitType = .fitToVideoRect {
         didSet {
             thumbImageView.contentMode = (coverFitType == .fitToVideoRect) ? .scaleAspectFit : .scaleAspectFill
             self.updateCoverConstraint()
         }
     }
+    /**
+     Set cover view auto hide after n interval
+     
+     ```
+     // Cover view auto hide with n interval
+     mmplayerLayer.autoHideCoverType = .MMPlayerLayer.CoverAutoHideType.autoHide(after: 3.0)
+     // Cover view auto hide disable
+     mmplayerLayer.autoHideCoverType = .disable
+     ```
+     */
     public var autoHideCoverType = MMPlayerLayer.CoverAutoHideType.autoHide(after: 3.0) {
         didSet {
             switch autoHideCoverType {
@@ -146,12 +197,27 @@ public class MMPlayerLayer: AVPlayerLayer {
             }
         }
     }
+    /**
+     Set to show image before video ready
+
+     ```
+     // Set thumbImageView
+     mmplayerLayer.thumbImageView.image = 'Background Image'
+     ```
+     */
     public lazy var thumbImageView: UIImageView = {
         let t = UIImageView()
         t.clipsToBounds = true
         return t
     }()
-    
+    /**
+     MMPlayerLayer will show in playView
+
+     ```
+     // Set thumbImageView
+     mmplayerLayer.playView = cell.imageView
+     ```
+     */
     public var playView: UIView? {
         set {
             if self.playView != newValue {
@@ -161,9 +227,39 @@ public class MMPlayerLayer: AVPlayerLayer {
             return _playView
         }
     }
+
+    /**
+     Loop video when end
+
+     ```
+     mmplayerLayer.repeatWhenEnd = true
+     ```
+     */
     public var repeatWhenEnd: Bool = false
-    public var coverView: (UIView & MMPlayerCoverViewProtocol)?
+    /**
+     Current cover view on mmplayerLayer
+     
+     ```
+     mmplayerLayer.coverView
+     ```
+     */
+    public private(set) var coverView: (UIView & MMPlayerCoverViewProtocol)?
+    /**
+     Auto play when video ready
+     */
     public var autoPlay = true
+    /**
+     Current player status
+     
+     ```
+     case ready
+     case unknown
+     case failed(err: String)
+     case playing
+     case pause
+     case end
+     ```
+     */
     public var currentPlayStatus: PlayStatus = .unknown {
         didSet {
             if currentPlayStatus == oldValue {
@@ -196,8 +292,19 @@ public class MMPlayerLayer: AVPlayerLayer {
         }
     }
     private var asset: AVURLAsset?
+    /**
+     Set AVPlayerItem cache in memory or not
+     
+     ```
+     case none
+     case memory(count: Int)
+     ```
+     */
     public var cacheType: PlayerCacheType = .none
-    public var playUrl: URL? {
+    /**
+     Current play url
+     */
+    public private(set) var playUrl: URL? {
         willSet {
             self.currentPlayStatus = .unknown
             self.isBackgroundPause = false
@@ -242,7 +349,9 @@ public class MMPlayerLayer: AVPlayerLayer {
             }
         }
     }
-
+    /**
+     If cover enable show on video, else hidden
+     */
     public func setCoverView(enable: Bool) {
         self.coverView?.isHidden = !enable
         self.tapGesture.isEnabled = enable
@@ -367,6 +476,7 @@ public class MMPlayerLayer: AVPlayerLayer {
     public func invalidate() {
         self.willPlayUrl = nil
     }
+    
     
     public func resume() {
         switch self.currentPlayStatus {
@@ -525,7 +635,7 @@ extension MMPlayerLayer {
         })
     }
     
-    func removeAllObserver() {
+    private func removeAllObserver() {
         if let observer = videoRectObservation {
             observer.invalidate()
             self.removeObserver(observer, forKeyPath: "videoRect")
@@ -566,6 +676,7 @@ extension MMPlayerLayer {
 
 // Download
 extension MMPlayerLayer {
+    
     public func download(observer status: @escaping ((MMPlayerDownloader.DownloadStatus)->Void)) -> MMPlayerObservation? {
         guard let url = self.playUrl else {
             status(.failed(err: "URL empty"))

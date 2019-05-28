@@ -59,7 +59,6 @@ class ViewController: UIViewController {
             default: break
             }
         }
-        
         mmPlayerLayer.getOrientationChange { (status) in
             print("Player OrientationChange \(status)")
         }
