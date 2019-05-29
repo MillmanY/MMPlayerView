@@ -9,6 +9,7 @@
 import UIKit
 import AVFoundation
 
+// MARK: - Enum define
 public extension MMPlayerLayer {
     enum PlayerCacheType {
         case none
@@ -53,105 +54,10 @@ public extension MMPlayerLayer {
 }
 
 public class MMPlayerLayer: AVPlayerLayer {
- 
-    /**
-     If true, player will fullscreen when roatate to landscape
-     ```
-     mmplayerLayer.fullScreenWhenLandscape = true
-     ```
-     */
-    public var fullScreenWhenLandscape = true
-   
-    /**
-     Player current orientation
-     
-     ```
-     mmplayerLayer.orientation = .protrait
-     mmplayerLayer.orientation = .landscapeLeft
-     mmplayerLayer.orientation = .landscapeRight
-     ```
-     */
-    public private(set) var orientation: OrientationStatus = .protrait {
-        didSet {
-            self.landscapeWindow.update()
-            if orientation == oldValue { return }
-            self.layerOrientationBlock?(orientation)
-        }
-    }
-    private var frameObservation: NSKeyValueObservation?
-    private var boundsObservation: NSKeyValueObservation?
-    private var videoRectObservation: NSKeyValueObservation?
-    private var mutedObservation: NSKeyValueObservation?
-    private var rateObservation: NSKeyValueObservation?
-    private var isCoverShow = false
-    private var timeObserver: Any?
-    private var isBackgroundPause = false
-    private var cahce = MMPlayerCache()
-    private var playStatusBlock: ((_ status: PlayStatus) ->Void)?
-    private var layerOrientationBlock: ((_ status: OrientationStatus) ->Void)?
-    private var indicator = MMProgress()
-    private let assetKeysRequiredToPlay = [
-        "duration",
-        "playable",
-        "hasProtectedContent",
-        ]
-    lazy var tapGesture: UITapGestureRecognizer = {
-        let g = UITapGestureRecognizer(target: self, action: #selector(MMPlayerLayer.touchAction(gesture:)))
-        return g
-    }()
-    
-    lazy var landscapeWindow: MMLandscapeWindow = {
-        let window = MMLandscapeWindow(playerLayer: self)
-        return window
-    }()
-    
-    lazy var  bgView: UIView = {
-        let v = UIView()
-        v.translatesAutoresizingMaskIntoConstraints = false
-        v.addSubview(self.thumbImageView)
-        v.addSubview(self.indicator)
-        self.indicator.mPlayFit.layoutFitSuper()
-        self.thumbImageView.mPlayFit.layoutFitSuper()
-        v.frame = .zero
-        v.backgroundColor = UIColor.clear
-        return v
-    }()
-    weak private var _playView: UIView? {
-        willSet {
-            bgView.removeFromSuperview()
-            self.removeFromSuperlayer()
-            _playView?.removeGestureRecognizer(tapGesture)
-        } didSet {
-            guard let new = _playView else {
-                return
-            }
-            new.addSubview(self.bgView)
-            self.bgView.mPlayFit.layoutFitSuper()
-            self.bgView.layoutIfNeeded()
-            self.updateCoverConstraint()
-            new.isUserInteractionEnabled = true
-            new.addGestureRecognizer(tapGesture)
-            new.layer.insertSublayer(self, at: 0)
-        }
-    }
-
-    
-    /**
-     Set player current Orientation
-
-     ```
-     mmplayerLayer.setOrientation(.protrait)
-     ```
-     */
-    public func setOrientation(_ status: MMPlayerLayer.OrientationStatus) {
-        self.orientation = status
-    }
-    
-    public weak var mmDelegate: MMPlayerLayerProtocol?
-
+    // MARK: - Public Parameter
     /**
      Set progress type on player center
-
+     
      ```
      mmplayerLayer.progressType = .custom(view: UIView & MMProgressProtocol)
      ```
@@ -199,7 +105,7 @@ public class MMPlayerLayer: AVPlayerLayer {
     }
     /**
      Set to show image before video ready
-
+     
      ```
      // Set thumbImageView
      mmplayerLayer.thumbImageView.image = 'Background Image'
@@ -212,7 +118,7 @@ public class MMPlayerLayer: AVPlayerLayer {
     }()
     /**
      MMPlayerLayer will show in playView
-
+     
      ```
      // Set thumbImageView
      mmplayerLayer.playView = cell.imageView
@@ -227,10 +133,10 @@ public class MMPlayerLayer: AVPlayerLayer {
             return _playView
         }
     }
-
+    
     /**
      Loop video when end
-
+     
      ```
      mmplayerLayer.repeatWhenEnd = true
      ```
@@ -291,7 +197,6 @@ public class MMPlayerLayer: AVPlayerLayer {
             }
         }
     }
-    private var asset: AVURLAsset?
     /**
      Set AVPlayerItem cache in memory or not
      
@@ -320,7 +225,7 @@ public class MMPlayerLayer: AVPlayerLayer {
                 self.player?.replaceCurrentItem(with: cacheItem)
             } else {
                 self.asset = AVURLAsset(url: url)
-
+                
                 self.asset?.loadValuesAsynchronously(forKeys: assetKeysRequiredToPlay) { [weak self] in
                     DispatchQueue.main.async {
                         if let a = self?.asset, let keys = self?.assetKeysRequiredToPlay {
@@ -340,7 +245,7 @@ public class MMPlayerLayer: AVPlayerLayer {
                                 self?.cahce.appendCache(key: url, item: item)
                             default:
                                 self?.cahce.removeAll()
-
+                                
                             }
                             self?.player?.replaceCurrentItem(with: item)
                         }
@@ -349,15 +254,100 @@ public class MMPlayerLayer: AVPlayerLayer {
             }
         }
     }
+    
+    public weak var mmDelegate: MMPlayerLayerProtocol?
     /**
-     If cover enable show on video, else hidden
+     If true, player will fullscreen when roatate to landscape
+     ```
+     mmplayerLayer.fullScreenWhenLandscape = true
+     ```
      */
-    public func setCoverView(enable: Bool) {
-        self.coverView?.isHidden = !enable
-        self.tapGesture.isEnabled = enable
+    public var fullScreenWhenLandscape = true
+    /**
+     Player current orientation
+     
+     ```
+     mmplayerLayer.orientation = .protrait
+     mmplayerLayer.orientation = .landscapeLeft
+     mmplayerLayer.orientation = .landscapeRight
+     ```
+     */
+    public private(set) var orientation: OrientationStatus = .protrait {
+        didSet {
+            self.landscapeWindow.update()
+            if orientation == oldValue { return }
+            self.layerOrientationBlock?(orientation)
+        }
+    }
+    // MARK: - Private Parameter
+    private var willPlayUrl: URL? {
+        didSet {
+            if oldValue != willPlayUrl {
+                self.playUrl = nil
+            }
+        }
     }
     
+    private lazy var  bgView: UIView = {
+        let v = UIView()
+        v.translatesAutoresizingMaskIntoConstraints = false
+        v.addSubview(self.thumbImageView)
+        v.addSubview(self.indicator)
+        self.indicator.mPlayFit.layoutFitSuper()
+        self.thumbImageView.mPlayFit.layoutFitSuper()
+        v.frame = .zero
+        v.backgroundColor = UIColor.clear
+        return v
+    }()
+   
+    private lazy var tapGesture: UITapGestureRecognizer = {
+        let g = UITapGestureRecognizer(target: self, action: #selector(MMPlayerLayer.touchAction(gesture:)))
+        return g
+    }()
+    
+    private lazy var landscapeWindow: MMLandscapeWindow = {
+        let window = MMLandscapeWindow(playerLayer: self)
+        return window
+    }()
+    
+    weak private var _playView: UIView? {
+        willSet {
+            bgView.removeFromSuperview()
+            self.removeFromSuperlayer()
+            _playView?.removeGestureRecognizer(tapGesture)
+        } didSet {
+            guard let new = _playView else {
+                return
+            }
+            new.addSubview(self.bgView)
+            self.bgView.mPlayFit.layoutFitSuper()
+            self.bgView.layoutIfNeeded()
+            self.updateCoverConstraint()
+            new.isUserInteractionEnabled = true
+            new.addGestureRecognizer(tapGesture)
+            new.layer.insertSublayer(self, at: 0)
+        }
+    }
+    private var asset: AVURLAsset?
     private var isInitLayer = false
+    private var frameObservation: NSKeyValueObservation?
+    private var boundsObservation: NSKeyValueObservation?
+    private var videoRectObservation: NSKeyValueObservation?
+    private var mutedObservation: NSKeyValueObservation?
+    private var rateObservation: NSKeyValueObservation?
+    private var isCoverShow = false
+    private var timeObserver: Any?
+    private var isBackgroundPause = false
+    private var cahce = MMPlayerCache()
+    private var playStatusBlock: ((_ status: PlayStatus) ->Void)?
+    private var layerOrientationBlock: ((_ status: OrientationStatus) ->Void)?
+    private var indicator = MMProgress()
+    private let assetKeysRequiredToPlay = [
+        "duration",
+        "playable",
+        "hasProtectedContent",
+        ]
+    // MARK: - Init
     public override init(layer: Any) {
         isInitLayer = true
         super.init(layer: layer)
@@ -367,42 +357,38 @@ public class MMPlayerLayer: AVPlayerLayer {
     required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
-
+    
     public override init() {
         super.init()
         self.setup()
     }
     
-    private func setup() {
-        self.player = AVPlayer()
-        self.backgroundColor = UIColor.black.cgColor
-        self.progressType = .default
-        self.addPlayerObserver()
-        CATransaction.setDisableActions(true)
-        NotificationCenter.default.addObserver(forName: UIDevice.orientationDidChangeNotification, object: nil, queue: nil) { [weak self] (_) in
-            guard let self = self, self.fullScreenWhenLandscape else {return}
-            
-            switch UIDevice.current.orientation {
-            case .landscapeLeft:
-                self.orientation = .landscapeLeft
-            case .landscapeRight:
-                self.orientation = .landscapeRight
-            case .portrait:
-                self.orientation = .protrait
-            default: break
-            }
+    deinit {
+        if !isInitLayer {
+            self.removeAllObserver()
         }
     }
+}
+
+// MARK: - Public function
+extension MMPlayerLayer {
+    /**
+     Set player current Orientation
+     
+     ```
+     mmplayerLayer.setOrientation(.protrait)
+     ```
+     */
+    public func setOrientation(_ status: MMPlayerLayer.OrientationStatus) {
+        self.orientation = status
+    }
     
-    func updateCoverConstraint() {
-        let vRect = self.coverFitType == .fitToVideoRect ? videoRect : bgView.bounds
-        if vRect.isEmpty {
-            self.coverView?.isHidden = true
-        } else {
-            self.coverView?.isHidden = (self.tapGesture.isEnabled) ? false : true
-            self.coverView?.frame = vRect
-        }
-        self.frame = bgView.bounds
+    /**
+     If cover enable show on video, else hidden
+     */
+    public func setCoverView(enable: Bool) {
+        self.coverView?.isHidden = !enable
+        self.tapGesture.isEnabled = enable
     }
     
     public func delayHideCover() {
@@ -415,6 +401,15 @@ public class MMPlayerLayer: AVPlayerLayer {
             break
         }
     }
+    
+    /**
+     Set player cover view
+     ** Cover view need implement 'MMPlayerCoverViewProtocol' **
+     
+     ```
+     mmplayerLayer.replace(cover: XXX)
+     ```
+     */
     public func replace(cover: UIView & MMPlayerCoverViewProtocol) {
         if let c = self.coverView ,c.isMember(of: cover.classForCoder) {
             c.alpha = 1.0
@@ -435,23 +430,21 @@ public class MMPlayerLayer: AVPlayerLayer {
         }
         cover.currentPlayer(status: self.currentPlayStatus)
     }
-    
-    private var willPlayUrl: URL? {
-        didSet {
-            if oldValue != willPlayUrl {
-                self.playUrl = nil
-            }
-        }
-    }
-
+    /**
+     Get player play status
+     */
     public func getStatusBlock(value: ((_ status: PlayStatus) -> Void)?) {
         self.playStatusBlock = value
     }
-    
+    /**
+     Get player orientation status
+     */
     public func getOrientationChange(status: ((_ status: OrientationStatus) ->Void)?) {
         self.layerOrientationBlock = status
     }
-    
+    /**
+     Set player playUrl
+     */
     public func set(url: URL?, lodDiskIfExist: Bool = true ) {
         if let will = url ,
             let real = MMPlayerDownloader.shared.localFileFrom(url: will),
@@ -472,12 +465,15 @@ public class MMPlayerLayer: AVPlayerLayer {
         }
         self.willPlayUrl = url
     }
-
+    /**
+     Stop player and clear url
+     */
     public func invalidate() {
         self.willPlayUrl = nil
     }
-    
-    
+    /**
+     Start player to play video
+     */
     public func resume() {
         switch self.currentPlayStatus {
         case .playing , .pause:
@@ -503,7 +499,7 @@ public class MMPlayerLayer: AVPlayerLayer {
             mmDelegate?.touchInVideoRect(contain: self.videoRect.contains(point))
         }
     }
-
+    
     @objc public func showCover(isShow: Bool) {
         self.isCoverShow = isShow
         if isShow {
@@ -525,6 +521,41 @@ public class MMPlayerLayer: AVPlayerLayer {
             self?.coverView?.alpha = (isShow) ? 1.0 : 0.0
         })
     }
+}
+
+// MARK: - Private function
+extension MMPlayerLayer {
+    private func setup() {
+        self.player = AVPlayer()
+        self.backgroundColor = UIColor.black.cgColor
+        self.progressType = .default
+        self.addPlayerObserver()
+        CATransaction.setDisableActions(true)
+        NotificationCenter.default.addObserver(forName: UIDevice.orientationDidChangeNotification, object: nil, queue: nil) { [weak self] (_) in
+            guard let self = self, self.fullScreenWhenLandscape else {return}
+            
+            switch UIDevice.current.orientation {
+            case .landscapeLeft:
+                self.orientation = .landscapeLeft
+            case .landscapeRight:
+                self.orientation = .landscapeRight
+            case .portrait:
+                self.orientation = .protrait
+            default: break
+            }
+        }
+    }
+    
+    private func updateCoverConstraint() {
+        let vRect = self.coverFitType == .fitToVideoRect ? videoRect : bgView.bounds
+        if vRect.isEmpty {
+            self.coverView?.isHidden = true
+        } else {
+            self.coverView?.isHidden = (self.tapGesture.isEnabled) ? false : true
+            self.coverView?.frame = vRect
+        }
+        self.frame = bgView.bounds
+    }
     
     private func startLoading(isStart: Bool) {
         if isStart {
@@ -533,17 +564,10 @@ public class MMPlayerLayer: AVPlayerLayer {
             self.indicator.stop()
         }
     }
-    
-    deinit {
-        if !isInitLayer {
-            self.removeAllObserver()
-        }
-    }
 }
 
-// Observer
+// MARK: - Observer
 extension MMPlayerLayer {
-    
     private func addPlayerObserver() {
         NotificationCenter.default.removeObserver(self)
         if timeObserver == nil {
@@ -674,7 +698,7 @@ extension MMPlayerLayer {
     }
 }
 
-// Download
+// MARK: - Download
 extension MMPlayerLayer {
     
     public func download(observer status: @escaping ((MMPlayerDownloader.DownloadStatus)->Void)) -> MMPlayerObservation? {
@@ -700,6 +724,7 @@ extension MMPlayerLayer {
     }
 }
 
+// MARK: - MMPlayerItem delegate
 extension MMPlayerLayer: MMPlayerItemProtocol {
     func status(change: AVPlayerItem.Status) {
         let s = self.convertItemStatus()
