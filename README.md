@@ -175,8 +175,8 @@
 
 ## Requirements
 
-    iOS 10.0+
-    Swift 4.0+
+    iOS 11.0+
+    Swift 5.0+
     
 ## Installation
 
