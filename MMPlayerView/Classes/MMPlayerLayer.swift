@@ -660,11 +660,7 @@ extension MMPlayerLayer {
     }
     
     private func removeAllObserver() {
-        if let observer = videoRectObservation {
-            observer.invalidate()
-            self.removeObserver(observer, forKeyPath: "videoRect")
-            self.videoRectObservation = nil
-        }
+        videoRectObservation?.invalidate()
         videoRectObservation = nil
         boundsObservation = nil
         frameObservation = nil

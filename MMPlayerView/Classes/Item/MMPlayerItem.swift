@@ -39,20 +39,11 @@ class MMPlayerItem: AVPlayerItem {
     }
     
     deinit {
-        if let observer = statusObservation {
-            observer.invalidate()
-            self.removeObserver(observer, forKeyPath: "status")
-            self.statusObservation = nil
-        }
-        if let observer = keepUpObservation {
-            observer.invalidate()
-            self.removeObserver(observer, forKeyPath: "playbackLikelyToKeepUp")
-            self.keepUpObservation = nil
-        }
-        if let observer = emptyObservation {
-            observer.invalidate()
-            self.removeObserver(observer, forKeyPath: "playbackBufferEmpty")
-            self.emptyObservation = nil
-        }
+        statusObservation?.invalidate()
+        keepUpObservation?.invalidate()
+        emptyObservation?.invalidate()
+        self.statusObservation = nil
+        self.keepUpObservation = nil
+        self.emptyObservation = nil
     }
 }
