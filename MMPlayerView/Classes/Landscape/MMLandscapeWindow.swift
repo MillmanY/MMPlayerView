@@ -8,6 +8,14 @@
 
 import UIKit
 
+private class WindowViewController: UIViewController {
+    var isStatusHidden = false 
+    
+    override var prefersStatusBarHidden: Bool {
+        return isStatusHidden
+    }
+}
+
 public class MMLandscapeWindow: UIWindow {
     unowned let playerLayer: MMPlayerLayer
     weak var originalPlayView: UIView?
@@ -28,11 +36,12 @@ public class MMLandscapeWindow: UIWindow {
         self.frame = UIScreen.main.bounds
         self.update()
     }
+    
 }
 
 extension MMLandscapeWindow {
     private func setup() {
-        self.rootViewController = UIViewController()
+        self.rootViewController = WindowViewController()
         self.backgroundColor = UIColor.clear
  
     }
@@ -40,6 +49,7 @@ extension MMLandscapeWindow {
     func update() {
         switch self.playerLayer.orientation {
         case .protrait:
+            (self.rootViewController as? WindowViewController)?.isStatusHidden = false
             if let o = self.originalPlayView {
                 UIView.animate(withDuration: 0.3, animations: {
                     self.rootViewController?.view.layer.transform = CATransform3DIdentity
@@ -51,6 +61,7 @@ extension MMLandscapeWindow {
                 }
             }
         case .landscapeRight, .landscapeLeft:
+            (self.rootViewController as? WindowViewController)?.isStatusHidden = true
             if !self.isPlayOnSelf {
                 self.isHidden = false
                 self.originalPlayView = self.playerLayer.playView

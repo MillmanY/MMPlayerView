@@ -265,7 +265,7 @@
 				TargetAttributes = {
 					607FACCF1AFB9204008FA782 = {
 						CreatedOnToolsVersion = 6.3.1;
-						DevelopmentTeam = 2SMXTR7629;
+						DevelopmentTeam = BSPD9WB6WT;
 						LastSwiftMigration = 0900;
 					};
 					607FACE41AFB9204008FA782 = {
@@ -571,7 +571,7 @@
 			baseConfigurationReference = DD347918F3677A34D10B7AD9 /* Pods-MMPlayerView_Example.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = 2SMXTR7629;
+				DEVELOPMENT_TEAM = BSPD9WB6WT;
 				INFOPLIST_FILE = MMPlayerView/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -589,7 +589,7 @@
 			baseConfigurationReference = 3FFE938993FA973D30C8C3F0 /* Pods-MMPlayerView_Example.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = 2SMXTR7629;
+				DEVELOPMENT_TEAM = BSPD9WB6WT;
 				INFOPLIST_FILE = MMPlayerView/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
