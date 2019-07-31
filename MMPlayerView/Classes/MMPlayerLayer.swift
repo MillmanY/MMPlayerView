@@ -445,8 +445,9 @@ extension MMPlayerLayer {
     /**
      Set player playUrl
      */
-    public func set(url: URL?, lodDiskIfExist: Bool = true ) {
+    public func set(url: URL?, lodDiskIfExist: Bool = true) {
         if let will = url ,
+            self.cahce.getItem(key: will) == nil,
             let real = MMPlayerDownloader.shared.localFileFrom(url: will),
             lodDiskIfExist {
             switch real.type {
