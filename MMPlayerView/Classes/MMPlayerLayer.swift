@@ -330,11 +330,6 @@ public class MMPlayerLayer: AVPlayerLayer {
     }
     private var asset: AVURLAsset?
     private var isInitLayer = false
-    private var frameObservation: NSKeyValueObservation?
-    private var boundsObservation: NSKeyValueObservation?
-    private var videoRectObservation: NSKeyValueObservation?
-    private var mutedObservation: NSKeyValueObservation?
-    private var rateObservation: NSKeyValueObservation?
     private var isCoverShow = false
     private var timeObserver: Any?
     private var isBackgroundPause = false
@@ -347,6 +342,7 @@ public class MMPlayerLayer: AVPlayerLayer {
         "playable",
         "hasProtectedContent",
         ]
+    
     // MARK: - Init
     public override init(layer: Any) {
         isInitLayer = true
@@ -616,57 +612,55 @@ extension MMPlayerLayer {
                 }
             }
         })
+        self.addObserver(self, forKeyPath: "videoRect", options: [.new, .old], context: nil)
+        bgView.addObserver(self, forKeyPath: "frame", options: [.new, .old], context: nil)
+        bgView.addObserver(self, forKeyPath: "bounds", options: [.new, .old], context: nil)
+        self.player?.addObserver(self, forKeyPath: "muted", options: [.new, .old], context: nil)
+        self.player?.addObserver(self, forKeyPath: "rate", options: [.new, .old], context: nil)
+    }
+    
+    override public func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         
-        videoRectObservation = self.observe(\.videoRect, options: [.new, .old]) { [weak self] (player, change) in
-            if change.newValue != change.oldValue {
-                self?.updateCoverConstraint()
+        switch keyPath {
+        case "videoRect", "frame", "bounds":
+            let new = change?[.newKey] as? CGRect ?? .zero
+            let old = change?[.oldKey] as? CGRect ?? .zero
+            if new != old {
+                self.updateCoverConstraint()
             }
-        }
-
-        frameObservation = bgView.observe(\.frame, options: [.new, .old], changeHandler: { [weak self] (view, change) in
-            if change.newValue != change.oldValue, change.newValue != .zero {
-                self?.updateCoverConstraint()
+            
+        case "muted":
+            let new = change?[.newKey] as? Bool ?? false
+            let old = change?[.oldKey] as? Bool ?? false
+            if new != old {
+                self.coverView?.player?(isMuted: new)
             }
-        })
-        
-        boundsObservation = bgView.observe(\.bounds, options: [.new, .old], changeHandler: { [weak self] (view, change) in
-            if change.newValue != change.oldValue, change.newValue != .zero {
-                self?.updateCoverConstraint()
-            }
-        })
-        
-        mutedObservation = self.player?.observe(\.isMuted, options: [.new, .old], changeHandler: { [weak self] (play, change) in
-            if let new = change.newValue, new != change.oldValue {
-                self?.coverView?.player?(isMuted: new)
-            }
-        })
-
-        rateObservation = self.player?.observe(\.rate, options: [.new, .old], changeHandler: { [weak self] (play, change) in
-            guard let new = change.newValue, let status = self?.currentPlayStatus else {
-                return
-            }
+        case "rate":
+            let new = change?[.newKey] as? Float ?? 1.0
+            let status = self.currentPlayStatus
             switch status {
             case .playing, .pause, .ready:
-                self?.currentPlayStatus = (new == 0.0) ? .pause : .playing
+                self.currentPlayStatus = (new == 0.0) ? .pause : .playing
             case .end:
-                let total = self?.player?.currentItem?.duration.seconds ?? 0.0
-                let current = self?.player?.currentItem?.currentTime().seconds ?? 0.0
+                let total = self.player?.currentItem?.duration.seconds ?? 0.0
+                let current = self.player?.currentItem?.currentTime().seconds ?? 0.0
                 if current < total {
-                    self?.currentPlayStatus = (new == 0.0) ? .pause : .playing
+                    self.currentPlayStatus = (new == 0.0) ? .pause : .playing
                 }
-            default:
-                break
+            default: break
             }
-        })
+
+        default:
+            super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
+        }
     }
     
     private func removeAllObserver() {
-        videoRectObservation?.invalidate()
-        videoRectObservation = nil
-        boundsObservation = nil
-        frameObservation = nil
-        mutedObservation = nil
-        rateObservation = nil
+        self.removeObserver(self, forKeyPath: "videoRect")
+        bgView.removeObserver(self, forKeyPath: "frame")
+        bgView.removeObserver(self, forKeyPath: "bounds")
+        self.player?.removeObserver(self, forKeyPath: "muted")
+        self.player?.removeObserver(self, forKeyPath: "rate")
         self.player?.replaceCurrentItem(with: nil)
         self.player?.pause()
         NotificationCenter.default.removeObserver(self)

@@ -38,6 +38,7 @@ class DetailViewController: UIViewController {
             textView.text = d.content
         }
         self.addDownloadObservation()
+        
     }
     
     fileprivate func addDownloadObservation() {
