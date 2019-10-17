@@ -17,8 +17,9 @@ class MMPlayerPassViewPresentTransition: MMPlayerBasePresentTransition, UIViewCo
         let container = transitionContext.containerView
         if self.isPresent {
             let toVC = transitionContext.viewController(forKey: .to)!
-            toVC.view.layoutIfNeeded()
             container.addSubview(toVC.view)
+
+            toVC.view.layoutIfNeeded()
             guard let fromProtocol = config.source?.fromProtocolVC else {
                     print("Need Called setView")
                     transitionContext.completeTransition(true)
