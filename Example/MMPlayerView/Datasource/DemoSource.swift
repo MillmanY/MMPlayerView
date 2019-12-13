@@ -24,7 +24,7 @@ class DemoSource: NSObject {
         demoData += [
             DataObj(image: #imageLiteral(resourceName: "seven"),
                     play_Url: URL(string: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4")!,
-                    title: "SRT File demo",
+                    title: "SRT File demo, detail show the text second",
                     content: """
 1
 00:00:15,000 --> 00:00:17,951

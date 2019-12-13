@@ -41,12 +41,11 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="WoM-bD-WBv" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-2551" y="1104"/>
+            <point key="canvasLocation" x="-2730" y="1169"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="BfC-I2-Hf6">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="lkb-al-SKx" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
                 <tabBarController id="UdE-QW-nJ0" sceneMemberID="viewController">
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="0Ay-8L-N0z">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="49"/>
@@ -58,8 +57,9 @@
                         <segue destination="Ftc-DN-Q75" kind="relationship" relationship="viewControllers" id="nT6-A1-LvU"/>
                     </connections>
                 </tabBarController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="lkb-al-SKx" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-3583" y="376"/>
+            <point key="canvasLocation" x="-4422" y="376"/>
         </scene>
         <!--List Video Demo-->
         <scene sceneID="ufC-wZ-h7g">
