@@ -175,7 +175,9 @@
 ## SubTitle
 ![](https://github.com/MillmanY/MMPlayerView/blob/master/demo/subTitleSmall.png)
 
-                
+           public var subTitleFont: UIFont = UIFont.systemFont(ofSize: 17)
+           public var subTitleDefaultTextColor: UIColor = UIColor.white
+           public var subTitleLabelEdge: (bottom: CGFloat, left: CGFloat, right: CGFloat) = (20,10,10)
            enum SubTitleType {
               case srt(info: String)
            }
