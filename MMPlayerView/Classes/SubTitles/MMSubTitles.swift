@@ -6,7 +6,7 @@
 //
 
 import Foundation
-public class MMSubTitles<C: MMSubTitlesProtocol> {
+public class MMSubTitles<C: ConverterProtocol> {
     let converter: C
     
     public init(_ converter: C) {
@@ -17,16 +17,17 @@ public class MMSubTitles<C: MMSubTitlesProtocol> {
         converter.parseText(value)
     }
     
-    public func search(duration: TimeInterval, completed: @escaping ((C.Element)->Void)) {
-        converter.search(duration: duration, completed: completed)
+    public func search(duration: TimeInterval, completed: @escaping ((C.Element)->Void), queue: DispatchQueue?) {
+        converter.search(duration: duration) { (e) in
+            if let q = queue {
+                q.async {
+                    completed(e)
+                }
+            } else {
+                completed(e)
+            }
+        }
     }
-}
-
-
-public protocol MMSubTitlesProtocol {
-    associatedtype Element
-    func parseText(_ value: String)
-    func search(duration: TimeInterval, completed: @escaping ((Element)->Void))
 }
 
 //
@@ -43,4 +44,4 @@ public protocol MMSubTitlesProtocol {
 ////            })
 //
 //        }
-//        
+//

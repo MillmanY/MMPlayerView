@@ -31,6 +31,11 @@ public protocol MMPlayerLayerProtocol: class {
     func touchInVideoRect(contain: Bool)
 }
 
+public protocol ConverterProtocol {
+    associatedtype Element
+    func parseText(_ value: String)
+    func search(duration: TimeInterval, completed: @escaping ((Element)->Void))
+}
 
 
 let VideoBasePath = NSTemporaryDirectory()

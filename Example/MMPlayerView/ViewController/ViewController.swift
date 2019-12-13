@@ -142,6 +142,13 @@ extension ViewController: UICollectionViewDelegateFlowLayout {
         if let path = playerCollect.indexPathForItem(at: p),
             self.presentedViewController == nil {
             self.updateCell(at: path)
+            //Demo SubTitle
+            if path.row == 0, self.mmPlayerLayer.subTitleType == nil {
+                let subTitleStr = Bundle.main.path(forResource: "test", ofType: "srt")!
+                if let str = try? String.init(contentsOfFile: subTitleStr) {
+                    self.mmPlayerLayer.subTitleType = .srt(info: str)
+                }
+            }
         }
     }
     
@@ -150,6 +157,7 @@ extension ViewController: UICollectionViewDelegateFlowLayout {
         if let detail = self.presentedViewController as? DetailViewController {
             detail.data = value
         }
+        
         self.mmPlayerLayer.thumbImageView.image = value.image
         self.mmPlayerLayer.set(url: DemoSource.shared.demoData[indexPath.row].play_Url)
         self.mmPlayerLayer.resume()

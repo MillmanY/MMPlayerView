@@ -6,7 +6,7 @@
 //
 
 import Foundation
-public class SRTConverter: MMSubTitlesProtocol {
+public class SRTConverter: ConverterProtocol {
     private var completed: ((Element)->Void)?
     public typealias Element = SRTInfo
     
@@ -32,7 +32,6 @@ public class SRTConverter: MMSubTitlesProtocol {
     
     private func queueSearch(duration: TimeInterval, findIndex: Int, isIncrease: Bool? = nil) {
         if let current = self.currentObj, current.timeRange.contains(duration) {
-            self.currentObj = current
             return
         }
         

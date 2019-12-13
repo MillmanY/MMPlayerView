@@ -11,7 +11,9 @@ import AVFoundation
 
 // MARK: - Enum define
 public extension MMPlayerLayer {
-    
+    enum SubTitleType {
+        case srt(info: String)
+    }
     enum PlayerCacheType {
         case none
         case memory(count: Int)
@@ -56,6 +58,31 @@ public extension MMPlayerLayer {
 
 public class MMPlayerLayer: AVPlayerLayer {
     // MARK: - Public Parameter
+
+    lazy var labSubTitle: UILabel = {
+        let lab = UILabel()
+        lab.textAlignment = .center
+        lab.numberOfLines = 0
+        lab.textColor = .white
+        lab.layer.zPosition = 1000
+        return lab
+    }()
+    var subTitleObj: AnyObject?
+    public var subTitleType: SubTitleType? {
+        didSet {
+            guard let type = self.subTitleType else {
+                subTitleObj = nil
+                return
+            }
+            switch type {
+            case .srt(let info):
+                let obj = MMSubTitles(SRTConverter())
+                obj.parseText(info)
+                subTitleObj = obj
+            }
+        }
+    }
+    
     /**
      Set progress type on player center
      
@@ -313,6 +340,7 @@ public class MMPlayerLayer: AVPlayerLayer {
     
     weak private var _playView: UIView? {
         willSet {
+            labSubTitle.removeFromSuperview()
             bgView.removeFromSuperview()
             self.removeFromSuperlayer()
             _playView?.removeGestureRecognizer(tapGesture)
@@ -327,6 +355,11 @@ public class MMPlayerLayer: AVPlayerLayer {
             new.isUserInteractionEnabled = true
             new.addGestureRecognizer(tapGesture)
             new.layer.insertSublayer(self, at: 0)
+            new.addSubview(labSubTitle)
+            labSubTitle.mmLayout
+                      .setLeft(anchor: new.leftAnchor, type: .equal(constant: 0))
+                      .setRight(anchor: new.rightAnchor, type: .equal(constant: 0))
+                      .setBottom(anchor: new.bottomAnchor, type: .equal(constant: -20))
         }
     }
     private var asset: AVURLAsset?
@@ -574,6 +607,18 @@ extension MMPlayerLayer {
                 if time.isIndefinite {
                     return
                 }
+                if let sub = self?.subTitleObj {
+                    switch sub {
+                    case let srt as MMSubTitles<SRTConverter>:
+                        srt.search(duration: time.seconds, completed: { [weak self] (info) in
+                            self?.labSubTitle.text = info.text
+                        }, queue: DispatchQueue.main)
+                    default:
+                        break
+                    }
+                }
+                
+                
                 if let cover = self?.coverView, cover.responds(to: #selector(cover.timerObserver(time:))) {
                     cover.timerObserver!(time: time)
                 }
