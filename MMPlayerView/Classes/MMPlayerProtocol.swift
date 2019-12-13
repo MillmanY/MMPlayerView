@@ -31,4 +31,6 @@ public protocol MMPlayerLayerProtocol: class {
     func touchInVideoRect(contain: Bool)
 }
 
+
+
 let VideoBasePath = NSTemporaryDirectory()

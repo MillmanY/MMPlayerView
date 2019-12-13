@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15400" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="28g-qc-fgW">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15400" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="UdE-QW-nJ0">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
@@ -24,31 +24,42 @@
             </objects>
             <point key="canvasLocation" x="-2551" y="377"/>
         </scene>
-        <!--View Controller-->
-        <scene sceneID="HGk-5N-0Zs">
+        <!--Item-->
+        <scene sceneID="As7-iC-x01">
             <objects>
-                <viewController id="bTC-Ln-oNx" sceneMemberID="viewController">
+                <viewController id="Ftc-DN-Q75" sceneMemberID="viewController">
                     <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="FTn-4W-rs1"/>
-                        <viewControllerLayoutGuide type="bottom" id="o9i-2R-ndX"/>
+                        <viewControllerLayoutGuide type="top" id="o1j-1e-YBv"/>
+                        <viewControllerLayoutGuide type="bottom" id="cdz-zV-b3Y"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="er2-Ge-beG">
+                    <view key="view" contentMode="scaleToFill" id="pYJ-k6-Hvt">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fVO-p9-bRR">
-                                <rect key="frame" x="164" y="376" width="46" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Button"/>
-                            </button>
-                        </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                     </view>
-                    <navigationItem key="navigationItem" id="MZe-xS-1tU"/>
+                    <tabBarItem key="tabBarItem" title="Item" id="eRq-qE-e1I"/>
                 </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="FtR-an-krm" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="WoM-bD-WBv" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-2551" y="1104"/>
+        </scene>
+        <!--Tab Bar Controller-->
+        <scene sceneID="BfC-I2-Hf6">
+            <objects>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="lkb-al-SKx" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <tabBarController id="UdE-QW-nJ0" sceneMemberID="viewController">
+                    <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="0Ay-8L-N0z">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="49"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    </tabBar>
+                    <connections>
+                        <segue destination="28g-qc-fgW" kind="relationship" relationship="viewControllers" id="IJC-Vc-Sgp"/>
+                        <segue destination="Ftc-DN-Q75" kind="relationship" relationship="viewControllers" id="nT6-A1-LvU"/>
+                    </connections>
+                </tabBarController>
+            </objects>
+            <point key="canvasLocation" x="-3583" y="376"/>
         </scene>
         <!--List Video Demo-->
         <scene sceneID="ufC-wZ-h7g">
@@ -63,7 +74,7 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="RZU-9S-Yz7">
-                                <rect key="frame" x="0.0" y="44" width="375" height="623"/>
+                                <rect key="frame" x="0.0" y="44" width="375" height="574"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="Wui-Ug-LtX">
                                     <size key="itemSize" width="365" height="250"/>

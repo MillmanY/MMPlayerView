@@ -11,6 +11,7 @@ import AVFoundation
 
 // MARK: - Enum define
 public extension MMPlayerLayer {
+    
     enum PlayerCacheType {
         case none
         case memory(count: Int)
