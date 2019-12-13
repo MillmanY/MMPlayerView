@@ -172,6 +172,19 @@
             if let info = MMPlayerDownloader.shared.localFileFrom(url: downloadURL)  {
                 MMPlayerDownloader.shared.deleteVideo(info)
             }
+## SubTitle
+![](https://github.com/MillmanY/MMPlayerView/blob/master/demo/subTitleSmall.png)
+
+                
+           enum SubTitleType {
+              case srt(info: String)
+           }
+   
+           let subTitleStr = Bundle.main.path(forResource: "test", ofType: "srt")!
+                if let str = try? String.init(contentsOfFile: subTitleStr) {
+                    self.mmPlayerLayer.subTitleType = .srt(info: str)
+                }
+            }
 
 ## Requirements
 
