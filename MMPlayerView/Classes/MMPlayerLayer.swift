@@ -68,6 +68,27 @@ public class MMPlayerLayer: AVPlayerLayer {
         return lab
     }()
     var subTitleObj: AnyObject?
+    public var subTitleFont: UIFont = UIFont.systemFont(ofSize: 17) {
+        didSet {
+            self.labSubTitle.font = subTitleFont
+        }
+    }
+    public var subTitleDefaultTextColor: UIColor = UIColor.white {
+        didSet {
+            self.labSubTitle.textColor = subTitleDefaultTextColor
+        }
+    }
+    public var subTitleLabelEdge: (bottom: CGFloat, left: CGFloat, right: CGFloat) = (20,10,10) {
+        didSet {
+            guard let play = playView else {
+                return
+            }
+            labSubTitle.mmLayout
+                .setLeft(anchor: play.leftAnchor, type: .equal(constant: subTitleLabelEdge.left))
+                .setRight(anchor: play.rightAnchor, type: .equal(constant: -subTitleLabelEdge.right))
+                .setBottom(anchor: play.bottomAnchor, type: .equal(constant: -subTitleLabelEdge.bottom))
+        }
+    }
     public var subTitleType: SubTitleType? {
         didSet {
             guard let type = self.subTitleType else {
@@ -82,6 +103,7 @@ public class MMPlayerLayer: AVPlayerLayer {
             }
         }
     }
+    
     
     /**
      Set progress type on player center
@@ -355,11 +377,10 @@ public class MMPlayerLayer: AVPlayerLayer {
             new.isUserInteractionEnabled = true
             new.addGestureRecognizer(tapGesture)
             new.layer.insertSublayer(self, at: 0)
+            new.layer.layoutIfNeeded()
             new.addSubview(labSubTitle)
-            labSubTitle.mmLayout
-                      .setLeft(anchor: new.leftAnchor, type: .equal(constant: 0))
-                      .setRight(anchor: new.rightAnchor, type: .equal(constant: 0))
-                      .setBottom(anchor: new.bottomAnchor, type: .equal(constant: -20))
+            let edge = subTitleLabelEdge
+            self.subTitleLabelEdge = edge
         }
     }
     private var asset: AVURLAsset?
