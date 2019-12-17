@@ -6,7 +6,7 @@
 //
 
 import Foundation
-public class MMSubTitles<C: ConverterProtocol> {
+public class MMSubtitles<C: ConverterProtocol> {
     let converter: C
     
     public init(_ converter: C) {
@@ -29,19 +29,3 @@ public class MMSubTitles<C: ConverterProtocol> {
         }
     }
 }
-
-//
-//        let value = Bundle.main.path(forResource: "test", ofType: "srt")!
-//        if let str = try? String.init(contentsOfFile: value) {
-//            srt.parseText(str)
-//            srt.search(duration: 100.95, completed: { (info) in
-//                print(info)
-//            })
-//
-////
-////            srt.search(duration: 200, completed: { (info) in
-////                print(info)
-////            })
-//
-//        }
-//

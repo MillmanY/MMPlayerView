@@ -10,13 +10,6 @@ import UIKit
 
 public class MMPlayerPassViewPresentatinController: MMPlayerBasePresentationController {
 
-    lazy var shrinkControl: MMPlayerShrinkControl = {
-        let control = MMPlayerShrinkControl.init(containerView: self.containerView!, config: config)
-        control.to = self.presentedViewController
-        control.from = self.presentingViewController
-        return control
-    }()
-
     public override func dismissalTransitionWillBegin() {
         super.dismissalTransitionWillBegin()
         
@@ -30,10 +23,6 @@ public class MMPlayerPassViewPresentatinController: MMPlayerBasePresentationCont
         get {            
             return containerView?.frame ?? .zero
         } set {}
-    }
-    
-    public func shrinkView() {
-        shrinkControl.shrinkView()
     }
 }
 

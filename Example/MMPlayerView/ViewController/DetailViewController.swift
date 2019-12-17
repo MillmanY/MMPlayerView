@@ -12,8 +12,10 @@ class DetailViewController: UIViewController {
     var downloadObservation: MMPlayerObservation?
     var data: DataObj? {
         didSet {
-            if !self.isViewLoaded {
-                return
+            self.loadViewIfNeeded()
+            if let d = data {
+                self.title = d.title
+                textView.text = d.content
             }
             self.addDownloadObservation()
         }
@@ -33,10 +35,6 @@ class DetailViewController: UIViewController {
         super.viewDidLoad()
         progress.isHidden = true
         self.automaticallyAdjustsScrollViewInsets = false        
-        if let d = data {
-            self.title = d.title
-            textView.text = d.content
-        }
         self.addDownloadObservation()
         
     }
@@ -89,7 +87,8 @@ class DetailViewController: UIViewController {
     }
     
     @IBAction func shrinkVideoAction() {
-        (self.presentationController as? MMPlayerPassViewPresentatinController)?.shrinkView()
+        self.playerLayer?.shrink(on: self, isHidden: true, completedToView: nil)
+//        (self.presentationController as? MMPlayerPassViewPresentatinController)?.shrinkView()
     }
 
     @IBAction func dismiss() {

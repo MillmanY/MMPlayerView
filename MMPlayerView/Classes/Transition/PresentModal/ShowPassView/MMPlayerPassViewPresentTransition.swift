@@ -93,19 +93,6 @@ class MMPlayerPassViewPresentTransition: MMPlayerBasePresentTransition, UIViewCo
 
             pass.removeFromSuperview()
             container.addSubview(pass)
-            
-            if config.dismissGesture {
-                pass.removeFromSuperview()
-                from?.view.removeFromSuperview()                
-                config.playLayer?.playView = nil
-                CATransaction.setDisableActions(true)
-                transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
-                source.dismissViewFromGesture?()
-                source.transitionCompleted()
-                CATransaction.setDisableActions(false)
-                return
-            }
-            
             pass.frame = original
             UIView.animate(withDuration: self.config.duration, animations: {
                 from?.view.alpha = 0.0

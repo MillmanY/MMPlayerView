@@ -15,7 +15,7 @@ class ViewController: UIViewController {
     lazy var mmPlayerLayer: MMPlayerLayer = {
         let l = MMPlayerLayer()        
         l.cacheType = .memory(count: 5)
-        l.coverFitType = .fitToPlayerView
+        l.coverFitType = .fitToVideoRect
         l.videoGravity = AVLayerVideoGravity.resizeAspect
         l.replace(cover: CoverA.instantiateFromNib())
         l.repeatWhenEnd = true
@@ -77,6 +77,16 @@ class ViewController: UIViewController {
         super.viewDidAppear(animated)
     }
     
+    @IBAction func shrinkAction() {
+        self.mmPlayerLayer.shrink(on: self, isHidden: false) { [weak self] () -> UIView? in
+            guard let self = self, let path = self.findCurrentPath() else {return nil}
+            let cell = self.findCurrentCell(path: path) as! PlayerCell
+            self.mmPlayerLayer.set(url: cell.data!.play_Url)
+            self.mmPlayerLayer.resume()
+            return cell.imgView
+        }
+    }
+    
     deinit {
         offsetObservation?.invalidate()
         offsetObservation = nil
@@ -89,45 +99,35 @@ extension ViewController: MMPlayerFromProtocol {
     // when second controller pop or dismiss, this help to put player back to where you want
     // original was player last view ex. it will be nil because of this view on reuse view
     func backReplaceSuperView(original: UIView?) -> UIView? {
-        return original
+        guard let path = self.findCurrentPath() else {
+            return original
+        }
+        
+        let cell = self.findCurrentCell(path: path) as! PlayerCell
+        return cell.imgView
     }
 
     // add layer to temp view and pass to another controller
     var passPlayer: MMPlayerLayer {
         return self.mmPlayerLayer
     }
-    // current playview is cell.image hide prevent ui error
     func transitionWillStart() {
-        self.mmPlayerLayer.playView?.isHidden = true
     }
     // show cell.image
     func transitionCompleted() {
-        self.mmPlayerLayer.playView?.isHidden = false
-    }
-
-    func dismissViewFromGesture() {
-        mmPlayerLayer.thumbImageView.image = nil
         self.updateByContentOffset()
         self.startLoading()
-    }
-
-    func presentedView(isShrinkVideo: Bool) {
-        self.playerCollect.visibleCells.forEach {
-            if ($0 as? PlayerCell)?.imgView.isHidden == true && isShrinkVideo {
-                ($0 as? PlayerCell)?.imgView.isHidden = false
-            }
-        }
     }
 }
 
 extension ViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let m = min(UIScreen.main.bounds.size.width, UIScreen.main.bounds.size.height)
-        return CGSize.init(width: m, height: m*0.75)
+        return CGSize(width: m, height: m*0.75)
     }
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
        DispatchQueue.main.async { [unowned self] in
-            if self.presentedViewController != nil {
+        if self.presentedViewController != nil || self.mmPlayerLayer.isShrink == true {
                 self.playerCollect.scrollToItem(at: indexPath, at: .centeredVertically, animated: true)
                 self.updateDetail(at: indexPath)
             } else {
@@ -137,16 +137,18 @@ extension ViewController: UICollectionViewDelegateFlowLayout {
     }
     
     fileprivate func updateByContentOffset() {
-        let p = CGPoint(x: playerCollect.frame.width/2, y: playerCollect.contentOffset.y + playerCollect.frame.width/2)
+        if mmPlayerLayer.isShrink {
+            return
+        }
         
-        if let path = playerCollect.indexPathForItem(at: p),
+        if let path = findCurrentPath(),
             self.presentedViewController == nil {
             self.updateCell(at: path)
             //Demo SubTitle
-            if path.row == 0, self.mmPlayerLayer.subTitleType == nil {
-                let subTitleStr = Bundle.main.path(forResource: "test", ofType: "srt")!
+            if path.row == 0, self.mmPlayerLayer.subtitleType == nil {
+                let subTitleStr = Bundle.main.path(forResource: "srtDemo", ofType: "srt")!
                 if let str = try? String.init(contentsOfFile: subTitleStr) {
-                    self.mmPlayerLayer.subTitleType = .srt(info: str)
+                    self.mmPlayerLayer.subtitleType = .srt(info: str)
                 }
             }
         }
@@ -191,6 +193,14 @@ extension ViewController: UICollectionViewDelegateFlowLayout {
         mmPlayerLayer.resume()
     }
     
+    private func findCurrentPath() -> IndexPath? {
+        let p = CGPoint(x: playerCollect.frame.width/2, y: playerCollect.contentOffset.y + playerCollect.frame.width/2)
+        return playerCollect.indexPathForItem(at: p)
+    }
+    
+    private func findCurrentCell(path: IndexPath) -> UICollectionViewCell {
+        return playerCollect.cellForItem(at: path)!
+    }
 }
 
 extension ViewController: UICollectionViewDataSource {

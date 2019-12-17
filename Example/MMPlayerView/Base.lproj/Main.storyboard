@@ -146,7 +146,18 @@
                             <constraint firstItem="RZU-9S-Yz7" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" id="bPH-gN-VgW"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="List Video Demo" id="WhA-wc-Olu"/>
+                    <navigationItem key="navigationItem" title="List Video Demo" id="WhA-wc-Olu">
+                        <barButtonItem key="rightBarButtonItem" style="plain" id="hiT-Vd-Hkm">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="2sg-IP-m3T">
+                                <rect key="frame" x="287" y="0.0" width="72" height="44"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" image="ic_airplay_white"/>
+                                <connections>
+                                    <action selector="shrinkAction" destination="vXZ-lx-hvc" eventType="touchUpInside" id="LzM-fj-2rQ"/>
+                                </connections>
+                            </button>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="playerCollect" destination="RZU-9S-Yz7" id="Vcq-YV-W20"/>
                     </connections>

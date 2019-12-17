@@ -11,7 +11,7 @@ import AVFoundation
 
 // MARK: - Enum define
 public extension MMPlayerLayer {
-    enum SubTitleType {
+    enum SubtitleType {
         case srt(info: String)
     }
     enum PlayerCacheType {
@@ -58,16 +58,37 @@ public extension MMPlayerLayer {
 
 public class MMPlayerLayer: AVPlayerLayer {
     // MARK: - Public Parameter
-
+    /**
+     Check layer is shrink
+     
+     ```
+     ```
+     */
+    public var isShrink: Bool {
+        get {
+            return shrink.isShrink
+        }
+    }
+    
+    /**
+     Set subtitle
+     
+     ```
+     subTitleFont: UIFont = UIFont.systemFont(ofSize: 17)
+     subTitleLabelEdge: (bottom: CGFloat, left: CGFloat, right: CGFloat) = (20,10,10)
+     subtitleType: SubtitleType?
+     ```
+     */    
     lazy var labSubTitle: UILabel = {
         let lab = UILabel()
         lab.textAlignment = .center
         lab.numberOfLines = 0
         lab.textColor = .white
         lab.layer.zPosition = 1000
+        lab.minimumScaleFactor = 0.6
         return lab
     }()
-    var subTitleObj: AnyObject?
+    var subtitleObj: AnyObject?
     public var subTitleFont: UIFont = UIFont.systemFont(ofSize: 17) {
         didSet {
             self.labSubTitle.font = subTitleFont
@@ -84,27 +105,29 @@ public class MMPlayerLayer: AVPlayerLayer {
                 return
             }
             labSubTitle.mmLayout
+                .setTop(anchor: play.topAnchor, type: .greaterThanOrEqual(constant: 0))
                 .setLeft(anchor: play.leftAnchor, type: .equal(constant: subTitleLabelEdge.left))
                 .setRight(anchor: play.rightAnchor, type: .equal(constant: -subTitleLabelEdge.right))
                 .setBottom(anchor: play.bottomAnchor, type: .equal(constant: -subTitleLabelEdge.bottom))
         }
     }
-    public var subTitleType: SubTitleType? {
+    public var subtitleType: SubtitleType? {
         didSet {
-            guard let type = self.subTitleType else {
-                subTitleObj = nil
+            guard let type = self.subtitleType else {
+                subtitleObj = nil
+                labSubTitle.text = nil
+                subtitleObj = nil
+                subtitleType = nil
                 return
             }
             switch type {
             case .srt(let info):
-                let obj = MMSubTitles(SRTConverter())
+                let obj = MMSubtitles(SRTConverter())
                 obj.parseText(info)
-                subTitleObj = obj
+                subtitleObj = obj
             }
         }
     }
-    
-    
     /**
      Set progress type on player center
      
@@ -330,6 +353,9 @@ public class MMPlayerLayer: AVPlayerLayer {
         }
     }
     // MARK: - Private Parameter
+    lazy var shrink = {
+       return MMPlayerShrinkControl(mmPlayerLayer: self)
+    }()
     private var willPlayUrl: URL? {
         didSet {
             if oldValue != willPlayUrl {
@@ -370,6 +396,7 @@ public class MMPlayerLayer: AVPlayerLayer {
             guard let new = _playView else {
                 return
             }
+            labSubTitle.text = nil
             new.addSubview(self.bgView)
             self.bgView.mPlayFit.layoutFitSuper()
             self.bgView.layoutIfNeeded()
@@ -423,6 +450,13 @@ public class MMPlayerLayer: AVPlayerLayer {
 
 // MARK: - Public function
 extension MMPlayerLayer {
+    public func shrink(on: UIViewController, isHidden: Bool, maxWidth: CGFloat = 150, completedToView: (()->UIView?)?) {
+        if self.shrink.isShrink {
+            return
+        }
+        self.shrink.shrinkView(onVC: on, isHiddenVC: isHidden, maxWidth: maxWidth, completedToView: completedToView)
+    }
+    
     /**
      Set player current Orientation
      
@@ -582,7 +616,6 @@ extension MMPlayerLayer {
         self.backgroundColor = UIColor.black.cgColor
         self.progressType = .default
         self.addPlayerObserver()
-        CATransaction.setDisableActions(true)
         NotificationCenter.default.addObserver(forName: UIDevice.orientationDidChangeNotification, object: nil, queue: nil) { [weak self] (_) in
             guard let self = self, self.fullScreenWhenLandscape else {return}
             
@@ -600,13 +633,12 @@ extension MMPlayerLayer {
     
     private func updateCoverConstraint() {
         let vRect = self.coverFitType == .fitToVideoRect ? videoRect : bgView.bounds
-        if vRect.isEmpty {
-            self.coverView?.isHidden = true
-        } else {
+        if !vRect.isEmpty {
             self.coverView?.isHidden = (self.tapGesture.isEnabled) ? false : true
             self.coverView?.frame = vRect
         }
         self.frame = bgView.bounds
+        print("-> F \(self.frame) V \(self.videoRect)")
     }
     
     private func startLoading(isStart: Bool) {
@@ -628,9 +660,9 @@ extension MMPlayerLayer {
                 if time.isIndefinite {
                     return
                 }
-                if let sub = self?.subTitleObj {
+                if let sub = self?.subtitleObj {
                     switch sub {
-                    case let srt as MMSubTitles<SRTConverter>:
+                    case let srt as MMSubtitles<SRTConverter>:
                         srt.search(duration: time.seconds, completed: { [weak self] (info) in
                             self?.labSubTitle.text = info.text
                         }, queue: DispatchQueue.main)
