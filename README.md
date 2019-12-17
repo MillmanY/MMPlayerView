@@ -187,6 +187,15 @@
                     self.mmPlayerLayer.subTitleType = .srt(info: str)
                 }
             }
+## Shrink
+        // Return a view which you want back
+        self.mmPlayerLayer.shrink(on: self, isHidden: false) { [weak self] () -> UIView? in
+            guard let self = self, let path = self.findCurrentPath() else {return nil}
+            let cell = self.findCurrentCell(path: path) as! PlayerCell
+            self.mmPlayerLayer.set(url: cell.data!.play_Url)
+            self.mmPlayerLayer.resume()
+            return cell.imgView
+        }
 
 ## Requirements
 
