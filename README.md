@@ -172,13 +172,13 @@
             if let info = MMPlayerDownloader.shared.localFileFrom(url: downloadURL)  {
                 MMPlayerDownloader.shared.deleteVideo(info)
             }
-## SubTitle
+## Subtitle
 ![](https://github.com/MillmanY/MMPlayerView/blob/master/demo/subTitleSmall.png)
 
-           public var subTitleFont: UIFont = UIFont.systemFont(ofSize: 17)
-           public var subTitleDefaultTextColor: UIColor = UIColor.white
-           public var subTitleLabelEdge: (bottom: CGFloat, left: CGFloat, right: CGFloat) = (20,10,10)
-           enum SubTitleType {
+           public var subtitleFont: UIFont = UIFont.systemFont(ofSize: 17)
+           public var subtitleDefaultTextColor: UIColor = UIColor.white
+           public var subtitleLabelEdge: (bottom: CGFloat, left: CGFloat, right: CGFloat) = (20,10,10)
+           enum SubtitleType {
               case srt(info: String)
            }
    
