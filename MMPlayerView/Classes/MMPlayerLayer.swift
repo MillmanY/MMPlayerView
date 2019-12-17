@@ -638,7 +638,6 @@ extension MMPlayerLayer {
             self.coverView?.frame = vRect
         }
         self.frame = bgView.bounds
-        print("-> F \(self.frame) V \(self.videoRect)")
     }
     
     private func startLoading(isStart: Bool) {

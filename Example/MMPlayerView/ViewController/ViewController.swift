@@ -164,6 +164,7 @@ extension ViewController: UICollectionViewDelegateFlowLayout {
         self.mmPlayerLayer.thumbImageView.image = value.image
         self.mmPlayerLayer.set(url: DemoSource.shared.demoData[indexPath.row].play_Url)
         self.mmPlayerLayer.resume()
+        
     }
     
     fileprivate func presentDetail(at indexPath: IndexPath) {
