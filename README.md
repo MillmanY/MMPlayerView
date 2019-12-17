@@ -172,13 +172,13 @@
             if let info = MMPlayerDownloader.shared.localFileFrom(url: downloadURL)  {
                 MMPlayerDownloader.shared.deleteVideo(info)
             }
-## SubTitle
+## Subtitle
 ![](https://github.com/MillmanY/MMPlayerView/blob/master/demo/subTitleSmall.png)
 
-           public var subTitleFont: UIFont = UIFont.systemFont(ofSize: 17)
-           public var subTitleDefaultTextColor: UIColor = UIColor.white
-           public var subTitleLabelEdge: (bottom: CGFloat, left: CGFloat, right: CGFloat) = (20,10,10)
-           enum SubTitleType {
+           public var subtitleFont: UIFont = UIFont.systemFont(ofSize: 17)
+           public var subtitleDefaultTextColor: UIColor = UIColor.white
+           public var subtitleLabelEdge: (bottom: CGFloat, left: CGFloat, right: CGFloat) = (20,10,10)
+           enum SubtitleType {
               case srt(info: String)
            }
    
@@ -187,6 +187,15 @@
                     self.mmPlayerLayer.subTitleType = .srt(info: str)
                 }
             }
+## Shrink
+        // Return a view which you want back
+        self.mmPlayerLayer.shrink(on: self, isHidden: false) { [weak self] () -> UIView? in
+            guard let self = self, let path = self.findCurrentPath() else {return nil}
+            let cell = self.findCurrentCell(path: path) as! PlayerCell
+            self.mmPlayerLayer.set(url: cell.data!.play_Url)
+            self.mmPlayerLayer.resume()
+            return cell.imgView
+        }
 
 ## Requirements
 
