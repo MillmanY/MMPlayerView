@@ -78,6 +78,7 @@ class ViewController: UIViewController {
     }
     
     @IBAction func shrinkAction() {
+        // Return a view which you want back
         self.mmPlayerLayer.shrink(on: self, isHidden: false) { [weak self] () -> UIView? in
             guard let self = self, let path = self.findCurrentPath() else {return nil}
             let cell = self.findCurrentCell(path: path) as! PlayerCell
@@ -146,8 +147,8 @@ extension ViewController: UICollectionViewDelegateFlowLayout {
             self.updateCell(at: path)
             //Demo SubTitle
             if path.row == 0, self.mmPlayerLayer.subtitleType == nil {
-                let subTitleStr = Bundle.main.path(forResource: "srtDemo", ofType: "srt")!
-                if let str = try? String.init(contentsOfFile: subTitleStr) {
+                let subtitleStr = Bundle.main.path(forResource: "srtDemo", ofType: "srt")!
+                if let str = try? String.init(contentsOfFile: subtitleStr) {
                     self.mmPlayerLayer.subtitleType = .srt(info: str)
                 }
             }

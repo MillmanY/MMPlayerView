@@ -14,7 +14,7 @@ extension MMPlayerShrinkControl {
         case rightBottom
     }
     
-    static var defaultSize = CGSize.init(width: 150, height: 100)
+    static var defaultSize = CGSize(width: 150, height: 100)
 }
 public class MMPlayerShrinkControl {
     private var currentQuadrant: VideoPositionType = .rightBottom

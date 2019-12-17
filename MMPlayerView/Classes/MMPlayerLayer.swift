@@ -74,12 +74,12 @@ public class MMPlayerLayer: AVPlayerLayer {
      Set subtitle
      
      ```
-     subTitleFont: UIFont = UIFont.systemFont(ofSize: 17)
-     subTitleLabelEdge: (bottom: CGFloat, left: CGFloat, right: CGFloat) = (20,10,10)
+     subtitleFont: UIFont = UIFont.systemFont(ofSize: 17)
+     subtitleLabelEdge: (bottom: CGFloat, left: CGFloat, right: CGFloat) = (20,10,10)
      subtitleType: SubtitleType?
      ```
      */    
-    lazy var labSubTitle: UILabel = {
+    lazy var labSubtitle: UILabel = {
         let lab = UILabel()
         lab.textAlignment = .center
         lab.numberOfLines = 0
@@ -89,33 +89,33 @@ public class MMPlayerLayer: AVPlayerLayer {
         return lab
     }()
     var subtitleObj: AnyObject?
-    public var subTitleFont: UIFont = UIFont.systemFont(ofSize: 17) {
+    public var subtitleFont: UIFont = UIFont.systemFont(ofSize: 17) {
         didSet {
-            self.labSubTitle.font = subTitleFont
+            self.labSubtitle.font = subtitleFont
         }
     }
-    public var subTitleDefaultTextColor: UIColor = UIColor.white {
+    public var subtitleDefaultTextColor: UIColor = UIColor.white {
         didSet {
-            self.labSubTitle.textColor = subTitleDefaultTextColor
+            self.labSubtitle.textColor = subtitleDefaultTextColor
         }
     }
-    public var subTitleLabelEdge: (bottom: CGFloat, left: CGFloat, right: CGFloat) = (20,10,10) {
+    public var subtitleLabelEdge: (bottom: CGFloat, left: CGFloat, right: CGFloat) = (20,10,10) {
         didSet {
             guard let play = playView else {
                 return
             }
-            labSubTitle.mmLayout
+            labSubtitle.mmLayout
                 .setTop(anchor: play.topAnchor, type: .greaterThanOrEqual(constant: 0))
-                .setLeft(anchor: play.leftAnchor, type: .equal(constant: subTitleLabelEdge.left))
-                .setRight(anchor: play.rightAnchor, type: .equal(constant: -subTitleLabelEdge.right))
-                .setBottom(anchor: play.bottomAnchor, type: .equal(constant: -subTitleLabelEdge.bottom))
+                .setLeft(anchor: play.leftAnchor, type: .equal(constant: subtitleLabelEdge.left))
+                .setRight(anchor: play.rightAnchor, type: .equal(constant: -subtitleLabelEdge.right))
+                .setBottom(anchor: play.bottomAnchor, type: .equal(constant: -subtitleLabelEdge.bottom))
         }
     }
     public var subtitleType: SubtitleType? {
         didSet {
             guard let type = self.subtitleType else {
                 subtitleObj = nil
-                labSubTitle.text = nil
+                labSubtitle.text = nil
                 subtitleObj = nil
                 subtitleType = nil
                 return
@@ -388,7 +388,7 @@ public class MMPlayerLayer: AVPlayerLayer {
     
     weak private var _playView: UIView? {
         willSet {
-            labSubTitle.removeFromSuperview()
+            labSubtitle.removeFromSuperview()
             bgView.removeFromSuperview()
             self.removeFromSuperlayer()
             _playView?.removeGestureRecognizer(tapGesture)
@@ -396,7 +396,7 @@ public class MMPlayerLayer: AVPlayerLayer {
             guard let new = _playView else {
                 return
             }
-            labSubTitle.text = nil
+            labSubtitle.text = nil
             new.addSubview(self.bgView)
             self.bgView.mPlayFit.layoutFitSuper()
             self.bgView.layoutIfNeeded()
@@ -405,9 +405,9 @@ public class MMPlayerLayer: AVPlayerLayer {
             new.addGestureRecognizer(tapGesture)
             new.layer.insertSublayer(self, at: 0)
             new.layer.layoutIfNeeded()
-            new.addSubview(labSubTitle)
-            let edge = subTitleLabelEdge
-            self.subTitleLabelEdge = edge
+            new.addSubview(labSubtitle)
+            let edge = subtitleLabelEdge
+            self.subtitleLabelEdge = edge
         }
     }
     private var asset: AVURLAsset?
@@ -664,7 +664,7 @@ extension MMPlayerLayer {
                     switch sub {
                     case let srt as MMSubtitles<SRTConverter>:
                         srt.search(duration: time.seconds, completed: { [weak self] (info) in
-                            self?.labSubTitle.text = info.text
+                            self?.labSubtitle.text = info.text
                         }, queue: DispatchQueue.main)
                     default:
                         break
