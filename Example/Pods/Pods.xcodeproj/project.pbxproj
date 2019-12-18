@@ -15,6 +15,7 @@
 		2717E19F219DB17000DCC8CB /* MMPlayer+Codable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2717E19E219DB17000DCC8CB /* MMPlayer+Codable.swift */; };
 		27570B4C239E10CC0082B9A7 /* MMPlayer+String+Bounds.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27570B4B239E10CC0082B9A7 /* MMPlayer+String+Bounds.swift */; };
 		27570B4E239E2F460082B9A7 /* String+SRTTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27570B4D239E2F460082B9A7 /* String+SRTTime.swift */; };
+		2777706E23A9C9EB00ACEB20 /* MMPlayer+Array+Safe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2777706D23A9C9EB00ACEB20 /* MMPlayer+Array+Safe.swift */; };
 		27874357219E7522001B98F9 /* MMPlayer+String+Encode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27874356219E7522001B98F9 /* MMPlayer+String+Encode.swift */; };
 		27874359219E774A001B98F9 /* MMPlayerDownloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27874358219E774A001B98F9 /* MMPlayerDownloadManager.swift */; };
 		2787435B219E7966001B98F9 /* MMPlayerDownloadRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2787435A219E7966001B98F9 /* MMPlayerDownloadRequest.swift */; };
@@ -79,6 +80,7 @@
 		2717E19E219DB17000DCC8CB /* MMPlayer+Codable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MMPlayer+Codable.swift"; sourceTree = "<group>"; };
 		27570B4B239E10CC0082B9A7 /* MMPlayer+String+Bounds.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MMPlayer+String+Bounds.swift"; sourceTree = "<group>"; };
 		27570B4D239E2F460082B9A7 /* String+SRTTime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+SRTTime.swift"; sourceTree = "<group>"; };
+		2777706D23A9C9EB00ACEB20 /* MMPlayer+Array+Safe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MMPlayer+Array+Safe.swift"; sourceTree = "<group>"; };
 		27874356219E7522001B98F9 /* MMPlayer+String+Encode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MMPlayer+String+Encode.swift"; sourceTree = "<group>"; };
 		27874358219E774A001B98F9 /* MMPlayerDownloadManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MMPlayerDownloadManager.swift; sourceTree = "<group>"; };
 		2787435A219E7966001B98F9 /* MMPlayerDownloadRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MMPlayerDownloadRequest.swift; sourceTree = "<group>"; };
@@ -273,6 +275,7 @@
 				27570B4B239E10CC0082B9A7 /* MMPlayer+String+Bounds.swift */,
 				27570B4D239E2F460082B9A7 /* String+SRTTime.swift */,
 				27D5CB8623A3653400DB76F9 /* MMPlayerLayer+Constraint.swift */,
+				2777706D23A9C9EB00ACEB20 /* MMPlayer+Array+Safe.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -579,6 +582,7 @@
 				27874364219EF4FF001B98F9 /* MMPlayerObservation.swift in Sources */,
 				5E9A1B731F4D80E600746E5B /* MMPlayerBasePresentationController.swift in Sources */,
 				5E9A1B6F1F4D80E600746E5B /* MMPlayerPushAnimator.swift in Sources */,
+				2777706E23A9C9EB00ACEB20 /* MMPlayer+Array+Safe.swift in Sources */,
 				2717E19D219DA46800DCC8CB /* MMPlayerDownLoadVideoInfo.swift in Sources */,
 				5E862B1C20629F06000EAC20 /* MMPlayerShrinkControl.swift in Sources */,
 				5E4F8A8B206245E200A2B19D /* MMPlayer+NSObject+Replace.swift in Sources */,

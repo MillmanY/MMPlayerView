@@ -12,13 +12,12 @@ public class SRTConverter: ConverterProtocol {
     
     private var queue = DispatchQueue(label: "SRTConverter")
     private var currentIdx: Int? = nil
-    private var splitValue = [Int: SRTInfo]()
+    private var splitValue = [SRTInfo]()
     var info: String = ""
     var currentObj: SRTInfo? {
         didSet {
-            if let c = currentObj {
-                completed?(c)
-            }
+            if oldValue == currentObj { return }
+            completed?(currentObj ?? SRTInfo.emptyInfo())
         }
     }
     public init() {}
@@ -29,13 +28,28 @@ public class SRTConverter: ConverterProtocol {
             self?.queueSearch(duration: duration, findIndex: idx)
         }
     }
+        
+    public func parseText(_ value: String) {
+        currentObj = nil
+        splitValue.removeAll()
+        self.info = value
+        queue.async { [weak self] in self?.parse() }
+    }
+}
+
+//Private
+extension SRTConverter {
+    private func parse() {
+        splitValue = self.convertInfoToSRT(info: self.info)
+        currentIdx = splitValue.count > 0 ? 0 : nil
+    }
     
     private func queueSearch(duration: TimeInterval, findIndex: Int, isIncrease: Bool? = nil) {
-        if let current = self.currentObj, current.timeRange.contains(duration) {
+        if currentIdx != nil, let current = self.currentObj, current.timeRange.contains(duration) {
             return
         }
-        
-        guard let obj = self.splitValue[findIndex] else {
+        guard let obj = splitValue[safe: findIndex] else {
+            self.currentObj = nil
             return
         }
         switch duration {
@@ -43,53 +57,42 @@ public class SRTConverter: ConverterProtocol {
             self.currentObj = obj
             self.currentIdx = findIndex
         case ...obj.timeRange.lowerBound:
-            if isIncrease == true { return }
+            if isIncrease == true {
+                self.currentObj = nil
+                return
+            }
             self.queueSearch(duration: duration, findIndex: findIndex-1, isIncrease: false)
         case obj.timeRange.upperBound...:
-            if let i = isIncrease, i == false { return }
+            if let i = isIncrease, i == false {
+                self.currentObj = nil
+                return
+            }
             self.queueSearch(duration: duration, findIndex: findIndex+1, isIncrease: true)
         default:
             break
         }
     }
-    
-    public func parseText(_ value: String) {
-        currentObj = nil
-        splitValue.removeAll()
-        self.info = value
-        queue.async { [weak self] in self?.parse() }
-    }
 
-    private func parse() {
-        var index: String = ""
-        var time: String = ""
-        var title: String = ""
-        var currentAdd = 0
-        let split = info.components(separatedBy: CharacterSet(charactersIn: "\n\r\n")).filter { $0 != "" }
-        split.enumerated().forEach { (offset, str) in
-            if currentAdd == 2, let i = Int(index), (i+1 == Int(str) || offset == split.count-1) {
-                if offset == split.count-1 { title += str }
-                splitValue[i] = SRTInfo(index: i, timeRange: time.splitSRTTime, text: title)
-                currentAdd = 0
-                index = ""
-                time = ""
-                title = ""
-                
-                if currentIdx == nil {
-                    self.currentIdx = i
-                }
+    private func convertInfoToSRT(info: String) -> [SRTInfo] {
+        var preRN = false
+        return info.split { (c) -> Bool in
+            if preRN && c == "\r\n" {
+                preRN = false
+                return true
+            } else if c == "\r\n" {
+                preRN = true
+            } else {
+                preRN = false
             }
-            switch currentAdd {
-            case 0:
-                index += str
-                currentAdd += 1
-            case 1:
-                time += str
-                currentAdd += 1
-            case 2:
-                title += str
-            default: break
+            return false
+        }.compactMap {
+            var split = $0.split(separator: "\r\n")
+            guard split.count >= 3, let index = Int(String(split.removeFirst())) else {
+                return nil
             }
+            let time = String(split.removeFirst())
+            let text = split.joined(separator: "\r\n")
+            return SRTInfo(index: index, timeRange: time.splitSRTTime, text: text)
         }
     }
 }
