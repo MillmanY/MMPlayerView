@@ -79,7 +79,7 @@ class ViewController: UIViewController {
     
     @IBAction func shrinkAction() {
         // Return a view which you want back
-        self.mmPlayerLayer.shrink(on: self, isHidden: false) { [weak self] () -> UIView? in
+        self.mmPlayerLayer.shrinkControl.shrinkView(onVC: self, isHiddenVC: false) { [weak self] () -> UIView? in
             guard let self = self, let path = self.findCurrentPath() else {return nil}
             let cell = self.findCurrentCell(path: path) as! PlayerCell
             self.mmPlayerLayer.set(url: cell.data!.play_Url)

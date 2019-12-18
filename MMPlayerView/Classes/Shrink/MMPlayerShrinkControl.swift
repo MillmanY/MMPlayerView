@@ -44,7 +44,7 @@ public class MMPlayerShrinkControl {
         shrinkPlayView.addGestureRecognizer(containerGesture)
     }
     
-    public func shrinkView(onVC: UIViewController, isHiddenVC: Bool, maxWidth: CGFloat, completedToView: (()->UIView?)?) {
+    public func shrinkView(onVC: UIViewController, isHiddenVC: Bool, maxWidth: CGFloat = 150.0, completedToView: (()->UIView?)?) {
         if self.isShrink {
             return
         }

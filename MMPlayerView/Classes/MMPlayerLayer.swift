@@ -405,10 +405,6 @@ public class MMPlayerLayer: AVPlayerLayer {
 
 // MARK: - Public function
 extension MMPlayerLayer {
-    public func shrink(on: UIViewController, isHidden: Bool, maxWidth: CGFloat = 150, completedToView: (()->UIView?)?) {
-        self.shrinkControl.shrinkView(onVC: on, isHiddenVC: isHidden, maxWidth: maxWidth, completedToView: completedToView)
-    }
-    
     /**
      Set player current Orientation
      

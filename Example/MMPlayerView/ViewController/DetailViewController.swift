@@ -87,7 +87,7 @@ class DetailViewController: UIViewController {
     }
     
     @IBAction func shrinkVideoAction() {
-        self.playerLayer?.shrink(on: self, isHidden: true, completedToView: nil)
+        self.playerLayer?.shrinkControl.shrinkView(onVC: self, isHiddenVC: true, completedToView: nil)
 //        (self.presentationController as? MMPlayerPassViewPresentatinController)?.shrinkView()
     }
 
