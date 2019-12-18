@@ -128,7 +128,7 @@ extension ViewController: UICollectionViewDelegateFlowLayout {
     }
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
        DispatchQueue.main.async { [unowned self] in
-        if self.presentedViewController != nil || self.mmPlayerLayer.isShrink == true {
+        if self.presentedViewController != nil || self.mmPlayerLayer.shrinkControl.isShrink == true {
                 self.playerCollect.scrollToItem(at: indexPath, at: .centeredVertically, animated: true)
                 self.updateDetail(at: indexPath)
             } else {
@@ -138,7 +138,7 @@ extension ViewController: UICollectionViewDelegateFlowLayout {
     }
     
     fileprivate func updateByContentOffset() {
-        if mmPlayerLayer.isShrink {
+        if mmPlayerLayer.shrinkControl.isShrink {
             return
         }
         
@@ -146,15 +146,17 @@ extension ViewController: UICollectionViewDelegateFlowLayout {
             self.presentedViewController == nil {
             self.updateCell(at: path)
             //Demo SubTitle
-            if path.row == 0, self.mmPlayerLayer.subtitleType == nil {
+            if path.row == 0, self.mmPlayerLayer.subtitleSetting.subtitleType == nil {
                 let subtitleStr = Bundle.main.path(forResource: "srtDemo", ofType: "srt")!
                 if let str = try? String.init(contentsOfFile: subtitleStr) {
-                    self.mmPlayerLayer.subtitleType = .srt(info: str)
+                    self.mmPlayerLayer.subtitleSetting.subtitleType = .srt(info: str)
+                    self.mmPlayerLayer.subtitleSetting.defaultTextColor = .red
+                    self.mmPlayerLayer.subtitleSetting.defaultFont = UIFont.boldSystemFont(ofSize: 20)
                 }
             }
         }
     }
-    
+
     fileprivate func updateDetail(at indexPath: IndexPath) {
         let value = DemoSource.shared.demoData[indexPath.row]
         if let detail = self.presentedViewController as? DetailViewController {

@@ -6,7 +6,7 @@
 //
 
 import Foundation
-public class MMSubtitles<C: ConverterProtocol> {
+class SubtitleConverter<C: ConverterProtocol> {
     let converter: C
     
     public init(_ converter: C) {

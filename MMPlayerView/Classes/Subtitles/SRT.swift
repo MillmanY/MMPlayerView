@@ -6,10 +6,9 @@
 //
 
 import Foundation
-public class SRTConverter: ConverterProtocol {
+class SRT: ConverterProtocol {
     private var completed: ((Element)->Void)?
     public typealias Element = SRTInfo
-    
     private var queue = DispatchQueue(label: "SRTConverter")
     private var currentIdx: Int? = nil
     private var splitValue = [SRTInfo]()
@@ -21,7 +20,7 @@ public class SRTConverter: ConverterProtocol {
         }
     }
     public init() {}
-    public func search(duration: TimeInterval, completed: @escaping ((SRTInfo) -> Void)) {
+    public func search(duration: TimeInterval, completed: @escaping ((Element) -> Void)) {
         self.completed = completed
         queue.async { [weak self] in
             guard let idx = self?.currentIdx else { return }
@@ -38,7 +37,7 @@ public class SRTConverter: ConverterProtocol {
 }
 
 //Private
-extension SRTConverter {
+extension SRT {
     private func parse() {
         splitValue = self.convertInfoToSRT(info: self.info)
         currentIdx = splitValue.count > 0 ? 0 : nil

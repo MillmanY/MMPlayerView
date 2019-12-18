@@ -57,19 +57,6 @@ public extension MMPlayerLayer {
 }
 
 public class MMPlayerLayer: AVPlayerLayer {
-    // MARK: - Public Parameter
-    /**
-     Check layer is shrink
-     
-     ```
-     ```
-     */
-    public var isShrink: Bool {
-        get {
-            return shrink.isShrink
-        }
-    }
-    
     /**
      Set subtitle
      
@@ -88,46 +75,19 @@ public class MMPlayerLayer: AVPlayerLayer {
         lab.minimumScaleFactor = 0.6
         return lab
     }()
-    var subtitleObj: AnyObject?
-    public var subtitleFont: UIFont = UIFont.systemFont(ofSize: 17) {
-        didSet {
-            self.labSubtitle.font = subtitleFont
-        }
-    }
-    public var subtitleDefaultTextColor: UIColor = UIColor.white {
-        didSet {
-            self.labSubtitle.textColor = subtitleDefaultTextColor
-        }
-    }
-    public var subtitleLabelEdge: (bottom: CGFloat, left: CGFloat, right: CGFloat) = (20,10,10) {
-        didSet {
-            guard let play = playView else {
-                return
-            }
-            labSubtitle.mmLayout
-                .setTop(anchor: play.topAnchor, type: .greaterThanOrEqual(constant: 0))
-                .setLeft(anchor: play.leftAnchor, type: .equal(constant: subtitleLabelEdge.left))
-                .setRight(anchor: play.rightAnchor, type: .equal(constant: -subtitleLabelEdge.right))
-                .setBottom(anchor: play.bottomAnchor, type: .equal(constant: -subtitleLabelEdge.bottom))
-        }
-    }
-    public var subtitleType: SubtitleType? {
-        didSet {
-            guard let type = self.subtitleType else {
-                subtitleObj = nil
-                labSubtitle.text = nil
-                subtitleObj = nil
-                subtitleType = nil
-                return
-            }
-            switch type {
-            case .srt(let info):
-                let obj = MMSubtitles(SRTConverter())
-                obj.parseText(info)
-                subtitleObj = obj
-            }
-        }
-    }
+    /**
+     Subtitle Setting
+     
+     ```
+     subtitleSetting.defaultFont = UIFont.systemFont(ofSize: 17)
+     subtitleSetting.defaultTextColor = .white
+     subtitleSetting.defaultLabelEdge = (20,10,10)
+     subtitleSetting.subtitleType = .srt(info: "XXX")
+     ```
+     */
+    public private(set) lazy var subtitleSetting: MMSubtitleSetting = {
+        return MMSubtitleSetting(delegate: self)
+    }()
     /**
      Set progress type on player center
      
@@ -353,7 +313,7 @@ public class MMPlayerLayer: AVPlayerLayer {
         }
     }
     // MARK: - Private Parameter
-    lazy var shrink = {
+    public private(set) lazy var shrinkControl = {
        return MMPlayerShrinkControl(mmPlayerLayer: self)
     }()
     private var willPlayUrl: URL? {
@@ -388,7 +348,6 @@ public class MMPlayerLayer: AVPlayerLayer {
     
     weak private var _playView: UIView? {
         willSet {
-            labSubtitle.removeFromSuperview()
             bgView.removeFromSuperview()
             self.removeFromSuperlayer()
             _playView?.removeGestureRecognizer(tapGesture)
@@ -396,7 +355,6 @@ public class MMPlayerLayer: AVPlayerLayer {
             guard let new = _playView else {
                 return
             }
-            labSubtitle.text = nil
             new.addSubview(self.bgView)
             self.bgView.mPlayFit.layoutFitSuper()
             self.bgView.layoutIfNeeded()
@@ -405,9 +363,6 @@ public class MMPlayerLayer: AVPlayerLayer {
             new.addGestureRecognizer(tapGesture)
             new.layer.insertSublayer(self, at: 0)
             new.layer.layoutIfNeeded()
-            new.addSubview(labSubtitle)
-            let edge = subtitleLabelEdge
-            self.subtitleLabelEdge = edge
         }
     }
     private var asset: AVURLAsset?
@@ -451,10 +406,7 @@ public class MMPlayerLayer: AVPlayerLayer {
 // MARK: - Public function
 extension MMPlayerLayer {
     public func shrink(on: UIViewController, isHidden: Bool, maxWidth: CGFloat = 150, completedToView: (()->UIView?)?) {
-        if self.shrink.isShrink {
-            return
-        }
-        self.shrink.shrinkView(onVC: on, isHiddenVC: isHidden, maxWidth: maxWidth, completedToView: completedToView)
+        self.shrinkControl.shrinkView(onVC: on, isHiddenVC: isHidden, maxWidth: maxWidth, completedToView: completedToView)
     }
     
     /**
@@ -616,6 +568,9 @@ extension MMPlayerLayer {
         self.backgroundColor = UIColor.black.cgColor
         self.progressType = .default
         self.addPlayerObserver()
+        bgView.addSubview(labSubtitle)
+        let edge = subtitleSetting.defaultLabelEdge
+        self.subtitleSetting.defaultLabelEdge = edge
         NotificationCenter.default.addObserver(forName: UIDevice.orientationDidChangeNotification, object: nil, queue: nil) { [weak self] (_) in
             guard let self = self, self.fullScreenWhenLandscape else {return}
             
@@ -659,9 +614,9 @@ extension MMPlayerLayer {
                 if time.isIndefinite {
                     return
                 }
-                if let sub = self?.subtitleObj {
+                if let sub = self?.subtitleSetting.subtitleObj {
                     switch sub {
-                    case let srt as MMSubtitles<SRTConverter>:
+                    case let srt as SubtitleConverter<SRT>:
                         srt.search(duration: time.seconds, completed: { [weak self] (info) in
                             self?.labSubtitle.text = info.text
                         }, queue: DispatchQueue.main)
@@ -847,5 +802,26 @@ extension MMPlayerLayer: MMPlayerItemProtocol {
         if isEmpty {
             self.startLoading(isStart: true)
         }
+    }
+}
+
+extension MMPlayerLayer: MMSubtitleSettingProtocol {
+    public func setting(_ mmsubtitleSetting: MMSubtitleSetting, fontChange: UIFont) {
+        self.labSubtitle.font = fontChange
+    }
+    public func setting(_ mmsubtitleSetting: MMSubtitleSetting, textColorChange: UIColor) {
+        self.labSubtitle.textColor = textColorChange
+
+    }
+    public func setting(_ mmsubtitleSetting: MMSubtitleSetting, labelEdgeChange: (bottom: CGFloat, left: CGFloat, right: CGFloat)) {
+        labSubtitle.mmLayout
+            .setTop(anchor: bgView.topAnchor, type: .greaterThanOrEqual(constant: 0))
+            .setLeft(anchor: bgView.leftAnchor, type: .equal(constant: labelEdgeChange.left))
+            .setRight(anchor: bgView.rightAnchor, type: .equal(constant: -labelEdgeChange.right))
+            .setBottom(anchor: bgView.bottomAnchor, type: .equal(constant: -labelEdgeChange.bottom))
+    }
+    
+    public func setting(_ mmsubtitleSetting: MMSubtitleSetting, typeChange: MMSubtitleSetting.SubtitleType?) {
+        labSubtitle.text = nil
     }
 }

@@ -24,7 +24,7 @@ public class MMPlayerShrinkControl {
     private var maxWidth: CGFloat = 150
     private var completed: (()->UIView?)?
     private var videoRectObserver: NSKeyValueObservation?
-    var isShrink = false
+    public private(set) var isShrink = false
     lazy var  containerGesture: UIPanGestureRecognizer = {
         let g = UIPanGestureRecognizer.init(target: self, action: #selector(pan(gesture:)))
         return g
@@ -45,6 +45,9 @@ public class MMPlayerShrinkControl {
     }
     
     public func shrinkView(onVC: UIViewController, isHiddenVC: Bool, maxWidth: CGFloat, completedToView: (()->UIView?)?) {
+        if self.isShrink {
+            return
+        }
         self.completed = completedToView
         self.onVC = onVC
         self.isHiddenVC = isHiddenVC
