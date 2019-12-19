@@ -312,8 +312,13 @@ public class MMPlayerLayer: AVPlayerLayer {
             self.layerOrientationBlock?(orientation)
         }
     }
+    
+    public var isShrink: Bool {
+        return shrinkControl.isShrink
+    }
+    
     // MARK: - Private Parameter
-    public private(set) lazy var shrinkControl = {
+    lazy var shrinkControl = {
        return MMPlayerShrinkControl(mmPlayerLayer: self)
     }()
     private var willPlayUrl: URL? {
@@ -323,7 +328,6 @@ public class MMPlayerLayer: AVPlayerLayer {
             }
         }
     }
-    
     private lazy var  bgView: UIView = {
         let v = UIView()
         v.translatesAutoresizingMaskIntoConstraints = false
@@ -405,6 +409,10 @@ public class MMPlayerLayer: AVPlayerLayer {
 
 // MARK: - Public function
 extension MMPlayerLayer {
+    
+    public func shrinkView(onVC: UIViewController, isHiddenVC: Bool, maxWidth: CGFloat = 150.0, completedToView: (()->UIView?)?) {
+        shrinkControl.shrinkView(onVC: onVC, isHiddenVC: isHidden, maxWidth: maxWidth, completedToView: completedToView)
+    }
     /**
      Set player current Orientation
      

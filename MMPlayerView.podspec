@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'MMPlayerView'
-  s.version          = '5.3.0'
+  s.version          = '5.4.0'
   s.summary          = 'Custom Video Player view'
 
 # This description is used to generate tags and improve search results.

@@ -79,7 +79,7 @@ class ViewController: UIViewController {
     
     @IBAction func shrinkAction() {
         // Return a view which you want back
-        self.mmPlayerLayer.shrinkControl.shrinkView(onVC: self, isHiddenVC: false) { [weak self] () -> UIView? in
+        self.mmPlayerLayer.shrinkView(onVC: self, isHiddenVC: false) { [weak self] () -> UIView? in
             guard let self = self, let path = self.findCurrentPath() else {return nil}
             let cell = self.findCurrentCell(path: path) as! PlayerCell
             self.mmPlayerLayer.set(url: cell.data!.play_Url)
@@ -128,7 +128,7 @@ extension ViewController: UICollectionViewDelegateFlowLayout {
     }
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
        DispatchQueue.main.async { [unowned self] in
-        if self.presentedViewController != nil || self.mmPlayerLayer.shrinkControl.isShrink == true {
+        if self.presentedViewController != nil || self.mmPlayerLayer.isShrink == true {
                 self.playerCollect.scrollToItem(at: indexPath, at: .centeredVertically, animated: true)
                 self.updateDetail(at: indexPath)
             } else {
@@ -138,7 +138,7 @@ extension ViewController: UICollectionViewDelegateFlowLayout {
     }
     
     fileprivate func updateByContentOffset() {
-        if mmPlayerLayer.shrinkControl.isShrink {
+        if mmPlayerLayer.isShrink {
             return
         }
         
