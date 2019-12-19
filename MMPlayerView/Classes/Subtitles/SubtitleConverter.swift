@@ -17,7 +17,7 @@ class SubtitleConverter<C: ConverterProtocol> {
         converter.parseText(value)
     }
     
-    public func search(duration: TimeInterval, completed: @escaping ((C.Element)->Void), queue: DispatchQueue?) {
+    public func search(duration: TimeInterval, completed: @escaping (([C.Element])->Void), queue: DispatchQueue?) {
         converter.search(duration: duration) { (e) in
             if let q = queue {
                 q.async {

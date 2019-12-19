@@ -68,7 +68,28 @@ class LayoutHelper: NSObject {
             self.view.removeConstraint(c)
         }
     }
- 
+    
+    func layoutFitSuper() {
+        guard let superV = self.view.superview else {
+            return
+        }
+        self.view.mmLayout.setLeading(anchor: superV.leadingAnchor, type: .equal(constant: 0))
+            .setTrailing(anchor: superV.trailingAnchor, type: .equal(constant: 0))
+            .setTop(anchor: superV.topAnchor, type: .equal(constant: 0))
+            .setBottom(anchor: superV.bottomAnchor, type: .equal(constant: 0))
+    }
+    
+    func centerWith(size: CGSize) {
+        guard let superV = self.view.superview else {
+            return
+        }
+        self.view.mmLayout
+            .setWidth(type: .equal(constant: size.width))
+            .setHeight(type: .equal(constant: size.height))
+            .setCenterX(anchor: superV.centerXAnchor, type: .equal(constant: 0))
+            .setCenterY(anchor: superV.centerYAnchor, type: .equal(constant: 0))
+    }
+    
     @discardableResult
     func setLeft(anchor: NSLayoutXAxisAnchor, type: AxisType) -> Self {
         self.delete(type: .left)

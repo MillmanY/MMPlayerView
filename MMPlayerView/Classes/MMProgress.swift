@@ -33,7 +33,7 @@ public class MMProgress: UIView {
         } didSet {
             if let v = custom {
                 self.addSubview(v)
-                v.mPlayFit.centerWith(size: v.frame.size)
+                v.mmLayout.centerWith(size: v.frame.size)
             }
         }
     }
@@ -72,7 +72,7 @@ public class MMProgress: UIView {
     func setup() {
         defaultIndicator.style = .whiteLarge
         self.addSubview(defaultIndicator)
-        defaultIndicator.mPlayFit.layoutFitSuper()
+        defaultIndicator.mmLayout.layoutFitSuper()
     }
     
     func start() {

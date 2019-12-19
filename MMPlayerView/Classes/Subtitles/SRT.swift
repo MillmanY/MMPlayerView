@@ -7,29 +7,33 @@
 
 import Foundation
 class SRT: ConverterProtocol {
-    private var completed: ((Element)->Void)?
+    private var completed: (([Element])->Void)?
     public typealias Element = SRTInfo
     private var queue = DispatchQueue(label: "SRTConverter")
     private var currentIdx: Int? = nil
     private var splitValue = [SRTInfo]()
     var info: String = ""
-    var currentObj: SRTInfo? {
+
+    var findObjs = [Element]() {
         didSet {
-            if oldValue == currentObj { return }
-            completed?(currentObj ?? SRTInfo.emptyInfo())
+            if oldValue == findObjs { return }
+            completed?(findObjs)
         }
     }
+    
     public init() {}
-    public func search(duration: TimeInterval, completed: @escaping ((Element) -> Void)) {
+    public func search(duration: TimeInterval, completed: @escaping (([Element]) -> Void)) {
         self.completed = completed
         queue.async { [weak self] in
-            guard let idx = self?.currentIdx else { return }
-            self?.queueSearch(duration: duration, findIndex: idx)
+            guard let self = self, let idx = self.currentIdx else { return }
+            var a = [Element]()
+            let isInscreas = idx < self.splitValue.count-1
+            self.queueSearch(duration: duration, findIndex: idx, isIncrease: isInscreas, conformElements: &a)
         }
     }
         
     public func parseText(_ value: String) {
-        currentObj = nil
+        findObjs.removeAll()
         splitValue.removeAll()
         self.info = value
         queue.async { [weak self] in self?.parse() }
@@ -43,30 +47,32 @@ extension SRT {
         currentIdx = splitValue.count > 0 ? 0 : nil
     }
     
-    private func queueSearch(duration: TimeInterval, findIndex: Int, isIncrease: Bool? = nil) {
-        if currentIdx != nil, let current = self.currentObj, current.timeRange.contains(duration) {
+    private func queueSearch(duration: TimeInterval, findIndex: Int, isIncrease: Bool, conformElements: inout [Element]) {
+        if currentIdx == nil {
             return
         }
         guard let obj = splitValue[safe: findIndex] else {
-            self.currentObj = nil
             return
         }
         switch duration {
         case obj.timeRange:
-            self.currentObj = obj
-            self.currentIdx = findIndex
+            if conformElements.count == 0 {
+                self.currentIdx = findIndex
+            }
+            conformElements.append(obj)
+            self.queueSearch(duration: duration, findIndex: isIncrease ? findIndex+1 : findIndex-1 , isIncrease: isIncrease, conformElements: &conformElements)
         case ...obj.timeRange.lowerBound:
             if isIncrease == true {
-                self.currentObj = nil
+                self.findObjs = conformElements
                 return
             }
-            self.queueSearch(duration: duration, findIndex: findIndex-1, isIncrease: false)
+            self.queueSearch(duration: duration, findIndex: findIndex-1, isIncrease: false, conformElements: &conformElements)
         case obj.timeRange.upperBound...:
-            if let i = isIncrease, i == false {
-                self.currentObj = nil
+            if isIncrease == false {
+                self.findObjs = conformElements
                 return
             }
-            self.queueSearch(duration: duration, findIndex: findIndex+1, isIncrease: true)
+            self.queueSearch(duration: duration, findIndex: findIndex+1, isIncrease: true, conformElements: &conformElements)
         default:
             break
         }

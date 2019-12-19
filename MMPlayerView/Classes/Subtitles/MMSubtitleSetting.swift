@@ -36,6 +36,12 @@ public class MMSubtitleSetting: NSObject {
             self.delegate?.setting(self, textColorChange: defaultTextColor)
         }
     }
+    
+    public var defaultTextBackground: UIColor = UIColor.clear {
+        didSet {
+        }
+    }
+    
     public var defaultLabelEdge: (bottom: CGFloat, left: CGFloat, right: CGFloat) = (20,10,10) {
         didSet {
             self.delegate?.setting(self, labelEdgeChange: defaultLabelEdge)

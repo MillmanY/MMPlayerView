@@ -34,7 +34,7 @@ public protocol MMPlayerLayerProtocol: class {
 public protocol ConverterProtocol {
     associatedtype Element
     func parseText(_ value: String)
-    func search(duration: TimeInterval, completed: @escaping ((Element)->Void))
+    func search(duration: TimeInterval, completed: @escaping (([Element])->Void))
 }
 
 
