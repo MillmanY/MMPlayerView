@@ -181,13 +181,15 @@
          }
 ## Shrink
         // Return a view which you want back
-        self.mmPlayerLayer.shrinkControl.shrinkView(onVC: self, isHiddenVC: false) { [weak self] () -> UIView? in
+        self.mmPlayerLayer.shrinkView(onVC: self, isHiddenVC: false) { [weak self] () -> UIView? in
             guard let self = self, let path = self.findCurrentPath() else {return nil}
             let cell = self.findCurrentCell(path: path) as! PlayerCell
             self.mmPlayerLayer.set(url: cell.data!.play_Url)
             self.mmPlayerLayer.resume()
             return cell.imgView
         }
+        // Check player is shrink or not
+        self.mmPlayerL.isShrink
 ## Requirements
 
     iOS 12.0+
