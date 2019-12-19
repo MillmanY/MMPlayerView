@@ -37,9 +37,6 @@
     2. Set MMPLayerToProtocol on PresentedViewController
     3. Set MMPlayerPrsentFromProtocol on PresentingViewController
 
-## Shrink
-    ex. only set present transition can use shrink video
-    (self.presentationController as? PassViewPresentatinController)?.shrinkView()
 ## Landscape
     1.Set MMPlayerLayer
        // roation screen to landscape can change player to fullscreen
@@ -175,28 +172,22 @@
 ## Subtitle
 ![](https://github.com/MillmanY/MMPlayerView/blob/master/demo/subTitleSmall.png)
 
-           public var subtitleFont: UIFont = UIFont.systemFont(ofSize: 17)
-           public var subtitleDefaultTextColor: UIColor = UIColor.white
-           public var subtitleLabelEdge: (bottom: CGFloat, left: CGFloat, right: CGFloat) = (20,10,10)
-           enum SubtitleType {
-              case srt(info: String)
-           }
-   
-           let subTitleStr = Bundle.main.path(forResource: "test", ofType: "srt")!
-                if let str = try? String.init(contentsOfFile: subTitleStr) {
-                    self.mmPlayerLayer.subTitleType = .srt(info: str)
-                }
-            }
+         let subTitleStr = Bundle.main.path(forResource: "test", ofType: "srt")!
+             if let str = try? String.init(contentsOfFile: subTitleStr) {
+                 self.mmPlayerLayer.subtitleSetting.subtitleType = .srt(info: str)
+                 self.mmPlayerLayer.subtitleSetting.defaultTextColor = .red
+                 self.mmPlayerLayer.subtitleSetting.defaultFont = UIFont.boldSystemFont(ofSize: 20)
+             }
+         }
 ## Shrink
         // Return a view which you want back
-        self.mmPlayerLayer.shrink(on: self, isHidden: false) { [weak self] () -> UIView? in
+        self.mmPlayerLayer.shrinkControl.shrinkView(onVC: self, isHiddenVC: false) { [weak self] () -> UIView? in
             guard let self = self, let path = self.findCurrentPath() else {return nil}
             let cell = self.findCurrentCell(path: path) as! PlayerCell
             self.mmPlayerLayer.set(url: cell.data!.play_Url)
             self.mmPlayerLayer.resume()
             return cell.imgView
         }
-
 ## Requirements
 
     iOS 12.0+
