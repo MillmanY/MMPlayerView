@@ -82,50 +82,6 @@
     ) // 
     }
  
-## Parameter
-    
-    public enum MMPlayerCoverAutoHideType {
-        case autoHide(after: TimeInterval)
-        case disable
-    }
-
-    public enum MMPlayerCacheType {
-       case none // set no cache and remove all
-       case memory(count: Int) // cache player seek time in memory
-    }
-    public enum CoverViewFitType {
-      case fitToPlayerView // coverview fit with playerview
-      case fitToVideoRect // fit with VideoRect
-    }
-         
-    public enum ProgressType {
-       case `default`
-       case none
-       case custom(view: ProgressProtocol)
-    }
-    public var autoHideCoverType = MMPlayerCoverAutoHideType.autoHide(after: 3.0) // Default hide after 3.0 , set disable to close auto hide cover            
-    public var progressType: MMPlayerView.ProgressType  
-    public var coverFitType: MMPlayerView.CoverViewFitType
-    lazy public var thumbImageView: UIImageView 
-    public var playView: UIView?
-    public var coverView: UIView? { get }
-    public var autoPlay: Bool // when MMPlayerView.MMPlayerPlayStatus == ready auto play video
-    public var currentPlayStatus: MMPlayerView.MMPlayerPlayStatus 
-    public var cacheType: MMPlayerCacheType = .none
-    public var playUrl: URL?
-    public func showCover(isShow: Bool)
-    public func setCoverView(enable: Bool)
-    public func delayHideCover()
-    public func replace<T: UIView>(cover:T) where T: CoverViewProtocol
-    public func set(url: URL?, state: ((MMPlayerView.MMPlayerPlayStatus) -> Swift.Void)?)
-    public func resume() // if loading finish autoPlay = false, need call playerLayer.player.play() where you want
-    public weak var mmDelegate: MMPlayerLayerProtocol?
-    public func download(observer status: @escaping ((MMPlayerDownloader.DownloadStatus)->Void)) -> MMPlayerObservation? //Downlaod and observer
-    public var fullScreenWhenLandscape = true
-    public private(set) var orientation: OrientationStatus = .protrait
-    public func setOrientation(_ status: MMPlayerLayer.OrientationStatus)
-    public func getOrientationChange(status: ((_ status: OrientationStatus) ->Void)?)
-
 ## Downloader
             var downloadObservation: MMPlayerObservation?
 
