@@ -15,7 +15,7 @@ class ViewController: UIViewController {
     lazy var mmPlayerLayer: MMPlayerLayer = {
         let l = MMPlayerLayer()        
         l.cacheType = .memory(count: 5)
-        l.coverFitType = .fitToVideoRect
+        l.coverFitType = .fitToPlayerView
         l.videoGravity = AVLayerVideoGravity.resizeAspect
         l.replace(cover: CoverA.instantiateFromNib())
         l.repeatWhenEnd = true
@@ -32,9 +32,8 @@ class ViewController: UIViewController {
         })
         offsetObservation = playerCollect.observe(\.contentOffset, options: [.new]) { [weak self] (_, value) in
             guard let self = self, self.presentedViewController == nil else {return}
-            self.updateByContentOffset()
             NSObject.cancelPreviousPerformRequests(withTarget: self)
-            self.perform(#selector(self.startLoading), with: nil, afterDelay: 0.3)
+            self.perform(#selector(self.startLoading), with: nil, afterDelay: 0.2)
         }
         playerCollect.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 200, right:0)
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
@@ -171,7 +170,8 @@ extension ViewController: UICollectionViewDelegateFlowLayout {
     
     fileprivate func presentDetail(at indexPath: IndexPath) {
         self.updateCell(at: indexPath)
-        self.startLoading()
+        mmPlayerLayer.resume()
+
         if let vc = UIStoryboard.init(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "DetailViewController") as? DetailViewController {
             vc.data = DemoSource.shared.demoData[indexPath.row]
             self.present(vc, animated: true, completion: nil)
@@ -190,6 +190,7 @@ extension ViewController: UICollectionViewDelegateFlowLayout {
     }
     
     @objc fileprivate func startLoading() {
+        self.updateByContentOffset()
         if self.presentedViewController != nil {
             return
         }

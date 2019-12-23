@@ -224,52 +224,11 @@ public class MMPlayerLayer: AVPlayerLayer {
     /**
      Current play url
      */
-    public private(set) var playUrl: URL? {
-        willSet {
-            self.currentPlayStatus = .unknown
-            self.isBackgroundPause = false
-            self.player?.replaceCurrentItem(with: nil)
-            self.showCover(isShow: false)
-            
-            guard let url = newValue else {
-                return
-            }
-            self.startLoading(isStart: true)
-            if let cacheItem = self.cahce.getItem(key: url) , cacheItem.status == .readyToPlay {
-                self.asset = (cacheItem.asset as? AVURLAsset)
-                self.player?.replaceCurrentItem(with: cacheItem)
-            } else {
-                self.asset = AVURLAsset(url: url)
-                
-                self.asset?.loadValuesAsynchronously(forKeys: assetKeysRequiredToPlay) { [weak self] in
-                    DispatchQueue.main.async {
-                        if let a = self?.asset, let keys = self?.assetKeysRequiredToPlay {
-                            for key in keys {
-                                var error: NSError?
-                                let _ =  a.statusOfValue(forKey: key, error: &error)
-                                if let e = error {
-                                    self?.currentPlayStatus = .failed(err: e.localizedDescription)
-                                    return
-                                }
-                            }
-                            
-                            let item = MMPlayerItem(asset: a, delegate: self)
-                            switch self?.cacheType {
-                            case .some(.memory(let count)):
-                                self?.cahce.cacheCount = count
-                                self?.cahce.appendCache(key: url, item: item)
-                            default:
-                                self?.cahce.removeAll()
-                                
-                            }
-                            self?.player?.replaceCurrentItem(with: item)
-                        }
-                    }
-                }
-            }
+    public var playUrl: URL? {
+        get {
+            return (self.player?.currentItem?.asset as? AVURLAsset)?.url
         }
     }
-    
     public weak var mmDelegate: MMPlayerLayerProtocol?
     /**
      If true, player will fullscreen when roatate to landscape
@@ -304,13 +263,7 @@ public class MMPlayerLayer: AVPlayerLayer {
     lazy var shrinkControl = {
        return MMPlayerShrinkControl(mmPlayerLayer: self)
     }()
-    private var willPlayUrl: URL? {
-        didSet {
-            if oldValue != willPlayUrl {
-                self.playUrl = nil
-            }
-        }
-    }
+
     private lazy var  bgView: UIView = {
         let v = UIView()
         v.translatesAutoresizingMaskIntoConstraints = false
@@ -394,7 +347,7 @@ public class MMPlayerLayer: AVPlayerLayer {
 extension MMPlayerLayer {
     
     public func shrinkView(onVC: UIViewController, isHiddenVC: Bool, maxWidth: CGFloat = 150.0, completedToView: (()->UIView?)?) {
-        shrinkControl.shrinkView(onVC: onVC, isHiddenVC: isHidden, maxWidth: maxWidth, completedToView: completedToView)
+        shrinkControl.shrinkView(onVC: onVC, isHiddenVC: isHiddenVC, maxWidth: maxWidth, completedToView: completedToView)
     }
     /**
      Set player current Orientation
@@ -466,35 +419,48 @@ extension MMPlayerLayer {
     public func getOrientationChange(status: ((_ status: OrientationStatus) ->Void)?) {
         self.layerOrientationBlock = status
     }
-    /**
-     Set player playUrl
-     */
-    public func set(url: URL?, lodDiskIfExist: Bool = true) {
-        if let will = url ,
-            self.cahce.getItem(key: will) == nil,
-            let real = MMPlayerDownloader.shared.localFileFrom(url: will),
+    
+    public func set(asset: AVURLAsset?, lodDiskIfExist: Bool = true) {
+        if asset?.url == self.asset?.url {
+            return
+        }
+        if let will = asset ,
+            self.cahce.getItem(key: will.url) == nil,
+            let real = MMPlayerDownloader.shared.localFileFrom(url: will.url),
             lodDiskIfExist {
             switch real.type {
             case .hls:
                 var statle = false
                 if let data = try? Data(contentsOf: real.localURL),
                     let convert = try? URL(resolvingBookmarkData: data, bookmarkDataIsStale: &statle) {
-                    self.willPlayUrl = convert
+                    self.asset = AVURLAsset(url: convert)
                 } else {
-                    self.willPlayUrl = url
+                    self.asset = asset
                 }
             case .mp4:
-                self.willPlayUrl = real.localURL
+                self.asset = AVURLAsset(url: real.localURL)
             }
             return
         }
-        self.willPlayUrl = url
+        self.asset = asset
+    }
+    
+    /**
+     Set player playUrl
+     */
+    public func set(url: URL?, lodDiskIfExist: Bool = true) {
+        guard let u = url else {
+            self.set(asset: nil, lodDiskIfExist: lodDiskIfExist)
+            return
+        }
+        self.set(asset: AVURLAsset(url: u), lodDiskIfExist: lodDiskIfExist)
     }
     /**
      Stop player and clear url
      */
     public func invalidate() {
-        self.willPlayUrl = nil
+        self.initStatus()
+        self.asset = nil
     }
     /**
      Start player to play video
@@ -502,11 +468,45 @@ extension MMPlayerLayer {
     public func resume() {
         switch self.currentPlayStatus {
         case .playing , .pause:
-            if self.playUrl == willPlayUrl { return }
+            if (self.player?.currentItem?.asset as? AVURLAsset)?.url == self.asset?.url {
+                return
+            }
         default:
             break
         }
-        self.playUrl = willPlayUrl
+        self.initStatus()
+        guard let current = self.asset else {
+            return
+        }
+        self.startLoading(isStart: true)
+        if let cacheItem = self.cahce.getItem(key: current.url) , cacheItem.status == .readyToPlay {
+            self.player?.replaceCurrentItem(with: cacheItem)
+        } else {
+            current.loadValuesAsynchronously(forKeys: assetKeysRequiredToPlay) { [weak self] in
+                DispatchQueue.main.async {
+                    if let a = self?.asset, let keys = self?.assetKeysRequiredToPlay {
+                        for key in keys {
+                            var error: NSError?
+                            let _ =  a.statusOfValue(forKey: key, error: &error)
+                            if let e = error {
+                            self?.currentPlayStatus = .failed(err: e.localizedDescription)
+                            return
+                        }
+                    }
+                    
+                    let item = MMPlayerItem(asset: a, delegate: self)
+                    switch self?.cacheType {
+                    case .some(.memory(let count)):
+                        self?.cahce.cacheCount = count
+                        self?.cahce.appendCache(key: current.url, item: item)
+                    default:
+                        self?.cahce.removeAll()
+                    }
+                    self?.player?.replaceCurrentItem(with: item)
+                    }
+                }
+            }
+        }
     }
     
     @objc func touchAction(gesture: UITapGestureRecognizer) {
@@ -646,7 +646,7 @@ extension MMPlayerLayer {
             } else if let s = self?.currentPlayStatus {
                 switch s {
                 case .playing, .pause:
-                    if let u = self?.playUrl {
+                    if let u = self?.asset?.url {
                         self?.cahce.removeCache(key: u)
                     }
                     self?.currentPlayStatus = .end
@@ -729,27 +729,34 @@ extension MMPlayerLayer {
         }
         return .unknown
     }
+    
+    private func initStatus() {
+        self.currentPlayStatus = .unknown
+        self.isBackgroundPause = false
+        self.player?.replaceCurrentItem(with: nil)
+        self.showCover(isShow: false)
+    }
 }
 
 // MARK: - Download
 extension MMPlayerLayer {
     
     public func download(observer status: @escaping ((MMPlayerDownloader.DownloadStatus)->Void)) -> MMPlayerObservation? {
-        guard let url = self.playUrl else {
+        guard let asset = self.asset else {
             status(.failed(err: "URL empty"))
             return nil
         }
-        if url.isFileURL {
+        if asset.url.isFileURL {
             status(.failed(err: "Input fileURL are Invalid"))
             return nil
         }
         
-        MMPlayerDownloader.shared.download(url: url)
+        MMPlayerDownloader.shared.download(asset: asset)
         return self.observerDownload(status: status)
     }
     
     public func observerDownload(status: @escaping ((MMPlayerDownloader.DownloadStatus)->Void)) -> MMPlayerObservation? {
-        guard let url = self.playUrl else {
+        guard let url = self.asset?.url else {
             status(.failed(err: "URL empty"))
             return nil
         }

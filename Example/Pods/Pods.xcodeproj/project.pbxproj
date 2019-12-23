@@ -230,6 +230,14 @@
 			path = Shrink;
 			sourceTree = "<group>";
 		};
+		27BBE5AB23B06F0F00E78438 /* Progress */ = {
+			isa = PBXGroup;
+			children = (
+				5E9A1B411F4D2DAB00746E5B /* MMProgress.swift */,
+			);
+			path = Progress;
+			sourceTree = "<group>";
+		};
 		3DC26C96CC9E5AEAD0ECD28C2701EF2B /* MMPlayerView */ = {
 			isa = PBXGroup;
 			children = (
@@ -347,6 +355,7 @@
 		73CFEF017032DF420BDFF789F0A6C2A2 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				27BBE5AB23B06F0F00E78438 /* Progress */,
 				27A0DC6423A724C700C6DF75 /* Shrink */,
 				2734234B239DE75E008AB6CD /* Subtitles */,
 				27160EB021A1253400B8A746 /* Observer */,
@@ -357,7 +366,6 @@
 				5E9A1B4E1F4D806D00746E5B /* Transition */,
 				5E9A1B491F4D804400746E5B /* Extension */,
 				5E0038561F4C4CC90012A096 /* MMPlayerLayer.swift */,
-				5E9A1B411F4D2DAB00746E5B /* MMProgress.swift */,
 				5E562D9D1EF9556900025869 /* MMPlayerProtocol.swift */,
 			);
 			path = Classes;

@@ -101,33 +101,33 @@ public class MMPlayerDownloader: NSObject {
         return value
     }
     
-    public func download(url: URL, fileName: String? = nil, coverExist: Bool = false) {
+    public func download(asset: AVURLAsset, fileName: String? = nil, coverExist: Bool = false) {
         queue.async { [weak self] in
             guard let self = self else {return}
-            if url.isFileURL {
+            if asset.url.isFileURL {
                 fatalError("Input fileURL are Invalid")
             }
             
-            if !coverExist, let _ = self.localFileFrom(url: url) {
-                self.downloadObserverManager[url].forEach({ $0(.exist) })
+            if !coverExist, let _ = self.localFileFrom(url: asset.url) {
+                self.downloadObserverManager[asset.url].forEach({ $0(.exist) })
                 return
             }
             
-            if self.mapList[url] != nil { return }
-            self.downloadInfo.removeAll { $0.url == url }
-            self.mapList[url] = MMPlayerDownloadRequest(url: url,
+            if self.mapList[asset.url] != nil { return }
+            self.downloadInfo.removeAll { $0.url == asset.url }
+            self.mapList[asset.url] = MMPlayerDownloadRequest(asset: asset,
                                                         pathInfo: self.downloadPathInfo,
                                                         fileName: fileName,
                                                         manager: self.download)
-            self.mapList[url]?.start(status: { [weak self] (status) in
+            self.mapList[asset.url]?.start(status: { [weak self] (status) in
                 guard let self = self else {return}
-                self.downloadObserverManager[url].forEach({ $0(status) })
+                self.downloadObserverManager[asset.url].forEach({ $0(status) })
                 switch status {
                 case .completed(let info):
                     self.downloadInfo.append(info)
-                    self.mapList[url] = nil
+                    self.mapList[asset.url] = nil
                 case  .cancelled , .failed:
-                    self.mapList[url] = nil
+                    self.mapList[asset.url] = nil
                 default:
                     break
                 }

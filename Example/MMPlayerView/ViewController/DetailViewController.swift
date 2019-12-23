@@ -8,6 +8,8 @@
 
 import UIKit
 import MMPlayerView
+import AVFoundation
+
 class DetailViewController: UIViewController {
     var downloadObservation: MMPlayerObservation?
     var data: DataObj? {
@@ -107,8 +109,9 @@ class DetailViewController: UIViewController {
             return
         }
         
+        
         DispatchQueue.main.async {
-            MMPlayerDownloader.shared.download(url: downloadURL)
+            MMPlayerDownloader.shared.download(asset: AVURLAsset(url: downloadURL))
         }
     }
     deinit {
