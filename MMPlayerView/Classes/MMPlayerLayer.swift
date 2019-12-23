@@ -273,6 +273,7 @@ public class MMPlayerLayer: AVPlayerLayer {
         self.thumbImageView.mmLayout.layoutFitSuper()
         v.frame = .zero
         v.backgroundColor = UIColor.clear
+        v.layer.insertSublayer(self, at: 0)
         return v
     }()
    
@@ -289,7 +290,6 @@ public class MMPlayerLayer: AVPlayerLayer {
     weak private var _playView: UIView? {
         willSet {
             bgView.removeFromSuperview()
-            self.removeFromSuperlayer()
             _playView?.removeGestureRecognizer(tapGesture)
         } didSet {
             guard let new = _playView else {
@@ -297,12 +297,10 @@ public class MMPlayerLayer: AVPlayerLayer {
             }
             new.addSubview(self.bgView)
             self.bgView.mmLayout.layoutFitSuper()
-            self.bgView.layoutIfNeeded()
+            new.layoutIfNeeded()
             self.updateCoverConstraint()
             new.isUserInteractionEnabled = true
             new.addGestureRecognizer(tapGesture)
-            new.layer.insertSublayer(self, at: 0)
-            new.layer.layoutIfNeeded()
         }
     }
     private var asset: AVURLAsset?
@@ -392,7 +390,6 @@ extension MMPlayerLayer {
             c.alpha = 1.0
             return
         }
-        
         cover.backgroundColor = UIColor.clear
         cover.layoutIfNeeded()
         coverView?.removeFromSuperview()
@@ -580,6 +577,8 @@ extension MMPlayerLayer {
             self.coverView?.isHidden = (self.tapGesture.isEnabled) ? false : true
             self.coverView?.frame = vRect
         }
+        if bgView.bounds == self.frame { return }
+
         self.frame = bgView.bounds
     }
     
@@ -667,10 +666,9 @@ extension MMPlayerLayer {
         case "videoRect", "frame", "bounds":
             let new = change?[.newKey] as? CGRect ?? .zero
             let old = change?[.oldKey] as? CGRect ?? .zero
-            if new != old {
+         if new != old {
                 self.updateCoverConstraint()
             }
-            
         case "muted":
             let new = change?[.newKey] as? Bool ?? false
             let old = change?[.oldKey] as? Bool ?? false

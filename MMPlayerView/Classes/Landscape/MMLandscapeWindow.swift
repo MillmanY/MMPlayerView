@@ -51,13 +51,14 @@ extension MMLandscapeWindow {
         case .protrait:
             (self.rootViewController as? WindowViewController)?.isStatusHidden = false
             if let o = self.originalPlayView {
+                
                 UIView.animate(withDuration: 0.3, animations: {
                     self.rootViewController?.view.layer.transform = CATransform3DIdentity
                     self.rootViewController?.view.frame = o.superview?.convert(o.frame, to: self) ?? .zero
-                }) { (_) in
-                    self.playerLayer.playView = o
-                    self.originalPlayView = nil
-                    self.isHidden = true
+                }) { [weak self] (_) in
+                    self?.playerLayer.playView = o
+                    self?.originalPlayView = nil
+                    self?.isHidden = true
                 }
             }
         case .landscapeRight, .landscapeLeft:
