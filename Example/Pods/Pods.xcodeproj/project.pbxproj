@@ -222,6 +222,13 @@
 			path = Cache;
 			sourceTree = "<group>";
 		};
+		27989C2B23B1A73E008489FB /* SwiftUI */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = SwiftUI;
+			sourceTree = "<group>";
+		};
 		27A0DC6423A724C700C6DF75 /* Shrink */ = {
 			isa = PBXGroup;
 			children = (
@@ -355,6 +362,7 @@
 		73CFEF017032DF420BDFF789F0A6C2A2 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				27989C2B23B1A73E008489FB /* SwiftUI */,
 				27BBE5AB23B06F0F00E78438 /* Progress */,
 				27A0DC6423A724C700C6DF75 /* Shrink */,
 				2734234B239DE75E008AB6CD /* Subtitles */,
