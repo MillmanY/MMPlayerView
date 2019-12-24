@@ -273,7 +273,6 @@ public class MMPlayerLayer: AVPlayerLayer {
         self.thumbImageView.mmLayout.layoutFitSuper()
         v.frame = .zero
         v.backgroundColor = UIColor.clear
-        v.layer.insertSublayer(self, at: 0)
         return v
     }()
    
@@ -290,11 +289,13 @@ public class MMPlayerLayer: AVPlayerLayer {
     weak private var _playView: UIView? {
         willSet {
             bgView.removeFromSuperview()
+            self.removeFromSuperlayer()
             _playView?.removeGestureRecognizer(tapGesture)
         } didSet {
             guard let new = _playView else {
                 return
             }
+            new.layer.insertSublayer(self, at: 0)
             new.addSubview(self.bgView)
             self.bgView.mmLayout.layoutFitSuper()
             new.layoutIfNeeded()
