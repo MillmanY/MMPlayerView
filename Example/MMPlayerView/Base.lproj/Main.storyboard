@@ -65,7 +65,7 @@
         <!--Item-->
         <scene sceneID="jIX-N7-VmP">
             <objects>
-                <tableViewController id="YEs-SX-4vq" sceneMemberID="viewController">
+                <tableViewController id="YEs-SX-4vq" customClass="DemoListViewController" customModule="MMPlayerView_Example" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="lnK-AW-HIk">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -80,12 +80,14 @@
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="m4r-Ve-aNS">
-                                                    <rect key="frame" x="0.0" y="0.0" width="375" height="50"/>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="m4r-Ve-aNS">
+                                                    <rect key="frame" x="20" y="0.0" width="355" height="50"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="50" id="SpL-md-wdc"/>
                                                     </constraints>
-                                                    <state key="normal" title="Swift Demo"/>
+                                                    <state key="normal" title="Swift Demo">
+                                                        <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    </state>
                                                     <connections>
                                                         <segue destination="vXZ-lx-hvc" kind="show" id="wYS-qM-YsB"/>
                                                     </connections>
@@ -93,7 +95,7 @@
                                             </subviews>
                                             <constraints>
                                                 <constraint firstAttribute="bottom" secondItem="m4r-Ve-aNS" secondAttribute="bottom" id="3ec-d7-CXO"/>
-                                                <constraint firstItem="m4r-Ve-aNS" firstAttribute="leading" secondItem="Wew-DH-4F6" secondAttribute="leading" id="62a-RR-Nim"/>
+                                                <constraint firstItem="m4r-Ve-aNS" firstAttribute="leading" secondItem="Wew-DH-4F6" secondAttribute="leading" constant="20" id="62a-RR-Nim"/>
                                                 <constraint firstItem="m4r-Ve-aNS" firstAttribute="top" secondItem="Wew-DH-4F6" secondAttribute="top" id="jPp-zg-3hX"/>
                                                 <constraint firstAttribute="trailing" secondItem="m4r-Ve-aNS" secondAttribute="trailing" id="mXO-Za-QyI"/>
                                             </constraints>
@@ -102,9 +104,29 @@
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="xLR-Qf-1lW">
                                         <rect key="frame" x="0.0" y="71.5" width="375" height="43.5"/>
                                         <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="xLR-Qf-1lW" id="hg4-2H-XVi">
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" ambiguous="YES" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="xLR-Qf-1lW" id="hg4-2H-XVi">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ewG-v2-E1b">
+                                                    <rect key="frame" x="20" y="0.0" width="355" height="50"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="50" id="bOf-Sh-Gkf"/>
+                                                    </constraints>
+                                                    <state key="normal" title="SwiftUI Demo">
+                                                        <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    </state>
+                                                    <connections>
+                                                        <segue destination="EEa-Nw-LcY" kind="show" destinationCreationSelector="swiftUIDemo:" id="f8f-3h-hqD"/>
+                                                    </connections>
+                                                </button>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="trailing" secondItem="ewG-v2-E1b" secondAttribute="trailing" id="1nQ-2n-CfH"/>
+                                                <constraint firstItem="ewG-v2-E1b" firstAttribute="leading" secondItem="hg4-2H-XVi" secondAttribute="leading" constant="20" id="8gg-oS-D43"/>
+                                                <constraint firstItem="ewG-v2-E1b" firstAttribute="top" secondItem="hg4-2H-XVi" secondAttribute="top" id="Dgw-aQ-cku"/>
+                                                <constraint firstAttribute="bottom" secondItem="ewG-v2-E1b" secondAttribute="bottom" id="MmL-2k-S5r"/>
+                                            </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="Tsw-Ml-074">
@@ -129,6 +151,16 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3lZ-MQ-C7K" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-2764" y="385"/>
+        </scene>
+        <!--Hosting Controller-->
+        <scene sceneID="euc-WS-YZo">
+            <objects>
+                <hostingController id="EEa-Nw-LcY" sceneMemberID="viewController">
+                    <navigationItem key="navigationItem" id="Cbp-qI-0LD"/>
+                </hostingController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="LnT-eG-sIf" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1952" y="489"/>
         </scene>
         <!--List Video Demo-->
         <scene sceneID="ufC-wZ-h7g">
@@ -233,7 +265,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1998" y="376"/>
+            <point key="canvasLocation" x="-2041" y="-288"/>
         </scene>
         <!--Detail View Controller-->
         <scene sceneID="s8b-Cx-fOA">

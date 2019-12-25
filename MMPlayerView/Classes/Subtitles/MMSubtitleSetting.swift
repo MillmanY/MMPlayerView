@@ -63,8 +63,4 @@ public class MMSubtitleSetting: NSObject {
             self.delegate?.setting(self, typeChange: subtitleType)
         }
     }
-    
-    deinit {
-        print("Sub")
-    }
 }

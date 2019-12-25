@@ -269,7 +269,10 @@ public class MMPlayerLayer: AVPlayerLayer {
         v.translatesAutoresizingMaskIntoConstraints = false
         v.addSubview(self.thumbImageView)
         v.addSubview(self.indicator)
-        self.indicator.mmLayout.layoutFitSuper()
+        self.indicator
+            .mmLayout
+            .setCenterX(anchor: v.centerXAnchor, type: .equal(constant: 0))
+            .setCenterY(anchor: v.centerYAnchor, type: .equal(constant: 0))
         self.thumbImageView.mmLayout.layoutFitSuper()
         v.frame = .zero
         v.backgroundColor = UIColor.clear

@@ -27,6 +27,7 @@
 		27DBED1723A1D8040027F7A1 /* SRT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27DBED1623A1D8040027F7A1 /* SRT.swift */; };
 		27E9EE0E23A32D270025C529 /* SubtitleConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27E9EE0D23A32D270025C529 /* SubtitleConverter.swift */; };
 		27E9EE1023A342C80025C529 /* SRTInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27E9EE0F23A342C80025C529 /* SRTInfo.swift */; };
+		27ED4D6A23B251180054C669 /* MMPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27ED4D6923B251180054C669 /* MMPlayerView.swift */; };
 		27F9B20A23AB4A4200B49152 /* MMSubtitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27F9B20923AB4A4200B49152 /* MMSubtitleView.swift */; };
 		27F9B20C23AB52CE00B49152 /* MMplayer+StackView+RemoveAll.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27F9B20B23AB52CE00B49152 /* MMplayer+StackView+RemoveAll.swift */; };
 		2E84F8562C8CCA5CDEB1FFB61D2BD886 /* Pods-MMPlayerView_Example-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EFD9156A61B9FAA04CE035D9A3722F0 /* Pods-MMPlayerView_Example-dummy.m */; };
@@ -94,6 +95,7 @@
 		27DBED1623A1D8040027F7A1 /* SRT.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SRT.swift; sourceTree = "<group>"; };
 		27E9EE0D23A32D270025C529 /* SubtitleConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubtitleConverter.swift; sourceTree = "<group>"; };
 		27E9EE0F23A342C80025C529 /* SRTInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SRTInfo.swift; sourceTree = "<group>"; };
+		27ED4D6923B251180054C669 /* MMPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MMPlayerView.swift; sourceTree = "<group>"; };
 		27F9B20923AB4A4200B49152 /* MMSubtitleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MMSubtitleView.swift; sourceTree = "<group>"; };
 		27F9B20B23AB52CE00B49152 /* MMplayer+StackView+RemoveAll.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MMplayer+StackView+RemoveAll.swift"; sourceTree = "<group>"; };
 		36CCC8551496A7DFC48D0DFB3E4F03F7 /* Pods-MMPlayerView_Tests.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = "Pods-MMPlayerView_Tests.modulemap"; sourceTree = "<group>"; };
@@ -225,6 +227,7 @@
 		27989C2B23B1A73E008489FB /* SwiftUI */ = {
 			isa = PBXGroup;
 			children = (
+				27ED4D6923B251180054C669 /* MMPlayerView.swift */,
 			);
 			path = SwiftUI;
 			sourceTree = "<group>";
@@ -628,6 +631,7 @@
 				5EC40F441F4EA47100510EDF /* MMLandscapeWindow.swift in Sources */,
 				27F9B20C23AB52CE00B49152 /* MMplayer+StackView+RemoveAll.swift in Sources */,
 				5E9A1B6B1F4D80E600746E5B /* MMPlayerBaseTransition.swift in Sources */,
+				27ED4D6A23B251180054C669 /* MMPlayerView.swift in Sources */,
 				27160EB221A1255500B8A746 /* WeakBox.swift in Sources */,
 				27874359219E774A001B98F9 /* MMPlayerDownloadManager.swift in Sources */,
 				5E562DA11EF9556900025869 /* MMPlayerProtocol.swift in Sources */,
@@ -913,7 +917,7 @@
 				GCC_PREFIX_HEADER = "Target Support Files/MMPlayerView/MMPlayerView-prefix.pch";
 				INFOPLIST_FILE = "Target Support Files/MMPlayerView/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MODULEMAP_FILE = "Target Support Files/MMPlayerView/MMPlayerView.modulemap";
 				MTL_ENABLE_DEBUG_INFO = NO;
@@ -988,7 +992,7 @@
 				GCC_PREFIX_HEADER = "Target Support Files/MMPlayerView/MMPlayerView-prefix.pch";
 				INFOPLIST_FILE = "Target Support Files/MMPlayerView/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MODULEMAP_FILE = "Target Support Files/MMPlayerView/MMPlayerView.modulemap";
 				MTL_ENABLE_DEBUG_INFO = YES;

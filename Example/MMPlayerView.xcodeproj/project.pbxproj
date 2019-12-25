@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		0236E0805A163A3B6387BBA1 /* Pods_MMPlayerView_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 149D9519B965390863A86A76 /* Pods_MMPlayerView_Example.framework */; };
+		270B251E23B1B0EF00860278 /* DemoListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 270B251D23B1B0EF00860278 /* DemoListViewController.swift */; };
+		270B252123B1B17000860278 /* PlayerListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 270B252023B1B17000860278 /* PlayerListView.swift */; };
+		270B252523B1B5EF00860278 /* PlayCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 270B252423B1B5EF00860278 /* PlayCellView.swift */; };
 		27421CAC233C8A21000DE6BF /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 27421CAB233C8A21000DE6BF /* Images.xcassets */; };
 		27DBED1923A1DCCF0027F7A1 /* srtDemo.srt in Resources */ = {isa = PBXBuildFile; fileRef = 27DBED1823A1DCCF0027F7A1 /* srtDemo.srt */; };
 		495E9D3BBAC57867503EF6B3 /* Pods_MMPlayerView_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 315B9ED065A93AD9533BBCBE /* Pods_MMPlayerView_Tests.framework */; };
@@ -37,6 +40,9 @@
 /* Begin PBXFileReference section */
 		0698FB05CAE23C014679C1C1 /* MMPlayerView.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = MMPlayerView.podspec; path = ../MMPlayerView.podspec; sourceTree = "<group>"; };
 		149D9519B965390863A86A76 /* Pods_MMPlayerView_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MMPlayerView_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		270B251D23B1B0EF00860278 /* DemoListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoListViewController.swift; sourceTree = "<group>"; };
+		270B252023B1B17000860278 /* PlayerListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerListView.swift; sourceTree = "<group>"; };
+		270B252423B1B5EF00860278 /* PlayCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayCellView.swift; sourceTree = "<group>"; };
 		27421CAB233C8A21000DE6BF /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		27DBED1823A1DCCF0027F7A1 /* srtDemo.srt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = srtDemo.srt; sourceTree = "<group>"; };
 		315B9ED065A93AD9533BBCBE /* Pods_MMPlayerView_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MMPlayerView_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -83,6 +89,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		270B251F23B1B13200860278 /* SwiftUIView */ = {
+			isa = PBXGroup;
+			children = (
+				270B252223B1B5BD00860278 /* Cell */,
+				270B252023B1B17000860278 /* PlayerListView.swift */,
+			);
+			path = SwiftUIView;
+			sourceTree = "<group>";
+		};
+		270B252223B1B5BD00860278 /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				270B252423B1B5EF00860278 /* PlayCellView.swift */,
+			);
+			path = Cell;
+			sourceTree = "<group>";
+		};
 		2E5EB0ECE7F1EBC6ED4566F5 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -135,6 +158,7 @@
 				5E9A1B871F4D865E00746E5B /* DetailViewController.swift */,
 				5E9A1B891F4D865E00746E5B /* ViewController.swift */,
 				5EB350751F4DC84E007C5098 /* BaseNavigationController.swift */,
+				270B251D23B1B0EF00860278 /* DemoListViewController.swift */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -164,6 +188,7 @@
 			isa = PBXGroup;
 			children = (
 				27421CAB233C8A21000DE6BF /* Images.xcassets */,
+				270B251F23B1B13200860278 /* SwiftUIView */,
 				5E9A1B821F4D865E00746E5B /* Cell */,
 				5E9A1B841F4D865E00746E5B /* Datasource */,
 				5E9A1B861F4D865E00746E5B /* ViewController */,
@@ -421,11 +446,14 @@
 			files = (
 				5EB350761F4DC84E007C5098 /* BaseNavigationController.swift in Sources */,
 				5E9A1B8A1F4D865E00746E5B /* PlayerCell.swift in Sources */,
+				270B252523B1B5EF00860278 /* PlayCellView.swift in Sources */,
 				5E9A1B8B1F4D865E00746E5B /* DemoSource.swift in Sources */,
 				5E9A1B8C1F4D865E00746E5B /* DetailViewController.swift in Sources */,
+				270B252123B1B17000860278 /* PlayerListView.swift in Sources */,
 				607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */,
 				5E9A1B8E1F4D865E00746E5B /* ViewController.swift in Sources */,
 				5E105C411F4C78C000774714 /* CoverA.swift in Sources */,
+				270B251E23B1B0EF00860278 /* DemoListViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -577,7 +605,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = 2SMXTR7629;
 				INFOPLIST_FILE = MMPlayerView/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MODULE_NAME = ExampleApp;
 				PRODUCT_BUNDLE_IDENTIFIER = com.test.MMPlayerViews;
@@ -595,7 +623,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = 2SMXTR7629;
 				INFOPLIST_FILE = MMPlayerView/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MODULE_NAME = ExampleApp;
 				PRODUCT_BUNDLE_IDENTIFIER = com.test.MMPlayerViews;
