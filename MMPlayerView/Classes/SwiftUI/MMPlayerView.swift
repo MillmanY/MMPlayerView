@@ -6,42 +6,44 @@
 //
 
 import SwiftUI
+import AVFoundation
 
+let sharedPlayr = AVPlayer()
 @available(iOS 13.0.0, *)
-public struct MMPlayerViewUI: UIViewRepresentable {
-    private let container = UIView()
-    private let player: MMPlayerLayer
-    
-    public init(player: MMPlayerLayer) {
-        self.player = player
-        player.playView = container
-    }
-    public func updateUIView(_ uiView: UIView, context: UIViewRepresentableContext<MMPlayerViewUI>) {
+struct MMPlayerViewBridge: UIViewRepresentable {
+    private let playLayer: AVPlayerLayer
 
+    public init(player: AVPlayerLayer) {
+        self.playLayer = player
+    }
+    public func updateUIView(_ uiView: UIView, context: UIViewRepresentableContext<MMPlayerViewBridge>) {
+    
     }
     public func makeUIView(context: Context) -> UIView {
-        return container
-    }
-    
-    public func set(url: URL?) -> Self {
-        player.set(url: url)
-        return self
-    }
-    
-    public func resume() -> Self {
-        player.resume()
-        return self
+        return MMPlayerContainer(playLayer: playLayer)
     }
 }
 
-//@available(iOS 13.0.0, *)
-//struct MMPlayerViewUI_Previews: PreviewProvider {
-//    let player = MMPlayerLayer()
-//    @available(iOS 13.0.0, *)
-//    static var previews: some View {
-//        MMPlayerViewUI(player: player)
-//            .set(url: URL.init(string: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4"))
-//        .resume()
-//        .previewLayout(.fixed(width: 375, height: 200))
-//    }
-//}
+
+@available(iOS 13.0.0, *)
+public struct MMPlayerViewUI: View {
+    private let control: MMPlayerControl
+    private let playLayer = AVPlayerLayer()
+    //Use Shared AVPlayer Singleton
+    public init() {
+        self.playLayer.player = sharedPlayr
+        self.control = MMPlayerControl(player: sharedPlayr)
+    }
+    
+    public init(player: AVPlayer) {
+        self.playLayer.player = player
+        self.control = MMPlayerControl(player: player)
+    }
+
+    public var body: some View {
+        ZStack {
+            MMPlayerViewBridge(player: playLayer)
+            Color.red.opacity(0.2)
+        }
+    }
+}

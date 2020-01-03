@@ -25,6 +25,9 @@
 		27874364219EF4FF001B98F9 /* MMPlayerObservation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27874363219EF4FF001B98F9 /* MMPlayerObservation.swift */; };
 		27D5CB8723A3653400DB76F9 /* MMPlayer+Constraint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27D5CB8623A3653400DB76F9 /* MMPlayer+Constraint.swift */; };
 		27DBED1723A1D8040027F7A1 /* SRT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27DBED1623A1D8040027F7A1 /* SRT.swift */; };
+		27DFC2D923BEE8AB003A8820 /* MMPlayerControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27DFC2D823BEE8AB003A8820 /* MMPlayerControl.swift */; };
+		27DFC2DB23BEEA68003A8820 /* MMPlayerContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27DFC2DA23BEEA68003A8820 /* MMPlayerContainer.swift */; };
+		27DFC2DD23BF3668003A8820 /* MMPlayer+AVPlayerItem+ConvertStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27DFC2DC23BF3668003A8820 /* MMPlayer+AVPlayerItem+ConvertStatus.swift */; };
 		27E9EE0E23A32D270025C529 /* SubtitleConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27E9EE0D23A32D270025C529 /* SubtitleConverter.swift */; };
 		27E9EE1023A342C80025C529 /* SRTInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27E9EE0F23A342C80025C529 /* SRTInfo.swift */; };
 		27ED4D6A23B251180054C669 /* MMPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27ED4D6923B251180054C669 /* MMPlayerView.swift */; };
@@ -93,6 +96,9 @@
 		27874363219EF4FF001B98F9 /* MMPlayerObservation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MMPlayerObservation.swift; sourceTree = "<group>"; };
 		27D5CB8623A3653400DB76F9 /* MMPlayer+Constraint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MMPlayer+Constraint.swift"; sourceTree = "<group>"; };
 		27DBED1623A1D8040027F7A1 /* SRT.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SRT.swift; sourceTree = "<group>"; };
+		27DFC2D823BEE8AB003A8820 /* MMPlayerControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MMPlayerControl.swift; sourceTree = "<group>"; };
+		27DFC2DA23BEEA68003A8820 /* MMPlayerContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MMPlayerContainer.swift; sourceTree = "<group>"; };
+		27DFC2DC23BF3668003A8820 /* MMPlayer+AVPlayerItem+ConvertStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MMPlayer+AVPlayerItem+ConvertStatus.swift"; sourceTree = "<group>"; };
 		27E9EE0D23A32D270025C529 /* SubtitleConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubtitleConverter.swift; sourceTree = "<group>"; };
 		27E9EE0F23A342C80025C529 /* SRTInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SRTInfo.swift; sourceTree = "<group>"; };
 		27ED4D6923B251180054C669 /* MMPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MMPlayerView.swift; sourceTree = "<group>"; };
@@ -228,6 +234,8 @@
 			isa = PBXGroup;
 			children = (
 				27ED4D6923B251180054C669 /* MMPlayerView.swift */,
+				27DFC2D823BEE8AB003A8820 /* MMPlayerControl.swift */,
+				27DFC2DA23BEEA68003A8820 /* MMPlayerContainer.swift */,
 			);
 			path = SwiftUI;
 			sourceTree = "<group>";
@@ -300,6 +308,7 @@
 				27570B4D239E2F460082B9A7 /* MMPlayer+String+SRTTime.swift */,
 				27D5CB8623A3653400DB76F9 /* MMPlayer+Constraint.swift */,
 				2777706D23A9C9EB00ACEB20 /* MMPlayer+Array+Safe.swift */,
+				27DFC2DC23BF3668003A8820 /* MMPlayer+AVPlayerItem+ConvertStatus.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -608,6 +617,7 @@
 				5E9A1B6F1F4D80E600746E5B /* MMPlayerPushAnimator.swift in Sources */,
 				2777706E23A9C9EB00ACEB20 /* MMPlayer+Array+Safe.swift in Sources */,
 				2717E19D219DA46800DCC8CB /* MMPlayerDownLoadVideoInfo.swift in Sources */,
+				27DFC2DB23BEEA68003A8820 /* MMPlayerContainer.swift in Sources */,
 				5E862B1C20629F06000EAC20 /* MMPlayerShrinkControl.swift in Sources */,
 				5E4F8A8B206245E200A2B19D /* MMPlayer+NSObject+Replace.swift in Sources */,
 				5E3E68EE1F4FF77900122F6C /* MMPlayer+UIView+Shadow.swift in Sources */,
@@ -630,6 +640,7 @@
 				5E4F8A9320627FC100A2B19D /* MMPlayer+UIViewController+CheckProtocol.swift in Sources */,
 				5EC40F441F4EA47100510EDF /* MMLandscapeWindow.swift in Sources */,
 				27F9B20C23AB52CE00B49152 /* MMplayer+StackView+RemoveAll.swift in Sources */,
+				27DFC2D923BEE8AB003A8820 /* MMPlayerControl.swift in Sources */,
 				5E9A1B6B1F4D80E600746E5B /* MMPlayerBaseTransition.swift in Sources */,
 				27ED4D6A23B251180054C669 /* MMPlayerView.swift in Sources */,
 				27160EB221A1255500B8A746 /* WeakBox.swift in Sources */,
@@ -640,6 +651,7 @@
 				2787435B219E7966001B98F9 /* MMPlayerDownloadRequest.swift in Sources */,
 				5E562DA21EF9556900025869 /* MMPlayerCache.swift in Sources */,
 				5E9A1B701F4D80E600746E5B /* MMPlayerPassViewPushConfig.swift in Sources */,
+				27DFC2DD23BF3668003A8820 /* MMPlayer+AVPlayerItem+ConvertStatus.swift in Sources */,
 				2717E199219D388600DCC8CB /* MMPlayerDownloader.swift in Sources */,
 				5E9A1B7D1F4D80E600746E5B /* MMPlayerPassViewPresentTransition.swift in Sources */,
 				2777707223AA0DF900ACEB20 /* MMSubtitleSetting.swift in Sources */,

@@ -12,6 +12,7 @@
 		270B252123B1B17000860278 /* PlayerListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 270B252023B1B17000860278 /* PlayerListView.swift */; };
 		270B252523B1B5EF00860278 /* PlayCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 270B252423B1B5EF00860278 /* PlayCellView.swift */; };
 		27421CAC233C8A21000DE6BF /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 27421CAB233C8A21000DE6BF /* Images.xcassets */; };
+		275AC84A23B59264000AFF8D /* ObserverFrame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 275AC84923B59264000AFF8D /* ObserverFrame.swift */; };
 		27DBED1923A1DCCF0027F7A1 /* srtDemo.srt in Resources */ = {isa = PBXBuildFile; fileRef = 27DBED1823A1DCCF0027F7A1 /* srtDemo.srt */; };
 		495E9D3BBAC57867503EF6B3 /* Pods_MMPlayerView_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 315B9ED065A93AD9533BBCBE /* Pods_MMPlayerView_Tests.framework */; };
 		5E105C411F4C78C000774714 /* CoverA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E105C401F4C78C000774714 /* CoverA.swift */; };
@@ -44,6 +45,7 @@
 		270B252023B1B17000860278 /* PlayerListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerListView.swift; sourceTree = "<group>"; };
 		270B252423B1B5EF00860278 /* PlayCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayCellView.swift; sourceTree = "<group>"; };
 		27421CAB233C8A21000DE6BF /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		275AC84923B59264000AFF8D /* ObserverFrame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObserverFrame.swift; sourceTree = "<group>"; };
 		27DBED1823A1DCCF0027F7A1 /* srtDemo.srt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = srtDemo.srt; sourceTree = "<group>"; };
 		315B9ED065A93AD9533BBCBE /* Pods_MMPlayerView_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MMPlayerView_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		354BF52B760A47E8C62F4FA4 /* Pods-MMPlayerView_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MMPlayerView_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MMPlayerView_Tests/Pods-MMPlayerView_Tests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -92,6 +94,7 @@
 		270B251F23B1B13200860278 /* SwiftUIView */ = {
 			isa = PBXGroup;
 			children = (
+				275AC84823B59209000AFF8D /* Modifier */,
 				270B252223B1B5BD00860278 /* Cell */,
 				270B252023B1B17000860278 /* PlayerListView.swift */,
 			);
@@ -104,6 +107,14 @@
 				270B252423B1B5EF00860278 /* PlayCellView.swift */,
 			);
 			path = Cell;
+			sourceTree = "<group>";
+		};
+		275AC84823B59209000AFF8D /* Modifier */ = {
+			isa = PBXGroup;
+			children = (
+				275AC84923B59264000AFF8D /* ObserverFrame.swift */,
+			);
+			path = Modifier;
 			sourceTree = "<group>";
 		};
 		2E5EB0ECE7F1EBC6ED4566F5 /* Frameworks */ = {
@@ -445,6 +456,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5EB350761F4DC84E007C5098 /* BaseNavigationController.swift in Sources */,
+				275AC84A23B59264000AFF8D /* ObserverFrame.swift in Sources */,
 				5E9A1B8A1F4D865E00746E5B /* PlayerCell.swift in Sources */,
 				270B252523B1B5EF00860278 /* PlayCellView.swift in Sources */,
 				5E9A1B8B1F4D865E00746E5B /* DemoSource.swift in Sources */,

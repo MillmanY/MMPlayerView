@@ -14,31 +14,7 @@ public extension MMPlayerLayer {
     enum SubtitleType {
         case srt(info: String)
     }
-    enum PlayerCacheType {
-        case none
-        case memory(count: Int)
-    }
-    
-    enum PlayStatus {
-        case ready
-        case unknown
-        case failed(err: String)
-        case playing
-        case pause
-        case end
         
-        static func == (lhs: PlayStatus, rhs: PlayStatus) -> Bool {
-            switch (lhs, rhs) {
-            case (.ready, .ready), (.unknown, .unknown), (.playing, .playing), (.pause, .pause), (.end, .end):
-                return true
-            case (.failed(let l), .failed(let r)):
-                return l == r
-            default:
-                return false
-            }
-        }
-    }
-    
     enum CoverFitType {
         case fitToPlayerView
         case fitToVideoRect
@@ -181,7 +157,7 @@ public class MMPlayerLayer: AVPlayerLayer {
      case end
      ```
      */
-    public var currentPlayStatus: PlayStatus = .unknown {
+    public var currentPlayStatus: MMPlayerDefine.PlayStatus = .unknown {
         didSet {
             if currentPlayStatus == oldValue {
                 return
@@ -220,7 +196,7 @@ public class MMPlayerLayer: AVPlayerLayer {
      case memory(count: Int)
      ```
      */
-    public var cacheType: PlayerCacheType = .none
+    public var cacheType: MMPlayerDefine.PlayerCacheType = .none
     /**
      Current play url
      */
@@ -269,10 +245,12 @@ public class MMPlayerLayer: AVPlayerLayer {
         v.translatesAutoresizingMaskIntoConstraints = false
         v.addSubview(self.thumbImageView)
         v.addSubview(self.indicator)
-        self.indicator
-            .mmLayout
-            .setCenterX(anchor: v.centerXAnchor, type: .equal(constant: 0))
-            .setCenterY(anchor: v.centerYAnchor, type: .equal(constant: 0))
+//        self.indicator
+//            .mmLayout
+//            .setCenterX(anchor: v.centerXAnchor, type: .equal(constant: 0))
+//            .setCentoMerY(anchor: v.centerYAnchor, type: .equal(constant: 0))
+
+        self.indicator.mmLayout.layoutFitSuper()
         self.thumbImageView.mmLayout.layoutFitSuper()
         v.frame = .zero
         v.backgroundColor = UIColor.clear
@@ -314,15 +292,9 @@ public class MMPlayerLayer: AVPlayerLayer {
     private var timeObserver: Any?
     private var isBackgroundPause = false
     private var cahce = MMPlayerCache()
-    private var playStatusBlock: ((_ status: PlayStatus) ->Void)?
+    private var playStatusBlock: ((_ status: MMPlayerDefine.PlayStatus) ->Void)?
     private var layerOrientationBlock: ((_ status: OrientationStatus) ->Void)?
     private var indicator = MMProgress()
-    private let assetKeysRequiredToPlay = [
-        "duration",
-        "playable",
-        "hasProtectedContent",
-        ]
-    
     // MARK: - Init
     public override init(layer: Any) {
         isInitLayer = true
@@ -412,7 +384,7 @@ extension MMPlayerLayer {
     /**
      Get player play status
      */
-    public func getStatusBlock(value: ((_ status: PlayStatus) -> Void)?) {
+    public func getStatusBlock(value: ((_ status: MMPlayerDefine.PlayStatus) -> Void)?) {
         self.playStatusBlock = value
     }
     /**
@@ -484,9 +456,10 @@ extension MMPlayerLayer {
         if let cacheItem = self.cahce.getItem(key: current.url) , cacheItem.status == .readyToPlay {
             self.player?.replaceCurrentItem(with: cacheItem)
         } else {
-            current.loadValuesAsynchronously(forKeys: assetKeysRequiredToPlay) { [weak self] in
+            current.loadValuesAsynchronously(forKeys: MMPlayerDefine.assetKeysRequiredToPlay) { [weak self] in
                 DispatchQueue.main.async {
-                    if let a = self?.asset, let keys = self?.assetKeysRequiredToPlay {
+                    let keys = MMPlayerDefine.assetKeysRequiredToPlay
+                    if let a = self?.asset {
                         for key in keys {
                             var error: NSError?
                             let _ =  a.statusOfValue(forKey: key, error: &error)
@@ -716,21 +689,8 @@ extension MMPlayerLayer {
         }
     }
 
-    private func convertItemStatus() -> MMPlayerLayer.PlayStatus {
-        if let item = self.player?.currentItem {
-            switch item.status {
-            case .failed:
-                let msg =  item.error?.localizedDescription ??  ""
-                return .failed(err: msg)
-            case .readyToPlay:
-                return .ready
-            case .unknown:
-                return .unknown
-            @unknown default:
-                return .unknown
-            }
-        }
-        return .unknown
+    private func convertItemStatus() -> MMPlayerDefine.PlayStatus {
+        return self.player?.currentItem?.convertStatus() ?? .unknown
     }
     
     private func initStatus() {
@@ -746,6 +706,7 @@ extension MMPlayerLayer {
     
     public func download(observer status: @escaping ((MMPlayerDownloader.DownloadStatus)->Void)) -> MMPlayerObservation? {
         guard let asset = self.asset else {
+            
             status(.failed(err: "URL empty"))
             return nil
         }
