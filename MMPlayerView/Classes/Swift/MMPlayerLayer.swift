@@ -157,7 +157,7 @@ public class MMPlayerLayer: AVPlayerLayer {
      case end
      ```
      */
-    public var currentPlayStatus: MMPlayerDefine.PlayStatus = .unknown {
+    public var currentPlayStatus: PlayStatus = .unknown {
         didSet {
             if currentPlayStatus == oldValue {
                 return
@@ -196,7 +196,7 @@ public class MMPlayerLayer: AVPlayerLayer {
      case memory(count: Int)
      ```
      */
-    public var cacheType: MMPlayerDefine.PlayerCacheType = .none
+    public var cacheType: PlayerCacheType = .none
     /**
      Current play url
      */
@@ -292,7 +292,7 @@ public class MMPlayerLayer: AVPlayerLayer {
     private var timeObserver: Any?
     private var isBackgroundPause = false
     private var cahce = MMPlayerCache()
-    private var playStatusBlock: ((_ status: MMPlayerDefine.PlayStatus) ->Void)?
+    private var playStatusBlock: ((_ status: PlayStatus) ->Void)?
     private var layerOrientationBlock: ((_ status: OrientationStatus) ->Void)?
     private var indicator = MMProgress()
     // MARK: - Init
@@ -384,7 +384,7 @@ extension MMPlayerLayer {
     /**
      Get player play status
      */
-    public func getStatusBlock(value: ((_ status: MMPlayerDefine.PlayStatus) -> Void)?) {
+    public func getStatusBlock(value: ((_ status: PlayStatus) -> Void)?) {
         self.playStatusBlock = value
     }
     /**
@@ -456,9 +456,9 @@ extension MMPlayerLayer {
         if let cacheItem = self.cahce.getItem(key: current.url) , cacheItem.status == .readyToPlay {
             self.player?.replaceCurrentItem(with: cacheItem)
         } else {
-            current.loadValuesAsynchronously(forKeys: MMPlayerDefine.assetKeysRequiredToPlay) { [weak self] in
+            current.loadValuesAsynchronously(forKeys: assetKeysRequiredToPlay) { [weak self] in
                 DispatchQueue.main.async {
-                    let keys = MMPlayerDefine.assetKeysRequiredToPlay
+                    let keys = assetKeysRequiredToPlay
                     if let a = self?.asset {
                         for key in keys {
                             var error: NSError?
@@ -689,7 +689,7 @@ extension MMPlayerLayer {
         }
     }
 
-    private func convertItemStatus() -> MMPlayerDefine.PlayStatus {
+    private func convertItemStatus() -> PlayStatus {
         return self.player?.currentItem?.convertStatus() ?? .unknown
     }
     

@@ -8,6 +8,7 @@
 
 import Foundation
 import AVFoundation
+import SwiftUI
 @objc public protocol MMPlayerBasePlayerProtocol: class {
     weak var playLayer: MMPlayerLayer? { set get }
     @objc optional func player(isMuted: Bool)
@@ -19,7 +20,7 @@ import AVFoundation
 }
 
 public protocol MMPlayerCoverViewProtocol: MMPlayerBasePlayerProtocol {
-    func currentPlayer(status: MMPlayerDefine.PlayStatus)
+    func currentPlayer(status: PlayStatus)
 }
 
 public protocol MMProgressProtocol {
@@ -38,37 +39,11 @@ public protocol ConverterProtocol {
 }
 
 
-let VideoBasePath = NSTemporaryDirectory()
-
-public struct MMPlayerDefine {
-    static let assetKeysRequiredToPlay = [
-    "duration",
-    "playable",
-    "hasProtectedContent",
-    ]
-
-    public enum PlayStatus {
-        case ready
-        case unknown
-        case failed(err: String)
-        case playing
-        case pause
-        case end
-        
-        static func == (lhs: PlayStatus, rhs: PlayStatus) -> Bool {
-            switch (lhs, rhs) {
-            case (.ready, .ready), (.unknown, .unknown), (.playing, .playing), (.pause, .pause), (.end, .end):
-                return true
-            case (.failed(let l), .failed(let r)):
-                return l == r
-            default:
-                return false
-            }
-        }
-    }
-    
-    public enum PlayerCacheType {
-        case none
-        case memory(count: Int)
-    }
+// SwiftUI
+public protocol ProgressUIProtocol {
+//    init(isStart: Binding<Bool>)
+    associatedtype Content: View
+    func start(isStart: Bool) -> Self.Content
 }
+
+

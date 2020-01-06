@@ -8,7 +8,6 @@
 import SwiftUI
 import AVFoundation
 
-let sharedPlayr = AVPlayer()
 @available(iOS 13.0.0, *)
 struct MMPlayerViewBridge: UIViewRepresentable {
     private let playLayer: AVPlayerLayer
@@ -24,26 +23,32 @@ struct MMPlayerViewBridge: UIViewRepresentable {
     }
 }
 
-
 @available(iOS 13.0.0, *)
 public struct MMPlayerViewUI: View {
-    private let control: MMPlayerControl
+    @ObservedObject private var control: MMPlayerControl
     private let playLayer = AVPlayerLayer()
-    //Use Shared AVPlayer Singleton
     public init() {
-        self.playLayer.player = sharedPlayr
-        self.control = MMPlayerControl(player: sharedPlayr)
+        self.init(player: sharedPlayr)
+        control.set(url: URL.init(string: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4")!)
+        control.resume()
     }
     
     public init(player: AVPlayer) {
         self.playLayer.player = player
         self.control = MMPlayerControl(player: player)
+        self.playLayer.backgroundColor = UIColor.black.cgColor
     }
 
     public var body: some View {
-        ZStack {
+        self.progress(view: IndicatorBridge())
+    }
+    
+    public func progress<Progress: View & ProgressUIProtocol>(view: Progress) -> some View {
+        return ZStack {
             MMPlayerViewBridge(player: playLayer)
-            Color.red.opacity(0.2)
+            MMPlayerProgressUI(content: view, isStart: $control.isStart)
         }
     }
 }
+
+

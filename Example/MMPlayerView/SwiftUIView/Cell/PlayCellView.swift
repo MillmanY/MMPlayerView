@@ -8,6 +8,7 @@
 
 import SwiftUI
 import MMPlayerView
+
 struct PlayCellView: View {
     let obj: DataObj
     let player: MMPlayerLayer
@@ -24,8 +25,7 @@ struct PlayCellView: View {
                     .resizable()
                 .frame(height: 200)
                 if self.isCurrent {
-                    MMPlayerViewUI()
-    
+                    MMPlayerViewUI()    
                 } else {
 
                 }
@@ -35,8 +35,6 @@ struct PlayCellView: View {
                 .padding(EdgeInsets(top: 5, leading: 10, bottom: 5, trailing: 10))
         }
     }
-    
-  
 }
 
 struct PlayCellView_Previews: PreviewProvider {

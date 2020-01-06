@@ -9,7 +9,7 @@ import Foundation
 
 import AVFoundation
 extension AVPlayerItem {
-    func convertStatus() -> MMPlayerDefine.PlayStatus {
+    func convertStatus() -> PlayStatus {
         switch self.status {
         case .failed:
             let msg =  self.error?.localizedDescription ??  ""

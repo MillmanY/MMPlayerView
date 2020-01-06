@@ -10,6 +10,7 @@ import AVFoundation
 import Combine
 
 class MMPlayerControl: ObservableObject {
+    static let shared = MMPlayerControl(player: sharedPlayr)
     private var asset: AVURLAsset?
     private var timeObserver: Any?
     private var muteObserver: NSKeyValueObservation?
@@ -24,12 +25,16 @@ class MMPlayerControl: ObservableObject {
     @Published
     public var isBackgroundPause = true
     @Published
-    public var currentPlayStatus: MMPlayerDefine.PlayStatus = .unknown
+    public var currentPlayStatus: PlayStatus = .unknown
     @Published
     public var repeatWhenEnd: Bool = false
     @Published
-    public var isStart: Bool = false
-    public var cacheType: MMPlayerDefine.PlayerCacheType = .none
+    public var isStart: Bool = false {
+        willSet {
+            objectWillChange.send()
+        }
+    }
+    public var cacheType: PlayerCacheType = .memory(count: 10)
 
     unowned var player: AVPlayer
     init(player: AVPlayer) {
@@ -45,6 +50,10 @@ class MMPlayerControl: ObservableObject {
         self.isBackgroundPause = false
         self.replace(item: nil)
 //        self.showCover(isShow: false)
+    }
+    
+    deinit {
+        self.initStatus()
     }
 }
 
@@ -99,9 +108,9 @@ extension MMPlayerControl {
         if let cacheItem = self.cahce.getItem(key: current.url) , cacheItem.status == .readyToPlay {
             self.replace(item: cacheItem)
         } else {
-            current.loadValuesAsynchronously(forKeys: MMPlayerDefine.assetKeysRequiredToPlay) { [weak self] in
+            current.loadValuesAsynchronously(forKeys: assetKeysRequiredToPlay) { [weak self] in
                 DispatchQueue.main.async {
-                    let keys = MMPlayerDefine.assetKeysRequiredToPlay
+                    let keys = assetKeysRequiredToPlay
                     if let a = self?.asset {
                         for key in keys {
                             var error: NSError?
@@ -149,6 +158,7 @@ extension MMPlayerControl {
                 default:
                     break
                 }
+                self.player.play()
             default:
                 break
             }
@@ -163,6 +173,7 @@ extension MMPlayerControl {
                 self?.isStart = true
             }
         }
+        
         self.itemCancel = [o1,o2,o3]
         self.player.replaceCurrentItem(with: item)
     }
@@ -233,6 +244,23 @@ extension MMPlayerControl {
             let old = value.newValue ?? false
             if new != old {
                 self?.isMuted = new
+            }
+        })
+        
+        rateObserver = self.player.observe(\.rate, options: [.new], changeHandler: { [weak self] (_, value) in
+            guard let self = self else {return}
+            let new = value.newValue ?? 1.0
+            let status = self.currentPlayStatus
+            switch status {
+            case .playing, .pause, .ready:
+                self.currentPlayStatus = (new == 0.0) ? .pause : .playing
+            case .end:
+                let total = self.player.currentItem?.duration.seconds ?? 0.0
+                let current = self.player.currentItem?.currentTime().seconds ?? 0.0
+                if current < total {
+                    self.currentPlayStatus = (new == 0.0) ? .pause : .playing
+                }
+            default: break
             }
         })
     }

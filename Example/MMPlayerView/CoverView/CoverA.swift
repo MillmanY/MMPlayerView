@@ -32,7 +32,7 @@ class CoverA: UIView, MMPlayerCoverViewProtocol {
         }
     }
     
-    func currentPlayer(status: MMPlayerDefine.PlayStatus) {
+    func currentPlayer(status: PlayStatus) {
         switch status {
         case .playing:
             self.btnPlay.setImage(#imageLiteral(resourceName: "ic_pause_circle_filled"), for: .normal)
