@@ -27,28 +27,46 @@ struct MMPlayerViewBridge: UIViewRepresentable {
 public struct MMPlayerViewUI: View {
     @ObservedObject private var control: MMPlayerControl
     private let playLayer = AVPlayerLayer()
-    public init() {
-        self.init(player: sharedPlayr)
-        control.set(url: URL.init(string: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4")!)
-        control.resume()
-    }
+    let progress: AnyView?
+    let cover: AnyView?
     
-    public init(player: AVPlayer) {
-        self.playLayer.player = player
-        self.control = MMPlayerControl(player: player)
-        self.playLayer.backgroundColor = UIColor.black.cgColor
-    }
-
     public var body: some View {
-        self.progress(view: IndicatorBridge())
-    }
-    
-    public func progress<Progress: View & ProgressUIProtocol>(view: Progress) -> some View {
         return ZStack {
             MMPlayerViewBridge(player: playLayer)
-            MMPlayerProgressUI(content: view, isStart: $control.isStart)
-        }
+            self.cover
+            self.progress
+        }.environmentObject(control)
     }
 }
 
+extension MMPlayerViewUI {
+    public init<P: View>(progress: P, player: AVPlayer? = nil) {
+        self.init(pView: AnyView(progress), cView: nil, player: player)
+    }
+
+    public init<C: View>(cover: C, player: AVPlayer? = nil) {
+        self.init(pView: AnyView(DefaultIndicator()), cView: AnyView(cover), player: player)
+    }
+
+    public init<P: View,C: View>(progress: P, cover: C, player: AVPlayer? = nil) {
+        self.init(pView: AnyView(progress), cView: AnyView(cover), player: player)
+    }
+    
+    public init(player: AVPlayer? = nil) {
+        self.init(pView: AnyView(DefaultIndicator()), cView: nil, player: player)
+    }
+
+    init(pView: AnyView? = AnyView(DefaultIndicator()), cView: AnyView? = nil, player: AVPlayer? = nil) {
+
+        let p = player ?? sharedPlayr
+        self.progress = pView
+        self.cover = cView
+        self.playLayer.player = p
+        self.control = MMPlayerControl(player: p)
+        self.playLayer.backgroundColor = UIColor.black.cgColor
+        control.set(url: URL.init(string: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WhatCarCanYouGetForAGrand.mp4"))
+        control.resume()
+
+    }
+}
 

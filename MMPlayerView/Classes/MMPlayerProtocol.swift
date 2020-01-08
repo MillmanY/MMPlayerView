@@ -46,4 +46,7 @@ public protocol ProgressUIProtocol {
     func start(isStart: Bool) -> Self.Content
 }
 
+public typealias ProgressContent = View
+public typealias CoverProtocol = View
+
 

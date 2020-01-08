@@ -9,7 +9,7 @@ import Foundation
 import AVFoundation
 import Combine
 
-class MMPlayerControl: ObservableObject {
+public class MMPlayerControl: ObservableObject {
     static let shared = MMPlayerControl(player: sharedPlayr)
     private var asset: AVURLAsset?
     private var timeObserver: Any?
@@ -29,11 +29,7 @@ class MMPlayerControl: ObservableObject {
     @Published
     public var repeatWhenEnd: Bool = false
     @Published
-    public var isStart: Bool = false {
-        willSet {
-            objectWillChange.send()
-        }
-    }
+    public var isLoading: Bool = false
     public var cacheType: PlayerCacheType = .memory(count: 10)
 
     unowned var player: AVPlayer
@@ -46,6 +42,7 @@ class MMPlayerControl: ObservableObject {
         self.addPlayerObserver()
     }
     private func initStatus() {
+        self.isLoading = false
         self.currentPlayStatus = .unknown
         self.isBackgroundPause = false
         self.replace(item: nil)
@@ -104,7 +101,7 @@ extension MMPlayerControl {
         guard let current = self.asset else {
             return
         }
-        isStart = true
+        isLoading = true
         if let cacheItem = self.cahce.getItem(key: current.url) , cacheItem.status == .readyToPlay {
             self.replace(item: cacheItem)
         } else {
@@ -138,6 +135,7 @@ extension MMPlayerControl {
         itemCancel.forEach { $0.cancel() }
         itemCancel.removeAll()
         guard let item = item as? MMPlayerItemUI else {
+            self.player.replaceCurrentItem(with: nil)
             return
         }
         let o1 = item.statusObserver.sink { [weak self] (status) in
@@ -165,16 +163,25 @@ extension MMPlayerControl {
         }
         let o2 = item.isKeepUpObserver.sink { [weak self] (value) in
             if value {
-                self?.isStart = false
+                self?.isLoading = false
             }
         }
         let o3 = item.isEmptyObserver.sink { [weak self] (value) in
             if value {
-                self?.isStart = true
+                self?.isLoading = true
             }
         }
         
-        self.itemCancel = [o1,o2,o3]
+        let o4 = self.$currentPlayStatus.sink { [weak self] (value) in
+            switch value {
+            case .unknown, .failed(_):
+                self?.isLoading = false
+            default:
+                break
+            }
+        }
+        
+        self.itemCancel = [o1,o2,o3,o4]
         self.player.replaceCurrentItem(with: item)
     }
 

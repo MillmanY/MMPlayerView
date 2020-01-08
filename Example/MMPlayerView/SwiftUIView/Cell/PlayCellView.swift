@@ -25,7 +25,7 @@ struct PlayCellView: View {
                     .resizable()
                 .frame(height: 200)
                 if self.isCurrent {
-                    MMPlayerViewUI()    
+                    MMPlayerViewUI.init(cover: Color.red.opacity(0.2))
                 } else {
 
                 }

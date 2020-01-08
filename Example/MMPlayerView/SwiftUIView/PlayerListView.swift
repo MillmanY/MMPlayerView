@@ -24,6 +24,7 @@ struct PlayerListView: View {
                     .modifier(ListObserver(index: offset))
                 }
                 .listRowInsets(PlayerListView.listEdge)
+                
             }
             .onPreferenceChange(ListObserver.ListFrameIndexPreferenceKey.self, perform: { (value) in
                 let first = value.sorted { $0.frame.origin.y < $1.frame.origin.y }
