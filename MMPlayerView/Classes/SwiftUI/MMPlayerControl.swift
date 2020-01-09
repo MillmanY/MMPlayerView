@@ -8,7 +8,6 @@
 import Foundation
 import AVFoundation
 import Combine
-
 public class MMPlayerControl: ObservableObject {
     static let shared = MMPlayerControl(player: sharedPlayr)
     private var asset: AVURLAsset?
@@ -17,6 +16,9 @@ public class MMPlayerControl: ObservableObject {
     private var rateObserver: NSKeyValueObservation?
     private var cahce = MMPlayerCache()
     private var itemCancel = [AnyCancellable]()
+    private var debounceCover = PassthroughSubject<Void,Never>()
+    private var debounceCancel: AnyCancellable?
+    private var hideCancel: AnyCancellable?
 
     @Published
     public var currentTime: CMTime = .zero
@@ -32,24 +34,22 @@ public class MMPlayerControl: ObservableObject {
     public var isLoading: Bool = false
     public var cacheType: PlayerCacheType = .memory(count: 10)
 
-    unowned var player: AVPlayer
+    @Published
+    public private(set) var isCoverShow = false
+    @Published
+    public var autoHideCoverType = CoverAutoHideType.autoHide(after: 3.0)
+    public var coverAnimationInterval = 0.3
+    
+    public unowned var player: AVPlayer
     init(player: AVPlayer) {
         self.player = player
         self.setup()
     }
     
-    private func setup() {
-        self.addPlayerObserver()
-    }
-    private func initStatus() {
-        self.isLoading = false
-        self.currentPlayStatus = .unknown
-        self.isBackgroundPause = false
-        self.replace(item: nil)
-//        self.showCover(isShow: false)
-    }
-    
     deinit {
+        hideCancel = nil
+        debounceCancel = nil
+        itemCancel.removeAll()
         self.initStatus()
     }
 }
@@ -131,6 +131,27 @@ extension MMPlayerControl {
             }
         }
     }
+}
+
+extension MMPlayerControl {
+    private func setup() {
+        self.addPlayerObserver()
+        hideCancel = $autoHideCoverType.sink { [weak self] (t) in
+            guard let self = self else {return}
+            self.debounceCancel?.cancel()
+            self.debounceCancel = self.debounceCover.debounce(for: .seconds(t.delay), scheduler: DispatchQueue.main).sink { (_) in
+                self.isCoverShow.toggle()
+            }
+        }
+    }
+        
+    private func initStatus() {
+        self.isLoading = false
+        self.currentPlayStatus = .unknown
+        self.isBackgroundPause = false
+        self.replace(item: nil)
+        self.isCoverShow = false
+    }
     private func replace(item: AVPlayerItem?) {
         itemCancel.forEach { $0.cancel() }
         itemCancel.removeAll()
@@ -185,9 +206,17 @@ extension MMPlayerControl {
         self.player.replaceCurrentItem(with: item)
     }
 
-}
-
-extension MMPlayerControl {
+    func coverViewTapHandle() {
+        switch autoHideCoverType {
+        case .autoHide(_):
+            if !self.isCoverShow {
+                self.isCoverShow.toggle()
+            }
+            self.debounceCover.send()
+        case .disable:
+            self.isCoverShow.toggle()
+        }
+    }
     private func addPlayerObserver() {
         NotificationCenter.default.removeObserver(self)
     

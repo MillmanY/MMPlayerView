@@ -19,12 +19,7 @@ public extension MMPlayerLayer {
         case fitToPlayerView
         case fitToVideoRect
     }
-    
-    enum CoverAutoHideType {
-        case autoHide(after: TimeInterval)
-        case disable
-    }
-    
+        
     enum OrientationStatus: Int {
         case landscapeLeft
         case landscapeRight
@@ -84,7 +79,7 @@ public class MMPlayerLayer: AVPlayerLayer {
      mmplayerLayer.autoHideCoverType = .disable
      ```
      */
-    public var autoHideCoverType = MMPlayerLayer.CoverAutoHideType.autoHide(after: 3.0) {
+    public var autoHideCoverType = CoverAutoHideType.autoHide(after: 3.0) {
         didSet {
             switch autoHideCoverType {
             case .disable:

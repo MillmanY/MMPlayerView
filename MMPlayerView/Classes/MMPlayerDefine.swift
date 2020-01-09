@@ -26,10 +26,28 @@ public enum PlayStatus {
         }
     }
 }
+
+public enum CoverAutoHideType {
+    case autoHide(after: TimeInterval)
+    case disable
+    
+    var delay: TimeInterval {
+        get {
+            switch self {
+            case .autoHide(let after):
+                return after
+            case .disable:
+                return 0
+            }
+        }
+    }
+}
+
 public enum PlayerCacheType {
     case none
     case memory(count: Int)
 }
+
 let VideoBasePath = NSTemporaryDirectory()
 let sharedPlayr = AVPlayer()
 let assetKeysRequiredToPlay = [
