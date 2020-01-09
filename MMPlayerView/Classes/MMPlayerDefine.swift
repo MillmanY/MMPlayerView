@@ -49,7 +49,7 @@ public enum PlayerCacheType {
 }
 
 let VideoBasePath = NSTemporaryDirectory()
-let sharedPlayr = AVPlayer()
+let sharedPlayer = AVPlayer()
 let assetKeysRequiredToPlay = [
   "duration",
   "playable",

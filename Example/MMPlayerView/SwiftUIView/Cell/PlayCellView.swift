@@ -11,11 +11,11 @@ import MMPlayerView
 
 struct PlayCellView: View {
     let obj: DataObj
-    let player: MMPlayerLayer
     let isCurrent: Bool
-    init(obj: DataObj, player: MMPlayerLayer, isCurrent: Bool = false) {
+    let control: MMPlayerControl
+    init(control: MMPlayerControl, obj: DataObj, isCurrent: Bool = false) {
+        self.control = control
         self.obj = obj
-        self.player = player
         self.isCurrent = isCurrent
     }
     var body: some View {
@@ -25,7 +25,7 @@ struct PlayCellView: View {
                     .resizable()
                 .frame(height: 200)
                 if self.isCurrent {
-                    MMPlayerViewUI.init(cover: Color.red.opacity(0.8))
+                    MMPlayerViewUI(cover: Color.red.opacity(0.8), control: control)
                 } else {
 
                 }
@@ -39,7 +39,7 @@ struct PlayCellView: View {
 
 struct PlayCellView_Previews: PreviewProvider {
     static var previews: some View {
-        PlayCellView(obj: DemoSource.shared.demoData[2], player: MMPlayerLayer())
+        PlayCellView(control: MMPlayerControl(), obj: DemoSource.shared.demoData[2])
             .previewLayout(.sizeThatFits)
     }
 }

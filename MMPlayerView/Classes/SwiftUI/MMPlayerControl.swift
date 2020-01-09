@@ -9,7 +9,6 @@ import Foundation
 import AVFoundation
 import Combine
 public class MMPlayerControl: ObservableObject {
-    static let shared = MMPlayerControl(player: sharedPlayr)
     private var asset: AVURLAsset?
     private var timeObserver: Any?
     private var muteObserver: NSKeyValueObservation?
@@ -40,9 +39,15 @@ public class MMPlayerControl: ObservableObject {
     public var autoHideCoverType = CoverAutoHideType.autoHide(after: 3.0)
     public var coverAnimationInterval = 0.3
     
-    public unowned var player: AVPlayer
-    init(player: AVPlayer) {
-        self.player = player
+    public var player: AVPlayer {
+        get {
+            return self.playerLayer.player!
+        }
+    }
+    public let playerLayer: AVPlayerLayer
+    public init(player: AVPlayer = AVPlayer()) {
+        self.playerLayer = AVPlayerLayer(player: player)
+        self.playerLayer.backgroundColor = UIColor.black.cgColor
         self.setup()
     }
     
@@ -139,8 +144,8 @@ extension MMPlayerControl {
         hideCancel = $autoHideCoverType.sink { [weak self] (t) in
             guard let self = self else {return}
             self.debounceCancel?.cancel()
-            self.debounceCancel = self.debounceCover.debounce(for: .seconds(t.delay), scheduler: DispatchQueue.main).sink { (_) in
-                self.isCoverShow.toggle()
+            self.debounceCancel = self.debounceCover.debounce(for: .seconds(t.delay), scheduler: DispatchQueue.main).sink { [weak self] (_) in
+                self?.isCoverShow.toggle()
             }
         }
     }

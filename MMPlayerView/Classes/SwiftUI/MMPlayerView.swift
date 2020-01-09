@@ -26,13 +26,12 @@ struct MMPlayerViewBridge: UIViewRepresentable {
 @available(iOS 13.0.0, *)
 public struct MMPlayerViewUI: View {
     @ObservedObject private var control: MMPlayerControl
-    private let playLayer = AVPlayerLayer()
     let progress: AnyView?
     let cover: AnyView?
     
     public var body: some View {
         return ZStack {
-            MMPlayerViewBridge(player: playLayer)
+            MMPlayerViewBridge(player: control.playerLayer)
             self.cover?
                 .animation(.easeOut(duration: control.coverAnimationInterval))
                 .opacity(self.control.isCoverShow ? 1.0 : 0.0)
@@ -41,7 +40,7 @@ public struct MMPlayerViewUI: View {
         .gesture(self.coverHandelGesture(), including: .all)
         .environmentObject(control)
     }
-    
+
     private func coverHandelGesture() -> _EndedGesture<TapGesture> {
         return TapGesture().onEnded { (_) in
             self.control.coverViewTapHandle()
@@ -50,33 +49,26 @@ public struct MMPlayerViewUI: View {
 }
 
 extension MMPlayerViewUI {
-    public init<P: View>(progress: P, player: AVPlayer? = nil) {
-        self.init(pView: AnyView(progress), cView: nil, player: player)
+    public init<P: View>(progress: P, control: MMPlayerControl) {
+        self.init(pView: AnyView(progress), cView: nil, control: control)
     }
 
-    public init<C: View>(cover: C, player: AVPlayer? = nil) {
-        self.init(pView: AnyView(DefaultIndicator()), cView: AnyView(cover), player: player)
+    public init<C: View>(cover: C, control: MMPlayerControl) {
+        self.init(pView: AnyView(DefaultIndicator()), cView: AnyView(cover), control: control)
     }
 
-    public init<P: View,C: View>(progress: P, cover: C, player: AVPlayer? = nil) {
-        self.init(pView: AnyView(progress), cView: AnyView(cover), player: player)
+    public init<P: View,C: View>(progress: P, cover: C, control: MMPlayerControl) {
+        self.init(pView: AnyView(progress), cView: AnyView(cover), control: control)
     }
     
-    public init(player: AVPlayer? = nil) {
-        self.init(pView: AnyView(DefaultIndicator()), cView: nil, player: player)
+    public init(control: MMPlayerControl) {
+        self.init(pView: AnyView(DefaultIndicator()), cView: nil, control: control)
     }
 
-    init(pView: AnyView? = AnyView(DefaultIndicator()), cView: AnyView? = nil, player: AVPlayer? = nil) {
-
-        let p = player ?? sharedPlayr
+    init(pView: AnyView? = AnyView(DefaultIndicator()), cView: AnyView? = nil, control: MMPlayerControl) {
         self.progress = pView
         self.cover = cView
-        self.playLayer.player = p
-        self.control = MMPlayerControl(player: p)
-        self.playLayer.backgroundColor = UIColor.black.cgColor
-        control.set(url: URL.init(string: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WhatCarCanYouGetForAGrand.mp4"))
-        control.resume()
-
+        self.control = control
     }
 }
 
