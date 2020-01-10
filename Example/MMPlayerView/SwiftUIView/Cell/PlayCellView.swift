@@ -25,9 +25,7 @@ struct PlayCellView: View {
                     .resizable()
                 .frame(height: 200)
                 if self.isCurrent {
-                    MMPlayerViewUI(cover: Color.red.opacity(0.8), control: control)
-                } else {
-
+                    MMPlayerViewUI(cover: CoverAUI(), control: control)
                 }
             }
             Text(self.obj.title)

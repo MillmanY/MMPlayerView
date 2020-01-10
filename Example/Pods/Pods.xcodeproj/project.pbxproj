@@ -17,6 +17,7 @@
 		27570B4E239E2F460082B9A7 /* MMPlayer+String+SRTTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27570B4D239E2F460082B9A7 /* MMPlayer+String+SRTTime.swift */; };
 		2777706E23A9C9EB00ACEB20 /* MMPlayer+Array+Safe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2777706D23A9C9EB00ACEB20 /* MMPlayer+Array+Safe.swift */; };
 		2777707223AA0DF900ACEB20 /* MMSubtitleSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2777707123AA0DF900ACEB20 /* MMSubtitleSetting.swift */; };
+		277C0A5F23C70EE80071DBAC /* TimeInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 277C0A5E23C70EE80071DBAC /* TimeInfo.swift */; };
 		27874357219E7522001B98F9 /* MMPlayer+String+Encode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27874356219E7522001B98F9 /* MMPlayer+String+Encode.swift */; };
 		27874359219E774A001B98F9 /* MMPlayerDownloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27874358219E774A001B98F9 /* MMPlayerDownloadManager.swift */; };
 		2787435B219E7966001B98F9 /* MMPlayerDownloadRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2787435A219E7966001B98F9 /* MMPlayerDownloadRequest.swift */; };
@@ -90,6 +91,7 @@
 		27570B4D239E2F460082B9A7 /* MMPlayer+String+SRTTime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MMPlayer+String+SRTTime.swift"; sourceTree = "<group>"; };
 		2777706D23A9C9EB00ACEB20 /* MMPlayer+Array+Safe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MMPlayer+Array+Safe.swift"; sourceTree = "<group>"; };
 		2777707123AA0DF900ACEB20 /* MMSubtitleSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MMSubtitleSetting.swift; sourceTree = "<group>"; };
+		277C0A5E23C70EE80071DBAC /* TimeInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeInfo.swift; sourceTree = "<group>"; };
 		27874356219E7522001B98F9 /* MMPlayer+String+Encode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MMPlayer+String+Encode.swift"; sourceTree = "<group>"; };
 		27874358219E774A001B98F9 /* MMPlayerDownloadManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MMPlayerDownloadManager.swift; sourceTree = "<group>"; };
 		2787435A219E7966001B98F9 /* MMPlayerDownloadRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MMPlayerDownloadRequest.swift; sourceTree = "<group>"; };
@@ -222,6 +224,7 @@
 			children = (
 				2787435E219E9F70001B98F9 /* MMPlayerItem.swift */,
 				27E9EE0F23A342C80025C529 /* SRTInfo.swift */,
+				277C0A5E23C70EE80071DBAC /* TimeInfo.swift */,
 			);
 			path = Item;
 			sourceTree = "<group>";
@@ -659,6 +662,7 @@
 				5E9A1B7E1F4D80E600746E5B /* MMPlayerTransitionDefine.swift in Sources */,
 				2717E19F219DB17000DCC8CB /* MMPlayer+Codable.swift in Sources */,
 				5E9A1B421F4D2DAB00746E5B /* MMProgress.swift in Sources */,
+				277C0A5F23C70EE80071DBAC /* TimeInfo.swift in Sources */,
 				27E9EE1023A342C80025C529 /* SRTInfo.swift in Sources */,
 				5E4F8A9320627FC100A2B19D /* MMPlayer+UIViewController+CheckProtocol.swift in Sources */,
 				5EC40F441F4EA47100510EDF /* MMLandscapeWindow.swift in Sources */,

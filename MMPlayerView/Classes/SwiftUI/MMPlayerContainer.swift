@@ -17,7 +17,6 @@ class MMPlayerContainer: UIView {
     
     private func setup() {
         self.backgroundColor = .clear
-        self.layer.insertSublayer(playLayer, at: 0)
     }
     
     required init?(coder: NSCoder) {
@@ -26,6 +25,9 @@ class MMPlayerContainer: UIView {
     
     override func layoutSubviews() {
         super.layoutSubviews()
+        if self.playLayer.superlayer != self.layer {
+            self.layer.insertSublayer(playLayer, at: 0)
+        }
         self.playLayer.frame = self.bounds
     }
 }

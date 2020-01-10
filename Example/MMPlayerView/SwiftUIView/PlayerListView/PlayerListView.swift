@@ -8,19 +8,26 @@
 
 import SwiftUI
 import MMPlayerView
-
+import Combine
 struct PlayerListView: View {
-    static let listEdge = EdgeInsets.init(top: 0, leading: 0, bottom: 0, trailing: 0)
-    let objs = DemoSource.shared.demoData.enumerated().map({ $0 })
-    let control = MMPlayerControl()
-    @State var currentIdx = -1
+    @ObservedObject var playListViewModel: PlayListViewModel
+    let control: MMPlayerControl
+
+    init() {
+        self.control = MMPlayerControl()
+        playListViewModel = PlayListViewModel.init(control: self.control)
+    }
+    
+    static let listEdge = EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
     var body: some View {
-        ZStack(alignment: .top) {
+        let objs = playListViewModel.videoList.enumerated().map({ $0 })
+
+        return ZStack(alignment: .top) {
             List {
                 ForEach(objs, id: \.element.title) { (offset, element) in
                     PlayCellView(control: self.control,
                                  obj: element,
-                                 isCurrent: offset == self.currentIdx)
+                                 isCurrent: offset == self.playListViewModel.currentViewIdx)
                     .modifier(ListObserver(index: offset))
                 }
                 .listRowInsets(PlayerListView.listEdge)
@@ -28,10 +35,9 @@ struct PlayerListView: View {
             .onPreferenceChange(ListObserver.ListFrameIndexPreferenceKey.self, perform: { (value) in
                 let first = value.sorted { $0.frame.origin.y < $1.frame.origin.y }
                     .first { $0.frame.origin.y > 0 }
-                if let f = first, f.idx != self.currentIdx  {
-                    self.control.set(url: self.objs[f.idx].element.play_Url)
-                    self.control.resume()
-                    self.currentIdx = f.idx
+                if let f = first, f.idx != self.playListViewModel.currentViewIdx  {
+                    print("Current Inidex \(f.idx)")
+                    self.playListViewModel.updatePlayView(idx: f.idx)
                 }
               })
         }
@@ -44,3 +50,5 @@ struct PlayerListView_Previews: PreviewProvider {
         PlayerListView()
     }
 }
+
+

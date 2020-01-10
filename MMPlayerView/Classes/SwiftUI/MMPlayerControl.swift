@@ -20,7 +20,7 @@ public class MMPlayerControl: ObservableObject {
     private var hideCancel: AnyCancellable?
 
     @Published
-    public var currentTime: CMTime = .zero
+    public var timeInfo = TimeInfo()
     @Published
     public var isMuted = false
     @Published
@@ -31,12 +31,11 @@ public class MMPlayerControl: ObservableObject {
     public var repeatWhenEnd: Bool = false
     @Published
     public var isLoading: Bool = false
-    public var cacheType: PlayerCacheType = .memory(count: 10)
-
+    public var cacheType: PlayerCacheType = .none
     @Published
     public private(set) var isCoverShow = false
     @Published
-    public var autoHideCoverType = CoverAutoHideType.autoHide(after: 3.0)
+    public var autoHideCoverType = CoverAutoHideType.disable
     public var coverAnimationInterval = 0.3
     
     public var player: AVPlayer {
@@ -47,7 +46,6 @@ public class MMPlayerControl: ObservableObject {
     public let playerLayer: AVPlayerLayer
     public init(player: AVPlayer = AVPlayer()) {
         self.playerLayer = AVPlayerLayer(player: player)
-        self.playerLayer.backgroundColor = UIColor.black.cgColor
         self.setup()
     }
     
@@ -127,7 +125,8 @@ extension MMPlayerControl {
                         switch self?.cacheType {
                         case .some(.memory(let count)):
                             self?.cahce.cacheCount = count
-                            self?.cahce.appendCache(key: current.url, item: item)
+                            
+                            self?.cahce.appendCache(key: a.url, item: item)
                         default:
                             self?.cahce.removeAll()
                         }
@@ -136,11 +135,34 @@ extension MMPlayerControl {
             }
         }
     }
+    public func invalidate() {
+        self.initStatus()
+        self.asset = nil
+    }
+    
+    public func toggleCoverShowStatus() {
+        self.coverViewGestureHandle()
+    }
 }
 
 extension MMPlayerControl {
+    func coverViewGestureHandle() {
+        switch autoHideCoverType {
+        case .autoHide(_):
+            if !self.isCoverShow {
+                self.isCoverShow.toggle()
+            }
+            self.debounceCover.send()
+        case .disable:
+            self.isCoverShow.toggle()
+        }
+    }
+
     private func setup() {
         self.addPlayerObserver()
+        self.playerLayer.videoGravity = AVLayerVideoGravity.resizeAspectFill
+        self.playerLayer.backgroundColor = UIColor.black.cgColor
+
         hideCancel = $autoHideCoverType.sink { [weak self] (t) in
             guard let self = self else {return}
             self.debounceCancel?.cancel()
@@ -149,12 +171,13 @@ extension MMPlayerControl {
             }
         }
     }
-        
+
     private func initStatus() {
+        self.replace(item: nil)
+        self.timeInfo = TimeInfo()
         self.isLoading = false
         self.currentPlayStatus = .unknown
         self.isBackgroundPause = false
-        self.replace(item: nil)
         self.isCoverShow = false
     }
     private func replace(item: AVPlayerItem?) {
@@ -210,24 +233,12 @@ extension MMPlayerControl {
         self.itemCancel = [o1,o2,o3,o4]
         self.player.replaceCurrentItem(with: item)
     }
-
-    func coverViewTapHandle() {
-        switch autoHideCoverType {
-        case .autoHide(_):
-            if !self.isCoverShow {
-                self.isCoverShow.toggle()
-            }
-            self.debounceCover.send()
-        case .disable:
-            self.isCoverShow.toggle()
-        }
-    }
+    
     private func addPlayerObserver() {
         NotificationCenter.default.removeObserver(self)
     
         timeObserver = self.player.addPeriodicTimeObserver(forInterval: CMTimeMake(value: 1, timescale: 100), queue: DispatchQueue.main, using: { [weak self] (time) in
-                
-            if time.isIndefinite {
+            guard let total = self?.player.currentItem?.duration, !time.isIndefinite else {
                 return
             }
 //                if let sub = self?.subtitleSetting.subtitleObj {
@@ -243,7 +254,9 @@ extension MMPlayerControl {
 //                    }
 //                }
 //
-            self?.currentTime = time
+            
+                self?.timeInfo = TimeInfo(current: time, total: total)
+
         })
         
         

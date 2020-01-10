@@ -15,9 +15,7 @@ struct MMPlayerViewBridge: UIViewRepresentable {
     public init(player: AVPlayerLayer) {
         self.playLayer = player
     }
-    public func updateUIView(_ uiView: UIView, context: UIViewRepresentableContext<MMPlayerViewBridge>) {
-    
-    }
+    public func updateUIView(_ uiView: UIView, context: UIViewRepresentableContext<MMPlayerViewBridge>) {}
     public func makeUIView(context: Context) -> UIView {
         return MMPlayerContainer(playLayer: playLayer)
     }
@@ -37,14 +35,15 @@ public struct MMPlayerViewUI: View {
                 .opacity(self.control.isCoverShow ? 1.0 : 0.0)
             self.progress
         }
-        .gesture(self.coverHandelGesture(), including: .all)
+        .gesture(self.coverTapGesture(), including: .all)
         .environmentObject(control)
     }
 
-    private func coverHandelGesture() -> _EndedGesture<TapGesture> {
+    private func coverTapGesture() -> _EndedGesture<TapGesture> {
         return TapGesture().onEnded { (_) in
-            self.control.coverViewTapHandle()
+            self.control.coverViewGestureHandle()
         }
+        
     }
 }
 
