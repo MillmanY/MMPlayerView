@@ -35,7 +35,8 @@ struct CoverAUI: View {
                     self.isSliderScroll = true
                     if isScroll { return }
                     let time =  CMTimeMake(value: Int64(self.scrollValue), timescale: 1)
-                    self.control.player.seek(to: time) { (_) in
+                    self.control.player.seek(to: time) { (value) in
+                        print("Completed \(value)")
                         self.isSliderScroll = false
                         self.control.toggleCoverShowStatus()
                     }

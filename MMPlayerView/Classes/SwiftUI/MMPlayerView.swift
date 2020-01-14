@@ -7,18 +7,20 @@
 
 import SwiftUI
 import AVFoundation
-
+var a = 0
 @available(iOS 13.0.0, *)
 struct MMPlayerViewBridge: UIViewRepresentable {
-    private let playLayer: AVPlayerLayer
+    @EnvironmentObject private var control: MMPlayerControl
 
-    public init(player: AVPlayerLayer) {
-        self.playLayer = player
+    public func updateUIView(_ uiView: MMPlayerContainer, context: UIViewRepresentableContext<MMPlayerViewBridge>) {
     }
-    public func updateUIView(_ uiView: UIView, context: UIViewRepresentableContext<MMPlayerViewBridge>) {}
-    public func makeUIView(context: Context) -> UIView {
-        return MMPlayerContainer(playLayer: playLayer)
+    static func dismantleUIView(_ uiView: MMPlayerContainer, coordinator: MMPlayerViewBridge.Coordinator) {
+//        uiView.playerLayer.player = nil
     }
+    public func makeUIView(context: Context) -> MMPlayerContainer {
+        return MMPlayerContainer(player: control.player)
+    }
+
 }
 
 @available(iOS 13.0.0, *)
@@ -26,10 +28,10 @@ public struct MMPlayerViewUI: View {
     @ObservedObject private var control: MMPlayerControl
     let progress: AnyView?
     let cover: AnyView?
-    
+    let bridge: MMPlayerViewBridge
     public var body: some View {
         return ZStack {
-            MMPlayerViewBridge(player: control.playerLayer)
+            bridge
             self.cover?
                 .animation(.easeOut(duration: control.coverAnimationInterval))
                 .opacity(self.control.isCoverShow ? 1.0 : 0.0)
@@ -38,12 +40,12 @@ public struct MMPlayerViewUI: View {
         .gesture(self.coverTapGesture(), including: .all)
         .environmentObject(control)
     }
+    
 
     private func coverTapGesture() -> _EndedGesture<TapGesture> {
         return TapGesture().onEnded { (_) in
             self.control.coverViewGestureHandle()
         }
-        
     }
 }
 
@@ -68,6 +70,7 @@ extension MMPlayerViewUI {
         self.progress = pView
         self.cover = cView
         self.control = control
+        self.bridge = MMPlayerViewBridge()
     }
 }
 

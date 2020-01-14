@@ -7,27 +7,37 @@
 
 import UIKit
 import AVFoundation
+
 class MMPlayerContainer: UIView {
-    unowned var playLayer: AVPlayerLayer
-    init(playLayer: AVPlayerLayer) {
-        self.playLayer = playLayer
+    var o: NSKeyValueObservation?
+    init(player: AVPlayer) {
         super.init(frame: .zero)
-        self.setup()
-    }
-    
-    private func setup() {
-        self.backgroundColor = .clear
+        self.playerLayer.player = player
+        self.backgroundColor = UIColor.clear
+        playerLayer.backgroundColor = UIColor.blue.withAlphaComponent(0.5).cgColor
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     override func layoutSubviews() {
         super.layoutSubviews()
-        if self.playLayer.superlayer != self.layer {
-            self.layer.insertSublayer(playLayer, at: 0)
-        }
-        self.playLayer.frame = self.bounds
+//        if playerLayer.superlayer != self.layer {
+//            self.layer.insertSublayer(playerLayer, at: 0)
+//            playerLayer.player?.play()
+//        }
+        self.playerLayer.frame = self.bounds
+    }
+    
+    // Override UIView property
+    override static var layerClass: AnyClass {
+        return AVPlayerLayer.self
+    }
+    var playerLayer: AVPlayerLayer {
+        return layer as! AVPlayerLayer
+    }
+    
+    deinit {
     }
 }

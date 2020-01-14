@@ -17,6 +17,8 @@ class PlayListViewModel: ObservableObject {
     
     @Published
     private(set) var currentViewIdx = -1
+    
+
     unowned let control: MMPlayerControl
     
     init(control: MMPlayerControl) {
@@ -25,8 +27,8 @@ class PlayListViewModel: ObservableObject {
             guard let self = self else {return -1}
             self.currentViewIdx = value
             return value
-        }).debounce(for: .seconds(0.5), scheduler: DispatchQueue.main).sink { [weak self] (idx) in
-            guard let self = self else {return}
+        }).debounce(for: .seconds(1), scheduler: DispatchQueue.main).sink { [weak self] (idx) in
+            guard let self = self, idx >= 0 else {return}
             control.set(url: self.videoList[idx].play_Url)
             control.resume()
         }
@@ -36,5 +38,8 @@ class PlayListViewModel: ObservableObject {
         self.control.invalidate()
         debounceIdx.value = idx
     }
-
+    func updatePlayIdx() {
+        self.control.invalidate()
+        debounceIdx.value = debounceIdx.value+1
+    }
 }

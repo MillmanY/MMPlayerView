@@ -13,10 +13,12 @@ struct PlayCellView: View {
     let obj: DataObj
     let isCurrent: Bool
     let control: MMPlayerControl
+//    let play: MMPlayerViewUI
     init(control: MMPlayerControl, obj: DataObj, isCurrent: Bool = false) {
         self.control = control
         self.obj = obj
         self.isCurrent = isCurrent
+//        play = MMPlayerViewUI(cover: CoverAUI(), control: control)
     }
     var body: some View {
         VStack {

@@ -12,16 +12,11 @@ import SwiftUI
 struct ListObserver: ViewModifier {
     let index: Int
     func body(content: Content) -> some View {
-        ZStack {
-            content
-            GeometryReader { (proxy) in
-                AnyView(Color.clear)
-                .frame(width: proxy.size.width,
-                       height: proxy.size.height)
-                .preference(key: ListFrameIndexPreferenceKey.self,
-                            value: [ListFrameIndexPreferenceKey.Info(idx: self.index, frame: proxy.frame(in: .global))])
-            }
-        }
+        content.background(GeometryReader{ proxy -> AnyView in
+           return AnyView(Color.clear
+            .preference(key: ListFrameIndexPreferenceKey.self,
+                        value: [ListFrameIndexPreferenceKey.Info(idx: self.index, frame: proxy.frame(in: .global))]))
+        })
     }
 }
 

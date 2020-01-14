@@ -38,14 +38,16 @@ public class MMPlayerControl: ObservableObject {
     public var autoHideCoverType = CoverAutoHideType.disable
     public var coverAnimationInterval = 0.3
     
-    public var player: AVPlayer {
-        get {
-            return self.playerLayer.player!
-        }
-    }
-    public let playerLayer: AVPlayerLayer
+//    public var player: AVPlayer {
+//        get {
+//            return self.playerLayer.player!
+//        }
+//    }
+    //    public let playerLayer: AVPlayerLayer
+    public let player: AVPlayer
     public init(player: AVPlayer = AVPlayer()) {
-        self.playerLayer = AVPlayerLayer(player: player)
+        self.player = player
+//        self.playerLayer = AVPlayerLayer(player: player)
         self.setup()
     }
     
@@ -100,6 +102,7 @@ extension MMPlayerControl {
         default:
             break
         }
+
         self.initStatus()
         guard let current = self.asset else {
             return
@@ -136,6 +139,7 @@ extension MMPlayerControl {
         }
     }
     public func invalidate() {
+        self.asset?.cancelLoading()
         self.initStatus()
         self.asset = nil
     }
@@ -160,8 +164,8 @@ extension MMPlayerControl {
 
     private func setup() {
         self.addPlayerObserver()
-        self.playerLayer.videoGravity = AVLayerVideoGravity.resizeAspectFill
-        self.playerLayer.backgroundColor = UIColor.black.cgColor
+//        self.playerLayer.videoGravity = AVLayerVideoGravity.resizeAspectFill
+//        self.playerLayer.backgroundColor = UIColor.black.cgColor
 
         hideCancel = $autoHideCoverType.sink { [weak self] (t) in
             guard let self = self else {return}
