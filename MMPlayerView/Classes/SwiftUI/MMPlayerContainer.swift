@@ -14,7 +14,6 @@ class MMPlayerContainer: UIView {
         super.init(frame: .zero)
         self.playerLayer.player = player
         self.backgroundColor = UIColor.clear
-        playerLayer.backgroundColor = UIColor.blue.withAlphaComponent(0.5).cgColor
     }
     
     required init?(coder: NSCoder) {

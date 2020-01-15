@@ -16,9 +16,7 @@ struct PlayerListView: View {
     @ObservedObject var playListViewModel: PlayListViewModel
     let control: MMPlayerControl
     @State private var showDetails = false
-    
-    @State var collect = [Int: ListObserver.ListFrameIndexPreferenceKey.Info]()
-    @State var idx = -1
+    @State var listRect = CGRect.zero
     init() {
         self.control = MMPlayerControl()
         playListViewModel = PlayListViewModel.init(control: self.control)
@@ -33,41 +31,21 @@ struct PlayerListView: View {
                     PlayCellView(control: self.control,
                                  obj: element,
                                  isCurrent: offset == self.playListViewModel.currentViewIdx)
-                    .modifier(ListObserver(index: offset))
+                    .modifier(CellObserver(index: offset))
                 }
+                .listRowInsets(PlayerListView.listEdge)
             }
-            .listRowInsets(PlayerListView.listEdge)
-            .background(GeometryReader{ proxy -> AnyView in
-                         print(proxy.frame(in: .global))
-                            return AnyView(Color.clear)
-            })
-            .onPreferenceChange(ListObserver.ListFrameIndexPreferenceKey.self, perform: { (value) in
-                let first = value.sorted { $0.frame.origin.y < $1.frame.origin.y }
-                    .first { $0.frame.origin.y > 0 }
-                //                if let f = first, f.idx != self.playListViewModel.currentViewIdx  {
-//                    print("@ Current Inidex \(f.idx)")
-//                    self.playListViewModel.updatePlayView(idx: f.idx)
-//                }
-              })
-            if showDetails {
-                DetailView(control: control)
-            }
+            .modifier(TopIndexObserver.init(completed: { (idx) in
+                self.playListViewModel.updatePlayView(idx: idx)
+                print("# idx \(idx)")
+            }))
+//            if showDetails {
+//                DetailView(control: control)
+//            }
 ////                .scaleEffect(showDetails ? 1.0 : 0.00001)
 //            .position(x: 0, y: 0)
-            HStack {
-
-                Button(action: {
-                    withAnimation {
-                        self.showDetails.toggle()
-                    }
-                    }) {
-                    Text("Tap to show details")
-                }
-                Button(action: {
-                    self.playListViewModel.updatePlayIdx()
-                              }) {
-                              Text("NExt")
-                          }
+            Button.init("Check") {
+                print(self.listRect)
             }
 
         }

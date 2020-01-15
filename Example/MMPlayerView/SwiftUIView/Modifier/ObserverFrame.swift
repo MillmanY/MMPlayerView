@@ -9,33 +9,32 @@
 import Foundation
 import SwiftUI
 
-struct ListObserver: ViewModifier {
-    let index: Int
+struct ObserverFrame: ViewModifier {
+    @Binding var r: CGRect
+    init(binding: Binding<CGRect> = .constant(.zero)) {
+        self._r = binding
+    }
     func body(content: Content) -> some View {
         content.background(GeometryReader{ proxy -> AnyView in
-           return AnyView(Color.clear
-            .preference(key: ListFrameIndexPreferenceKey.self,
-                        value: [ListFrameIndexPreferenceKey.Info(idx: self.index, frame: proxy.frame(in: .global))]))
-        })
+            return AnyView(Color.clear
+             .preference(key: FrameIndexPreferenceKey.self,
+                         value: [proxy.frame(in: .global)]))
+        }).onPreferenceChange(FrameIndexPreferenceKey.self) { (value) in
+            guard let f = value.first, self.r != f else {return}
+            self.r = f
+        }
     }
 }
 
-extension ListObserver {
-    struct ListFrameIndexPreferenceKey: PreferenceKey, Equatable {
-        struct Info: Equatable {
-            let idx: Int
-            let frame: CGRect
-            
-            init(idx: Int, frame: CGRect) {
-                self.idx = idx
-                self.frame = frame
+extension ObserverFrame {
+    struct FrameIndexPreferenceKey: PreferenceKey, Equatable {
+        static var defaultValue: [CGRect] = []
+        static func reduce(value: inout [CGRect], nextValue: () -> [CGRect]) {
+            let n = nextValue()
+            if n.count > 0 {
+                print("# v \(n)")
+                value.append(contentsOf: n)
             }
         }
-        
-        static var defaultValue: [Info] = []
-        static func reduce(value: inout [Info], nextValue: () -> [Info]) {
-            value.append(contentsOf: nextValue())
-        }
     }
-
 }

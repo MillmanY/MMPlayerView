@@ -13,7 +13,7 @@ class PlayListViewModel: ObservableObject {
     let videoList = DemoSource.shared.demoData
 
     private var debounceCancel: AnyCancellable?
-    private let debounceIdx = CurrentValueSubject<Int, Never>(-1)
+    let debounceIdx = CurrentValueSubject<Int, Never>(-1)
     
     @Published
     private(set) var currentViewIdx = -1
@@ -27,10 +27,11 @@ class PlayListViewModel: ObservableObject {
             guard let self = self else {return -1}
             self.currentViewIdx = value
             return value
-        }).debounce(for: .seconds(1), scheduler: DispatchQueue.main).sink { [weak self] (idx) in
+        }).debounce(for: .seconds(2), scheduler: DispatchQueue.main).sink { [weak self] (idx) in
             guard let self = self, idx >= 0 else {return}
             control.set(url: self.videoList[idx].play_Url)
             control.resume()
+//            print("#\(idx)")
         }
     }
     
