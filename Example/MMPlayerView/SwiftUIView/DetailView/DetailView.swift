@@ -11,8 +11,8 @@ import MMPlayerView
 struct DetailView: View {
     let control: MMPlayerControl
     var body: some View {
-            MMPlayerViewUI(cover: CoverAUI(), control: self.control)
-
+////        MMPlayerViewUI(progress: CoverAUI(), control: self.control)
+        EmptyView()
     }
 }
 

@@ -7,26 +7,18 @@
 
 import SwiftUI
 import AVFoundation
-var a = 0
 @available(iOS 13.0.0, *)
 struct MMPlayerViewBridge: UIViewRepresentable {
-    let c: MMPlayerContainer
-    init(player: AVPlayer) {
-        c = MMPlayerContainer.init(player: player)
-    }
+    @EnvironmentObject var control: MMPlayerControl
 
     public func updateUIView(_ uiView: MMPlayerContainer, context: UIViewRepresentableContext<MMPlayerViewBridge>) {
     }
     static func dismantleUIView(_ uiView: MMPlayerContainer, coordinator: MMPlayerViewBridge.Coordinator) {
         uiView.playerLayer.player = nil
-        print("# Deinit")
-
     }
     public func makeUIView(context: Context) -> MMPlayerContainer {
-        print("# Make")
-        return c
+        return MMPlayerContainer(player: control.player)
     }
-
 }
 
 @available(iOS 13.0.0, *)
@@ -34,10 +26,9 @@ public struct MMPlayerViewUI: View {
     @ObservedObject private var control: MMPlayerControl
     let progress: AnyView?
     let cover: AnyView?
-    let bridge: MMPlayerViewBridge
     public var body: some View {
         return ZStack {
-            bridge
+            MMPlayerViewBridge()
             self.cover?
                 .animation(.easeOut(duration: control.coverAnimationInterval))
                 .opacity(self.control.isCoverShow ? 1.0 : 0.0)
@@ -76,8 +67,6 @@ extension MMPlayerViewUI {
         self.progress = pView
         self.cover = cView
         self.control = control
-        self.bridge = MMPlayerViewBridge.init(player: control.player)
-        print("# plYView Init")
     }
 }
 

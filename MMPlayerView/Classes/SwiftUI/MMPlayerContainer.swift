@@ -8,12 +8,14 @@
 import UIKit
 import AVFoundation
 
+
 class MMPlayerContainer: UIView {
-    var o: NSKeyValueObservation?
-    init(player: AVPlayer) {
+    let playerLayer: AVPlayerLayer
+    init(player: AVPlayer?) {
+        self.playerLayer = AVPlayerLayer.init(player: player)
         super.init(frame: .zero)
-        self.playerLayer.player = player
-        self.backgroundColor = UIColor.clear
+        self.backgroundColor = UIColor.black
+        self.playerLayer.videoGravity = .resizeAspect
     }
     
     required init?(coder: NSCoder) {
@@ -22,21 +24,9 @@ class MMPlayerContainer: UIView {
 
     override func layoutSubviews() {
         super.layoutSubviews()
-//        if playerLayer.superlayer != self.layer {
-//            self.layer.insertSublayer(playerLayer, at: 0)
-//            playerLayer.player?.play()
-//        }
-        self.playerLayer.frame = self.bounds
-    }
-    
-    // Override UIView property
-    override static var layerClass: AnyClass {
-        return AVPlayerLayer.self
-    }
-    var playerLayer: AVPlayerLayer {
-        return layer as! AVPlayerLayer
-    }
-    
-    deinit {
+        if playerLayer.superlayer != self.layer {
+            self.layer.insertSublayer(playerLayer, at: 0)
+        }
+        self.playerLayer.frame = self.superview?.bounds ?? .zero
     }
 }
