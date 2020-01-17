@@ -34,6 +34,7 @@
 		27E9EE0E23A32D270025C529 /* SubtitleConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27E9EE0D23A32D270025C529 /* SubtitleConverter.swift */; };
 		27E9EE1023A342C80025C529 /* SRTInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27E9EE0F23A342C80025C529 /* SRTInfo.swift */; };
 		27ED4D6A23B251180054C669 /* MMPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27ED4D6923B251180054C669 /* MMPlayerView.swift */; };
+		27F3272723D18FF800DB55EA /* MMPlayerViewUIError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27F3272623D18FF800DB55EA /* MMPlayerViewUIError.swift */; };
 		27F9B20A23AB4A4200B49152 /* MMSubtitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27F9B20923AB4A4200B49152 /* MMSubtitleView.swift */; };
 		27F9B20C23AB52CE00B49152 /* MMplayer+StackView+RemoveAll.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27F9B20B23AB52CE00B49152 /* MMplayer+StackView+RemoveAll.swift */; };
 		2E84F8562C8CCA5CDEB1FFB61D2BD886 /* Pods-MMPlayerView_Example-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EFD9156A61B9FAA04CE035D9A3722F0 /* Pods-MMPlayerView_Example-dummy.m */; };
@@ -108,6 +109,7 @@
 		27E9EE0D23A32D270025C529 /* SubtitleConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubtitleConverter.swift; sourceTree = "<group>"; };
 		27E9EE0F23A342C80025C529 /* SRTInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SRTInfo.swift; sourceTree = "<group>"; };
 		27ED4D6923B251180054C669 /* MMPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MMPlayerView.swift; sourceTree = "<group>"; };
+		27F3272623D18FF800DB55EA /* MMPlayerViewUIError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MMPlayerViewUIError.swift; sourceTree = "<group>"; };
 		27F9B20923AB4A4200B49152 /* MMSubtitleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MMSubtitleView.swift; sourceTree = "<group>"; };
 		27F9B20B23AB52CE00B49152 /* MMplayer+StackView+RemoveAll.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MMplayer+StackView+RemoveAll.swift"; sourceTree = "<group>"; };
 		36CCC8551496A7DFC48D0DFB3E4F03F7 /* Pods-MMPlayerView_Tests.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = "Pods-MMPlayerView_Tests.modulemap"; sourceTree = "<group>"; };
@@ -240,6 +242,7 @@
 		27989C2B23B1A73E008489FB /* SwiftUI */ = {
 			isa = PBXGroup;
 			children = (
+				27F3272523D18FD900DB55EA /* Error */,
 				27D3DB0323C2EDD1003B4EED /* Progress */,
 				27ED4D6923B251180054C669 /* MMPlayerView.swift */,
 				27DFC2D823BEE8AB003A8820 /* MMPlayerControl.swift */,
@@ -280,6 +283,14 @@
 				27D3DB0423C2EDE2003B4EED /* MMPlayerProgressUI.swift */,
 			);
 			path = Progress;
+			sourceTree = "<group>";
+		};
+		27F3272523D18FD900DB55EA /* Error */ = {
+			isa = PBXGroup;
+			children = (
+				27F3272623D18FF800DB55EA /* MMPlayerViewUIError.swift */,
+			);
+			path = Error;
 			sourceTree = "<group>";
 		};
 		3DC26C96CC9E5AEAD0ECD28C2701EF2B /* MMPlayerView */ = {
@@ -655,6 +666,7 @@
 				27570B4C239E10CC0082B9A7 /* MMPlayer+String+Bounds.swift in Sources */,
 				5E9A1B711F4D80E600746E5B /* MMPlayerPassViewPushTransition.swift in Sources */,
 				27874361219EB538001B98F9 /* MMPlayer+DispatchQueue+Once.swift in Sources */,
+				27F3272723D18FF800DB55EA /* MMPlayerViewUIError.swift in Sources */,
 				5E9A1B4D1F4D804400746E5B /* MMPlayer+UIView+Load.swift in Sources */,
 				5E0038571F4C4CC90012A096 /* MMPlayerLayer.swift in Sources */,
 				27E9EE0E23A32D270025C529 /* SubtitleConverter.swift in Sources */,

@@ -27,6 +27,27 @@ public enum PlayStatus {
     }
 }
 
+public enum PlayUIStatus: Equatable {
+    case ready
+    case unknown
+    case failed(err: MMPlayerViewUIError)
+    case playing
+    case pause
+    case end
+    
+    public static func == (lhs: PlayUIStatus, rhs: PlayUIStatus) -> Bool {
+        switch (lhs, rhs) {
+        case (.ready, .ready), (.unknown, .unknown), (.playing, .playing), (.pause, .pause), (.end, .end):
+            return true
+        case (.failed(let l), .failed(let r)):
+            return l == r
+        default:
+            return false
+        }
+    }
+
+}
+
 public enum CoverAutoHideType {
     case autoHide(after: TimeInterval)
     case disable

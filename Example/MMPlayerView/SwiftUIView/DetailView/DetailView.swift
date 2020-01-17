@@ -12,7 +12,8 @@ struct DetailView: View {
     let control: MMPlayerControl
     var body: some View {
 ////        MMPlayerViewUI(progress: CoverAUI(), control: self.control)
-        EmptyView()
+//        EmptyView()
+        Color.red
     }
 }
 

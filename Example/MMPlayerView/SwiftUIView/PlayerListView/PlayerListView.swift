@@ -13,15 +13,14 @@ extension PlayerListView {
     static let listEdge = EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
 }
 struct PlayerListView: View {
+    @ObservedObject var control: MMPlayerControl
     @ObservedObject var playListViewModel: PlayListViewModel
-    let control: MMPlayerControl
-    @State private var showDetails = false
-    @State var listRect = CGRect.zero
     init() {
-        self.control = MMPlayerControl()
-        playListViewModel = PlayListViewModel.init(control: self.control)
+        let c = MMPlayerControl()
+        self.control = c
+        playListViewModel = PlayListViewModel.init(control: c)
     }
-    
+     
     var body: some View {
         let objs = playListViewModel.videoList.enumerated().map({ $0 })
 
@@ -32,22 +31,26 @@ struct PlayerListView: View {
                                  obj: element,
                                  isCurrent: offset == self.playListViewModel.currentViewIdx)
                     .modifier(CellObserver(index: offset))
+                    .tag(offset)
                 }
                 .listRowInsets(PlayerListView.listEdge)
             }
             .modifier(TopIndexObserver.init(completed: { (idx) in
                 self.playListViewModel.updatePlayView(idx: idx)
-                print("# idx \(idx)")
+                
             }))
+            .alert(item: self.$control.error) { (err) -> Alert in
+                    Alert(title: Text("Error"),
+                          message: Text(err.localizedDescription),
+                        dismissButton: .default(Text("OK"))
+                )
+            }
+            
 //            if showDetails {
 //                DetailView(control: control)
 //            }
 ////                .scaleEffect(showDetails ? 1.0 : 0.00001)
 //            .position(x: 0, y: 0)
-            Button.init("Check") {
-                print(self.listRect)
-            }
-
         }
        .navigationBarTitle("Swift UI Demo", displayMode: .inline)
     }

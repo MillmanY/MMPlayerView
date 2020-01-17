@@ -22,4 +22,18 @@ extension AVPlayerItem {
             return .unknown
         }
     }
+    
+    func convertUIStatus() -> PlayUIStatus {
+        switch self.status {
+        case .failed:
+            let msg =  self.error?.localizedDescription ??  ""
+            return .failed(err: MMPlayerViewUIError.init(id: .loadFailed, desc: msg))
+        case .readyToPlay:
+            return .ready
+        case .unknown:
+            return .unknown
+        @unknown default:
+            return .unknown
+        }
+    }
 }

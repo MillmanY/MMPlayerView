@@ -30,14 +30,13 @@ public struct MMPlayerViewUI: View {
         return ZStack {
             MMPlayerViewBridge()
             self.cover?
-                .animation(.easeOut(duration: control.coverAnimationInterval))
                 .opacity(self.control.isCoverShow ? 1.0 : 0.0)
+                .animation(.easeOut(duration: control.coverAnimationInterval))
             self.progress
         }
         .gesture(self.coverTapGesture(), including: .all)
         .environmentObject(control)
     }
-    
 
     private func coverTapGesture() -> _EndedGesture<TapGesture> {
         return TapGesture().onEnded { (_) in

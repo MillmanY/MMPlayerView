@@ -26,7 +26,19 @@ public class MMPlayerControl: ObservableObject {
     @Published
     public var isBackgroundPause = true
     @Published
-    public var currentPlayStatus: PlayStatus = .unknown
+    public var currentPlayStatus: PlayUIStatus = .unknown {
+        didSet {
+            switch currentPlayStatus {
+            case .failed(let err):
+                self.error = err
+                self.isLoading = false
+            case .unknown:
+                self.isLoading = false
+            default:
+                break
+            }
+        }
+    }
     @Published
     public var repeatWhenEnd: Bool = false
     @Published
@@ -37,7 +49,9 @@ public class MMPlayerControl: ObservableObject {
     @Published
     public var autoHideCoverType = CoverAutoHideType.disable
     public var coverAnimationInterval = 0.3
-    
+    @Published
+    public var error: MMPlayerViewUIError?
+
 //    public var player: AVPlayer {
 //        get {
 //            return self.playerLayer.player!
@@ -119,7 +133,7 @@ extension MMPlayerControl {
                             var error: NSError?
                             let _ =  a.statusOfValue(forKey: key, error: &error)
                             if let e = error {
-                                self?.currentPlayStatus = .failed(err: e.localizedDescription)
+                                self?.currentPlayStatus = .failed(err: MMPlayerViewUIError(id: .loadFailed, desc: e.localizedDescription))
                                 return
                             }
                         }
@@ -193,7 +207,7 @@ extension MMPlayerControl {
         }
         let o1 = item.statusObserver.sink { [weak self] (status) in
             guard let self = self else {return}
-            let s = self.player.currentItem?.convertStatus() ?? .unknown
+            let s = self.player.currentItem?.convertUIStatus() ?? .unknown
             switch s {
             case .failed(_) , .unknown:
                 self.currentPlayStatus = s
@@ -224,17 +238,7 @@ extension MMPlayerControl {
                 self?.isLoading = true
             }
         }
-        
-        let o4 = self.$currentPlayStatus.sink { [weak self] (value) in
-            switch value {
-            case .unknown, .failed(_):
-                self?.isLoading = false
-            default:
-                break
-            }
-        }
-        
-        self.itemCancel = [o1,o2,o3,o4]
+        self.itemCancel = [o1,o2,o3]
         self.player.replaceCurrentItem(with: item)
     }
     
