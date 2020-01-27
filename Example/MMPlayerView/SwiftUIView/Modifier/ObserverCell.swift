@@ -8,14 +8,18 @@
 
 import Foundation
 import SwiftUI
+
+
 struct CellObserver: ViewModifier {
     let index: Int
     func body(content: Content) -> some View {
-        content.background(GeometryReader{ proxy -> AnyView in
-           return AnyView(Color.clear
-            .preference(key: CellFrameIndexPreferenceKey.self,
-                        value: [CellFrameIndexPreferenceKey.Info(idx: self.index, frame: proxy.frame(in: .global))]))
-        })
+            content
+            .background(GeometryReader{ (proxy) in
+                Color.clear
+                .preference(key: CellFrameIndexPreferenceKey.self,
+                            value: [CellFrameIndexPreferenceKey.Info(idx: self.index,
+                                                                     frame: proxy.frame(in: .global))])
+      })
     }
 }
 

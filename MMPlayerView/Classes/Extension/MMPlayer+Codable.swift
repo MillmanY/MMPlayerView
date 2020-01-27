@@ -13,6 +13,6 @@ extension Data {
             return try decode.decode(T.self, from: self)
         } catch {
             return nil
-        }        
+        }
     }
 }

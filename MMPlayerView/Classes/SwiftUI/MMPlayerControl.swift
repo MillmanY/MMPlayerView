@@ -52,16 +52,9 @@ public class MMPlayerControl: ObservableObject {
     @Published
     public var error: MMPlayerViewUIError?
 
-//    public var player: AVPlayer {
-//        get {
-//            return self.playerLayer.player!
-//        }
-//    }
-    //    public let playerLayer: AVPlayerLayer
     public let player: AVPlayer
     public init(player: AVPlayer = AVPlayer()) {
         self.player = player
-//        self.playerLayer = AVPlayerLayer(player: player)
         self.setup()
     }
     
@@ -178,8 +171,6 @@ extension MMPlayerControl {
 
     private func setup() {
         self.addPlayerObserver()
-//        self.playerLayer.videoGravity = AVLayerVideoGravity.resizeAspectFill
-//        self.playerLayer.backgroundColor = UIColor.black.cgColor
 
         hideCancel = $autoHideCoverType.sink { [weak self] (t) in
             guard let self = self else {return}

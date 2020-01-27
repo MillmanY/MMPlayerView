@@ -18,12 +18,13 @@ struct PlayCellView: View {
         self.obj = obj
         self.isCurrent = isCurrent
     }
+
     var body: some View {
         VStack {
             ZStack {
                 Image(uiImage: self.obj.image ?? UIImage())
                     .resizable()
-                .frame(height: 200)
+                .frame(height: 300)
                 if self.isCurrent {
                     MMPlayerViewUI(cover: CoverAUI(), control: control)
                 }
@@ -33,6 +34,7 @@ struct PlayCellView: View {
                 .padding(EdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10))
         }
     }
+    
 }
 
 struct PlayCellView_Previews: PreviewProvider {

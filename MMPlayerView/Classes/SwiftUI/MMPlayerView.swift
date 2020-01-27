@@ -26,6 +26,7 @@ public struct MMPlayerViewUI: View {
     @ObservedObject private var control: MMPlayerControl
     let progress: AnyView?
     let cover: AnyView?
+    @State var r: CGRect = .zero
     public var body: some View {
         return ZStack {
             MMPlayerViewBridge()
@@ -34,8 +35,10 @@ public struct MMPlayerViewUI: View {
                 .animation(.easeOut(duration: control.coverAnimationInterval))
             self.progress
         }
+            
         .gesture(self.coverTapGesture(), including: .all)
         .environmentObject(control)
+        .modifier(GlobalFramePreference())
     }
 
     private func coverTapGesture() -> _EndedGesture<TapGesture> {

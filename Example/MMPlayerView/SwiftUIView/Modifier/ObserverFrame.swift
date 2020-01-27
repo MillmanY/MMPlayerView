@@ -15,10 +15,10 @@ struct ObserverFrame: ViewModifier {
         self._r = binding
     }
     func body(content: Content) -> some View {
-        content.background(GeometryReader{ proxy -> AnyView in
-            return AnyView(Color.clear
-             .preference(key: FrameIndexPreferenceKey.self,
-                         value: [proxy.frame(in: .global)]))
+        content.background(GeometryReader{ (proxy) in
+            return Color.clear
+            .preference(key: FrameIndexPreferenceKey.self,
+                        value: [proxy.frame(in: .global)])
         }).onPreferenceChange(FrameIndexPreferenceKey.self) { (value) in
             guard let f = value.first, self.r != f else {return}
             self.r = f
@@ -32,7 +32,6 @@ extension ObserverFrame {
         static func reduce(value: inout [CGRect], nextValue: () -> [CGRect]) {
             let n = nextValue()
             if n.count > 0 {
-                print("# v \(n)")
                 value.append(contentsOf: n)
             }
         }

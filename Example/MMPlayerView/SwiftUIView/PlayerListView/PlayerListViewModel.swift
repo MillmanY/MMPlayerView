@@ -13,13 +13,17 @@ class PlayListViewModel: ObservableObject {
     let videoList = DemoSource.shared.demoData
 
     private var debounceCancel: AnyCancellable?
-    let debounceIdx = CurrentValueSubject<Int, Never>(-1)
+    let debounceIdx = CurrentValueSubject<Int, Never>(0)
     
     @Published
     private(set) var currentViewIdx = -1
     
 
     unowned let control: MMPlayerControl
+    
+    var currentSelectObj: DataObj {
+        return videoList[currentViewIdx]
+    }
     
     init(control: MMPlayerControl) {
         self.control = control
@@ -31,7 +35,7 @@ class PlayListViewModel: ObservableObject {
             guard let self = self, idx >= 0 else {return}
             control.set(url: self.videoList[idx].play_Url)
             control.resume()
-//            print("#\(idx)")
+            
         }
     }
     
