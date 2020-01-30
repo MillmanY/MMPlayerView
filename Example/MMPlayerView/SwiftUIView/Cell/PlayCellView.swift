@@ -12,9 +12,7 @@ import MMPlayerView
 struct PlayCellView: View {
     let obj: DataObj
     let isCurrent: Bool
-    let control: MMPlayerControl
-    init(control: MMPlayerControl, obj: DataObj, isCurrent: Bool = false) {
-        self.control = control
+    init(obj: DataObj, isCurrent: Bool = false) {
         self.obj = obj
         self.isCurrent = isCurrent
     }
@@ -26,7 +24,7 @@ struct PlayCellView: View {
                     .resizable()
                 .frame(height: 300)
                 if self.isCurrent {
-                    MMPlayerViewUI(cover: CoverAUI(), control: control)
+                    MMPlayerViewUI(cover: CoverAUI())
                 }
             }
             Text(self.obj.title)
@@ -39,8 +37,9 @@ struct PlayCellView: View {
 
 struct PlayCellView_Previews: PreviewProvider {
     static var previews: some View {
-        PlayCellView(control: MMPlayerControl(), obj: DemoSource.shared.demoData[2])
+        PlayCellView(obj: DemoSource.shared.demoData[2])
             .previewLayout(.sizeThatFits)
+            .environmentObject(MMPlayerControl())
     }
 }
 

@@ -18,6 +18,7 @@ public extension AnyTransition {
 }
 
 struct MMPlayerViewTransition: AnimatableModifier {
+    @EnvironmentObject var control: MMPlayerControl
     var animatableData: CGFloat {
         get {
             return percent
@@ -52,11 +53,12 @@ struct MMPlayerViewTransition: AnimatableModifier {
                 self.to = r.first ?? .zero
             }
             GeometryReader { (proxy) in
-                Color.red
-                    .frame(width: self.from.size.width, height: self.from.size.height)
-                    .scaleEffect(self.percentSize)
-                    .offset(x: self.from.midX-proxy.size.width/2-self.percentOffsetX, y: self.from.midY-proxy.size.height/2-self.percentOffsetY)
-                    .opacity(self.percent == 1.0 ? 0 : 1)
+                MMPlayerViewUI()
+                .frame(width: self.from.size.width, height: self.from.size.height)
+                .scaleEffect(self.percentSize)
+                .offset(x: self.from.midX-proxy.size.width/2-self.percentOffsetX,
+                        y: self.from.midY-proxy.size.height/2-self.percentOffsetY)
+                .opacity(self.percent == 1.0 ? 0 : 1)
             }.edgesIgnoringSafeArea(.all)
         }
     }

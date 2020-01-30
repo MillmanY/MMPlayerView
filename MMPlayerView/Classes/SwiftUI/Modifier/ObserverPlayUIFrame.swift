@@ -7,8 +7,9 @@
 
 import Foundation
 import SwiftUI
-public struct GlobalFramePreference: ViewModifier {
+import Combine
 
+public struct GlobalFramePreference: ViewModifier {
     public func body(content: Content) -> some View {
         content.background(GeometryReader{ (proxy) in
             return Color.clear

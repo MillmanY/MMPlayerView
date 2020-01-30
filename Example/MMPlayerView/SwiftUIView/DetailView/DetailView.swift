@@ -10,14 +10,19 @@ import SwiftUI
 import MMPlayerView
 struct DetailView: View {
     let obj: DataObj
-    let control: MMPlayerControl
-    
+    @Binding var showDetailIdx: Int?
     var body: some View {
-////        MMPlayerViewUI(progress: CoverAUI(), control: self.control)
-//        EmptyView()
         VStack {
-            Spacer.init(minLength: 100)
-            MMPlayerViewUI(control: control).frame(height: 300)
+            ZStack(alignment: .topLeading) {
+                MMPlayerViewUI().frame(height: 300)
+                Image("ic_keyboard_arrow_left")
+                    .offset(x: 15, y: 44)
+                    .onTapGesture {
+                        withAnimation {
+                            self.showDetailIdx = nil
+                        }
+                }
+            }
             ScrollView(.vertical, showsIndicators: false) {
                 VStack(alignment: .leading, spacing: 5) {
                     Text(obj.title).font(.title).bold()
@@ -30,8 +35,10 @@ struct DetailView: View {
 }
 
 
-//struct DetailView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        DetailView()
-//    }
-//}
+struct DetailView_Previews: PreviewProvider {
+    static var previews: some View {
+        DetailView.init(obj: DemoSource.shared.demoData[1], showDetailIdx: .constant(nil))
+        .environmentObject(MMPlayerControl())
+
+    }
+}

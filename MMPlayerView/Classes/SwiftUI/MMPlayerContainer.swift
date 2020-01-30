@@ -10,10 +10,13 @@ import AVFoundation
 
 
 class MMPlayerContainer: UIView {
-    let playerLayer: AVPlayerLayer
+    var playerLayer: AVPlayerLayer {
+        return self.layer as! AVPlayerLayer
+    }
     init(player: AVPlayer?) {
-        self.playerLayer = AVPlayerLayer.init(player: player)
+//        self.playerLayer = AVPlayerLayer.init(player: player)
         super.init(frame: .zero)
+        self.playerLayer.player = player
         self.backgroundColor = UIColor.black
         self.playerLayer.videoGravity = .resizeAspect
     }
@@ -22,11 +25,20 @@ class MMPlayerContainer: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        if playerLayer.superlayer != self.layer {
-            self.layer.insertSublayer(playerLayer, at: 0)
-        }
-        self.playerLayer.frame = self.superview?.bounds ?? .zero
+//    override func layoutSubviews() {
+//        super.layoutSubviews()
+//        if playerLayer.superlayer != self.layer {
+//            self.layer.insertSublayer(playerLayer, at: 0)
+//        }
+//        self.playerLayer.frame = self.superview?.bounds ?? .zero
+//    }
+    
+    override class var layerClass: AnyClass {
+        return AVPlayerLayer.self
+    }
+
+    deinit {
+        self.playerLayer.player = nil
+        self.removeFromSuperview()
     }
 }

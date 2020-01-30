@@ -27,5 +27,4 @@ public struct MMPlayerViewUIError: Error ,Identifiable, Equatable {
     public static func == (lhs: MMPlayerViewUIError, rhs: MMPlayerViewUIError) -> Bool {
         return lhs.id == rhs.id && lhs.desc == rhs.desc
     }
-
 }

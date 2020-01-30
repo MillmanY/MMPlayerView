@@ -13,9 +13,6 @@ struct MMPlayerViewBridge: UIViewRepresentable {
 
     public func updateUIView(_ uiView: MMPlayerContainer, context: UIViewRepresentableContext<MMPlayerViewBridge>) {
     }
-    static func dismantleUIView(_ uiView: MMPlayerContainer, coordinator: MMPlayerViewBridge.Coordinator) {
-        uiView.playerLayer.player = nil
-    }
     public func makeUIView(context: Context) -> MMPlayerContainer {
         return MMPlayerContainer(player: control.player)
     }
@@ -23,13 +20,14 @@ struct MMPlayerViewBridge: UIViewRepresentable {
 
 @available(iOS 13.0.0, *)
 public struct MMPlayerViewUI: View {
-    @ObservedObject private var control: MMPlayerControl
+    @EnvironmentObject private var control: MMPlayerControl
     let progress: AnyView?
     let cover: AnyView?
     @State var r: CGRect = .zero
     public var body: some View {
         return ZStack {
             MMPlayerViewBridge()
+//            Color.red
             self.cover?
                 .opacity(self.control.isCoverShow ? 1.0 : 0.0)
                 .animation(.easeOut(duration: control.coverAnimationInterval))
@@ -37,7 +35,6 @@ public struct MMPlayerViewUI: View {
         }
             
         .gesture(self.coverTapGesture(), including: .all)
-        .environmentObject(control)
         .modifier(GlobalFramePreference())
     }
 
@@ -49,26 +46,25 @@ public struct MMPlayerViewUI: View {
 }
 
 extension MMPlayerViewUI {
-    public init<P: View>(progress: P, control: MMPlayerControl) {
-        self.init(pView: AnyView(progress), cView: nil, control: control)
+    public init<P: View>(progress: P) {
+        self.init(pView: AnyView(progress), cView: nil)
     }
 
-    public init<C: View>(cover: C, control: MMPlayerControl) {
-        self.init(pView: AnyView(DefaultIndicator()), cView: AnyView(cover), control: control)
+    public init<C: View>(cover: C) {
+        self.init(pView: AnyView(DefaultIndicator()), cView: AnyView(cover))
     }
 
-    public init<P: View,C: View>(progress: P, cover: C, control: MMPlayerControl) {
-        self.init(pView: AnyView(progress), cView: AnyView(cover), control: control)
+    public init<P: View,C: View>(progress: P, cover: C) {
+        self.init(pView: AnyView(progress), cView: AnyView(cover))
     }
     
-    public init(control: MMPlayerControl) {
-        self.init(pView: AnyView(DefaultIndicator()), cView: nil, control: control)
+    public init() {
+        self.init(pView: AnyView(DefaultIndicator()), cView: nil)
     }
 
-    init(pView: AnyView? = AnyView(DefaultIndicator()), cView: AnyView? = nil, control: MMPlayerControl) {
+    init(pView: AnyView? = AnyView(DefaultIndicator()), cView: AnyView? = nil) {
         self.progress = pView
         self.cover = cView
-        self.control = control
     }
 }
 
