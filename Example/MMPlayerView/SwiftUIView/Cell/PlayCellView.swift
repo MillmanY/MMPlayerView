@@ -18,11 +18,11 @@ struct PlayCellView: View {
     }
 
     var body: some View {
-        VStack {
+        return VStack {
             ZStack {
                 Image(uiImage: self.obj.image ?? UIImage())
                     .resizable()
-                .frame(height: 300)
+                    .frame(height: 200)
                 if self.isCurrent {
                     MMPlayerViewUI(cover: CoverAUI())
                 }

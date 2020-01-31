@@ -9,16 +9,11 @@
 import SwiftUI
 import MMPlayerView
 
-struct PlayTransition: ViewModifier {
-    func body(content: Content) -> some View {
-        return content
-    }
-}
-
 extension PlayerListView {
     static let listEdge = EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
 }
 struct PlayerListView: View {
+    let dismiss: (() -> Void)
     @ObservedObject var control: MMPlayerControl
     @ObservedObject var playListViewModel: PlayListViewModel
     @State var showDetailIdx: Int? = nil {
@@ -39,19 +34,14 @@ struct PlayerListView: View {
         }
     }
 
-    init() {
+    init(dismiss: @escaping (()->Void)) {
+        self.dismiss = dismiss
         let c = MMPlayerControl()
         self.control = c
         playListViewModel = PlayListViewModel(control: c)
     }
     
-    var realFrame : CGRect {
-        get {
-            var f = self.topInfo.first(where: { $0.idx == showDetailIdx})?.frame ?? .zero
-            f.size.height = 300
-            return f
-        }
-    }
+    @State var fromFrame = CGRect.zero
      
     var body: some View {
         let objs = playListViewModel.videoList.enumerated().map({ $0 })
@@ -59,39 +49,44 @@ struct PlayerListView: View {
             if showDetailIdx != nil {
                 DetailView(obj: self.playListViewModel.videoList[showDetailIdx!], showDetailIdx: $showDetailIdx)
                     .edgesIgnoringSafeArea(.all)
-                    .transition(.playerTransition(from: realFrame))
+                    .transition(.playerTransition(from: fromFrame))
                     .zIndex(1)
             }
-            
+                        
             NavigationView {
                 List {
+                    
                     ForEach(objs, id: \.element.title) { (offset, element) in
                         PlayCellView(obj: element,
                                      isCurrent: offset == self.playListViewModel.currentViewIdx)
                             .modifier(CellObserver(index: offset))
+                            .modifier(GlobalPlayerFrameModifier(rect: self.$fromFrame))
                             .onTapGesture {
                                 withAnimation {
                                     self.showDetailIdx = offset
                                 }
                         }
                     }
+
                     .listRowInsets(PlayerListView.listEdge)
                 }
+
                 .modifier(CellVisibleObserver(list: Binding<[CellObserver.CellFrameIndexPreferenceKey.Info]>(get: {
                     self.topInfo
                 }) {
                     self.topInfo = $0
                 }))
+                .navigationBarConfig(config: { (nav) in
+                        nav.navigationBar.barTintColor = UIColor(red: 0/255, green: 77/255, blue: 64/255, alpha: 1.0)
+                })
+                .navigationBarTitle("Swift UI Demo", displayMode: .inline)
                 .alert(item: self.$control.error) { (err) -> Alert in
                         Alert(title: Text("Error"),
                               message: Text(err.localizedDescription),
                             dismissButton: .default(Text("OK"))
                     )
                 }
-                .navigationBarTitle("Swift UI Demo", displayMode: .inline)
-                .navigationBarConfig(config: { (nav) in
-                    nav.navigationBar.barTintColor = UIColor(red: 0/255, green: 77/255, blue: 64/255, alpha: 1.0)
-                })
+                .navigationBarItems(leading:  Button("Dimiss", action: dismiss))
             }
         }
         .environmentObject(control)
@@ -100,6 +95,8 @@ struct PlayerListView: View {
 
 struct PlayerListView_Previews: PreviewProvider {
     static var previews: some View {
-        PlayerListView()
+        PlayerListView.init {
+            
+        }
     }
 }

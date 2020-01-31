@@ -16,7 +16,13 @@ struct MMPlayerViewBridge: UIViewRepresentable {
     public func makeUIView(context: Context) -> MMPlayerContainer {
         return MMPlayerContainer(player: control.player)
     }
+    
+    static func dismantleUIView(_ uiView: MMPlayerContainer, coordinator: MMPlayerViewBridge.Coordinator) {
+        uiView.playerLayer.player = nil
+    }
+
 }
+
 
 @available(iOS 13.0.0, *)
 public struct MMPlayerViewUI: View {
@@ -27,15 +33,13 @@ public struct MMPlayerViewUI: View {
     public var body: some View {
         return ZStack {
             MMPlayerViewBridge()
-//            Color.red
             self.cover?
                 .opacity(self.control.isCoverShow ? 1.0 : 0.0)
                 .animation(.easeOut(duration: control.coverAnimationInterval))
             self.progress
-        }
-            
+        }            
         .gesture(self.coverTapGesture(), including: .all)
-        .modifier(GlobalFramePreference())
+        .modifier(GlobalPlayerFramePreference())
     }
 
     private func coverTapGesture() -> _EndedGesture<TapGesture> {

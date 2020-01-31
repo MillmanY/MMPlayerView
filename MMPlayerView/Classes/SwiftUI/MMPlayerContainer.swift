@@ -8,7 +8,6 @@
 import UIKit
 import AVFoundation
 
-
 class MMPlayerContainer: UIView {
     var playerLayer: AVPlayerLayer {
         return self.layer as! AVPlayerLayer
@@ -25,20 +24,7 @@ class MMPlayerContainer: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
-//    override func layoutSubviews() {
-//        super.layoutSubviews()
-//        if playerLayer.superlayer != self.layer {
-//            self.layer.insertSublayer(playerLayer, at: 0)
-//        }
-//        self.playerLayer.frame = self.superview?.bounds ?? .zero
-//    }
-    
     override class var layerClass: AnyClass {
         return AVPlayerLayer.self
-    }
-
-    deinit {
-        self.playerLayer.player = nil
-        self.removeFromSuperview()
     }
 }

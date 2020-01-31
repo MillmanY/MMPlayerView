@@ -22,7 +22,7 @@ extension MMPlayerDownloader {
     }
 }
 
-public class MMPlayerDownloader: NSObject {
+public class MMPlayerDownloader: NSObject {    
     private var _downloadInfo = [MMPlayerDownLoadVideoInfo]()
     private let queue = DispatchQueue(label: "MMPlayerDownloader.Request")
     private let download: MMPlayerDownloadManager

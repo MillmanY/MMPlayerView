@@ -18,7 +18,6 @@ public class MMPlayerControl: ObservableObject {
     private var debounceCover = PassthroughSubject<Void,Never>()
     private var debounceCancel: AnyCancellable?
     private var hideCancel: AnyCancellable?
-
     @Published
     public var timeInfo = TimeInfo()
     @Published

@@ -13,8 +13,9 @@ struct DetailView: View {
     @Binding var showDetailIdx: Int?
     var body: some View {
         VStack {
+
             ZStack(alignment: .topLeading) {
-                MMPlayerViewUI().frame(height: 300)
+                MMPlayerViewUI().frame(height: 200)
                 Image("ic_keyboard_arrow_left")
                     .offset(x: 15, y: 44)
                     .onTapGesture {
@@ -23,6 +24,9 @@ struct DetailView: View {
                         }
                 }
             }
+            ProgressUI()
+                .value(0)
+                .frame(width: 200, height: 10)
             ScrollView(.vertical, showsIndicators: false) {
                 VStack(alignment: .leading, spacing: 5) {
                     Text(obj.title).font(.title).bold()

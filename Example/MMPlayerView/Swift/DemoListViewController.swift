@@ -17,7 +17,9 @@ class DemoListViewController: UITableViewController {
     }
     
     @IBSegueAction func swiftUIDemo(_ coder: NSCoder) -> UIViewController? {
-        return UIHostingController(coder: coder, rootView: PlayerListView())
+        return UIHostingController(coder: coder, rootView: PlayerListView.init(dismiss: {
+            self.dismiss(animated: true, completion: nil)
+        }))
     }
     
     /*
@@ -31,3 +33,15 @@ class DemoListViewController: UITableViewController {
     */
 
 }
+//
+//final class SettingsViewController: UIHostingController<PlayerListView> {
+//    required init?(coder: NSCoder) {
+//        super.init(coder: coder, rootView: PlayerListView())
+//        rootView.dismiss = dismiss
+//
+//    }
+//
+//    func dismiss() {
+//        dismiss(animated: true, completion: nil)
+//    }
+//}

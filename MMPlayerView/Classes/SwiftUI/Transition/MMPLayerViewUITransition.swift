@@ -27,8 +27,8 @@ struct MMPlayerViewTransition: AnimatableModifier {
         }
     }
     var percentSize: CGSize {
-        let w =  (from.size.width-(from.size.width-to.size.width)*percent)/from.size.width
-        let h =  (from.size.height-(from.size.height-to.size.height)*percent)/from.size.height
+        let w =  (from.size.width-(from.size.width-to.size.width)*percent)/(from.size.width == 0 ? 1 : from.size.width)
+        let h =  (from.size.height-(from.size.height-to.size.height)*percent)/(from.size.height == 0 ? 1 : from.size.height)
         return CGSize.init(width: w, height: h)
     }
     var percentOffsetX: CGFloat {
@@ -49,9 +49,7 @@ struct MMPlayerViewTransition: AnimatableModifier {
     func body(content: Content) -> some View {
         return ZStack {
             content.opacity(Double(percent))
-            .onPreferenceChange(GlobalFramePreference.Key.self) { (r) in
-                self.to = r.first ?? .zero
-            }
+                   .modifier(GlobalPlayerFrameModifier(rect: self.$to))
             GeometryReader { (proxy) in
                 MMPlayerViewUI()
                 .frame(width: self.from.size.width, height: self.from.size.height)

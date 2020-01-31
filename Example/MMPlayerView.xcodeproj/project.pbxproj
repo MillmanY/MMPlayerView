@@ -11,6 +11,7 @@
 		270B251E23B1B0EF00860278 /* DemoListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 270B251D23B1B0EF00860278 /* DemoListViewController.swift */; };
 		270B252123B1B17000860278 /* PlayerListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 270B252023B1B17000860278 /* PlayerListView.swift */; };
 		270B252523B1B5EF00860278 /* PlayCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 270B252423B1B5EF00860278 /* PlayCellView.swift */; };
+		2738B9FA23E3F853005BCAAD /* ProgressUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2738B9F923E3F853005BCAAD /* ProgressUI.swift */; };
 		27421CAC233C8A21000DE6BF /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 27421CAB233C8A21000DE6BF /* Images.xcassets */; };
 		275AC84A23B59264000AFF8D /* ObserverFrame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 275AC84923B59264000AFF8D /* ObserverFrame.swift */; };
 		275CD0D323C8351900F181F4 /* PlayerListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 275CD0D223C8351900F181F4 /* PlayerListViewModel.swift */; };
@@ -50,6 +51,7 @@
 		270B251D23B1B0EF00860278 /* DemoListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoListViewController.swift; sourceTree = "<group>"; };
 		270B252023B1B17000860278 /* PlayerListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerListView.swift; sourceTree = "<group>"; };
 		270B252423B1B5EF00860278 /* PlayCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayCellView.swift; sourceTree = "<group>"; };
+		2738B9F923E3F853005BCAAD /* ProgressUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressUI.swift; sourceTree = "<group>"; };
 		27421CAB233C8A21000DE6BF /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		275AC84923B59264000AFF8D /* ObserverFrame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObserverFrame.swift; sourceTree = "<group>"; };
 		275CD0D223C8351900F181F4 /* PlayerListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerListViewModel.swift; sourceTree = "<group>"; };
@@ -106,6 +108,7 @@
 		270B251F23B1B13200860278 /* SwiftUIView */ = {
 			isa = PBXGroup;
 			children = (
+				2738B9F823E3F834005BCAAD /* Progress */,
 				27CDFE2323D6A97A00CBB712 /* NavigationConfig */,
 				27F8A75823C84FFF00A3AB09 /* DetailView */,
 				275CD0D123C834FE00F181F4 /* PlayerListView */,
@@ -122,6 +125,14 @@
 				270B252423B1B5EF00860278 /* PlayCellView.swift */,
 			);
 			path = Cell;
+			sourceTree = "<group>";
+		};
+		2738B9F823E3F834005BCAAD /* Progress */ = {
+			isa = PBXGroup;
+			children = (
+				2738B9F923E3F853005BCAAD /* ProgressUI.swift */,
+			);
+			path = Progress;
 			sourceTree = "<group>";
 		};
 		275AC84823B59209000AFF8D /* Modifier */ = {
@@ -527,6 +538,7 @@
 				607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */,
 				5E9A1B8E1F4D865E00746E5B /* ViewController.swift in Sources */,
 				275CD0D323C8351900F181F4 /* PlayerListViewModel.swift in Sources */,
+				2738B9FA23E3F853005BCAAD /* ProgressUI.swift in Sources */,
 				5E105C411F4C78C000774714 /* CoverA.swift in Sources */,
 				27F8A75A23C8501E00A3AB09 /* DetailView.swift in Sources */,
 				270B251E23B1B0EF00860278 /* DemoListViewController.swift in Sources */,
