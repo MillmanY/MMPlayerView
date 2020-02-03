@@ -47,6 +47,7 @@ class MMPlayerItem: AVPlayerItem {
     }
 }
 
+@available(iOS 13.0.0, *)
 class MMPlayerItemUI: AVPlayerItem, ObservableObject {
     
     var statusObservation: NSKeyValueObservation?

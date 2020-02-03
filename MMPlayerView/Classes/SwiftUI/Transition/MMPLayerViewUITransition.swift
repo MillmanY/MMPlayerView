@@ -7,8 +7,7 @@
 
 import Foundation
 import SwiftUI
-
-
+@available(iOS 13.0.0, *)
 public extension AnyTransition {
     static func playerTransition(from: CGRect?) -> AnyTransition {
         let f = from ?? .zero
@@ -17,6 +16,7 @@ public extension AnyTransition {
     }
 }
 
+@available(iOS 13.0.0, *)
 struct MMPlayerViewTransition: AnimatableModifier {
     @EnvironmentObject var control: MMPlayerControl
     var animatableData: CGFloat {

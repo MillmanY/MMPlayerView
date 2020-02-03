@@ -8,10 +8,12 @@
 
 import UIKit
 import SwiftUI
+import MMPlayerView
 class DemoListViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        MMPlayerDownloader.cleanTmpFile()
 
         // Do any additional setup after loading the view.
     }

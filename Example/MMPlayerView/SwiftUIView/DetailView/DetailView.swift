@@ -7,13 +7,14 @@
 //
 
 import SwiftUI
+import AVFoundation
 import MMPlayerView
 struct DetailView: View {
     let obj: DataObj
+    @State var downloadStatus: MMPlayerDownloader.DownloadStatus = .none
     @Binding var showDetailIdx: Int?
     var body: some View {
         VStack {
-
             ZStack(alignment: .topLeading) {
                 MMPlayerViewUI().frame(height: 200)
                 Image("ic_keyboard_arrow_left")
@@ -24,9 +25,7 @@ struct DetailView: View {
                         }
                 }
             }
-            ProgressUI()
-                .value(0)
-                .frame(width: 200, height: 10)
+            self.generateTopViewFromDownloadStatus().frame(height: 44)
             ScrollView(.vertical, showsIndicators: false) {
                 VStack(alignment: .leading, spacing: 5) {
                     Text(obj.title).font(.title).bold()
@@ -34,7 +33,38 @@ struct DetailView: View {
                 }
             }
             .padding([.leading , .trailing], 8)
-        }.background(Color.white)
+        }
+        .modifier(MMPlayerDownloaderModifier( url: obj.play_Url!, status: $downloadStatus))
+        .background(Color.white)
+    }
+    
+    func generateTopViewFromDownloadStatus() -> AnyView {
+        switch self.downloadStatus {
+        case .none:
+            let view = Button("Download") {
+                MMPlayerDownloader.shared.download(asset: AVURLAsset(url: self.obj.play_Url!))
+            }
+            return AnyView.init(view)
+        case .exist, .completed(_):
+            let view = Button("Delete") {
+                MMPlayerDownloader.shared.deleteVideo(self.obj.play_Url!)
+            }
+            return AnyView.init(view)
+        case .downloading(let value):
+            let percent = String.init(format: "%.2f ％", value*100)
+            let view = ZStack {
+                ProgressUI(barWidth: 200, barHeight: 16)
+                .value(Double(value))
+                Text(percent).foregroundColor(Color.white).frame(height: 10)
+            }
+            return AnyView(view)
+        case .downloadWillStart:
+            let view = ProgressUI(barWidth: 200, barHeight: 16)
+                      .value(0.0)
+            return AnyView(view)
+        default:
+            return AnyView(EmptyView())
+        }
     }
 }
 

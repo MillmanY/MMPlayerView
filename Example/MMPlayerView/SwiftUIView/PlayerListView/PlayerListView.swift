@@ -86,7 +86,9 @@ struct PlayerListView: View {
                             dismissButton: .default(Text("OK"))
                     )
                 }
-                .navigationBarItems(leading:  Button("Dimiss", action: dismiss))
+                .navigationBarItems(leading:  Button.init("Dismiss", action: {
+                    self.dismiss()
+                }))
             }
         }
         .environmentObject(control)

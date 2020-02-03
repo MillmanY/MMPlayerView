@@ -8,14 +8,7 @@
 import Foundation
 import SwiftUI
 import Combine
-
-public struct DownloaderModifier: ViewModifier {
-    var download = MMPlayerDownloader.shared
-    public func body(content: Content) -> some View {
-        content
-    }
-}
-
+@available(iOS 13.0.0, *)
 public struct GlobalPlayerFrameModifier: ViewModifier {
     @Binding var r: CGRect
     public init (rect: Binding<CGRect> = .constant(.zero)) {
@@ -24,13 +17,15 @@ public struct GlobalPlayerFrameModifier: ViewModifier {
     public func body(content: Content) -> some View {
         content
             .onPreferenceChange(GlobalPlayerFramePreference.Key.self) { (values) in
-            if let f = values.first, f != .zero {
-                self.r = f
+            if let f = values.first, f != .zero, f != self.r {
+                DispatchQueue.main.async {
+                    self.r = f
+                }
             }
         }
     }
 }
-
+@available(iOS 13.0.0, *)
 public struct GlobalPlayerFramePreference: ViewModifier {
     public func body(content: Content) -> some View {
         content.background(GeometryReader{ (proxy) in
@@ -41,6 +36,7 @@ public struct GlobalPlayerFramePreference: ViewModifier {
     }
 }
 
+@available(iOS 13.0.0, *)
 public extension GlobalPlayerFramePreference {
     struct Key: PreferenceKey, Equatable {
         public static var defaultValue: [CGRect] = []

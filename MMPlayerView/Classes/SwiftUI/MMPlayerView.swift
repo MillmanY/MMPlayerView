@@ -48,7 +48,7 @@ public struct MMPlayerViewUI: View {
         }
     }
 }
-
+@available(iOS 13.0.0, *)
 extension MMPlayerViewUI {
     public init<P: View>(progress: P) {
         self.init(pView: AnyView(progress), cView: nil)

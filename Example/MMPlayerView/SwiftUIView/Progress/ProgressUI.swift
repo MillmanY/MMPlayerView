@@ -16,25 +16,62 @@ extension ProgressUI {
         var display: Color = defaultColor
         @Published
         var radius: CGFloat?
-
         @Published
         var progress: CGFloat = 0.0
+        @Published
+        var barFrame: (width: CGFloat?, height: CGFloat?)
     }
 }
 struct ProgressUI: View {
+    enum BarType {
+        case circle
+        case bar
+    }
+    let type: BarType
     @ObservedObject var status = Status()
     var body: some View {
-        GeometryReader { (proxy) in
-            ZStack(alignment: .leading) {
-                Rectangle().foregroundColor(self.status.tint)
-            
-                Rectangle().foregroundColor(self.status.display)
-                    .animation(.default)
-                    .frame(width: proxy.size.width * self.status.progress)
-            }.cornerRadius(self.status.radius ?? proxy.size.height/2)
+        self.generate()
+    }
+    
+    func generate() -> AnyView {
+        switch self.type {
+        case .bar:
+            let view = GeometryReader { (proxy) in
+                ZStack(alignment: .leading) {
+                    Rectangle().foregroundColor(self.status.tint)
+                    Rectangle().foregroundColor(self.status.display)
+                        .animation(.default)
+                        .frame(width: (self.status.barFrame.width ?? proxy.size.width) * self.status.progress)
+                }
+                .frame(width: self.status.barFrame.width, height: self.status.barFrame.height)
+                .cornerRadius(self.status.radius ?? proxy.size.height/2)
+            }
+            return AnyView(view)
+        case .circle:
+            let view = GeometryReader { (proxy) in
+                ZStack(alignment: .leading) {
+                    Circle().stroke(lineWidth: self.status.barFrame.width ?? 1).foregroundColor(self.status.tint)
+                    Circle().trim(from: 0, to: self.status.progress).stroke(lineWidth: self.status.barFrame.width ?? 1).foregroundColor(self.status.display)
+                        .animation(.default)
+                }
+                .rotationEffect(Angle.degrees(-90))
+                .scaledToFit()
+                .cornerRadius(self.status.radius ?? proxy.size.height/2)
+            }
+            return AnyView(view)
         }
     }
-   
+    
+    init(circleWidth: CGFloat) {
+        self.type = .circle
+        status.barFrame = (width: circleWidth, height: nil)
+    }
+    
+    init(barWidth: CGFloat, barHeight: CGFloat) {
+        self.type = .bar
+        status.barFrame = (barWidth, barHeight)
+    }
+        
     func value(_ value: Double) -> ProgressUI {
         status.progress = CGFloat(value)
         return self
@@ -60,7 +97,7 @@ struct ProgressUI: View {
 struct ProgressUI_Previews: PreviewProvider {
     static var previews: some View {
         VStack {
-            ProgressUI()
+            ProgressUI.init(barWidth: 200, barHeight: 10)
                 .value(0.5)
                 .frame(width: 200, height: 20)
                 .previewLayout(.fixed(width: 375, height: 44))

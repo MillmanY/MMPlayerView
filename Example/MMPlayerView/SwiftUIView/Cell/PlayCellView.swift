@@ -10,6 +10,7 @@ import SwiftUI
 import MMPlayerView
 
 struct PlayCellView: View {
+    @State var downloadStatus: MMPlayerDownloader.DownloadStatus = .none
     let obj: DataObj
     let isCurrent: Bool
     init(obj: DataObj, isCurrent: Bool = false) {
@@ -27,11 +28,33 @@ struct PlayCellView: View {
                     MMPlayerViewUI(cover: CoverAUI())
                 }
             }
-            Text(self.obj.title)
-                .multilineTextAlignment(.leading)
-                .padding(EdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10))
+            HStack {
+                Text(self.obj.title)
+                    .multilineTextAlignment(.leading)
+                    .padding(EdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10))
+                Spacer()
+                self.generateTopViewFromDownloadStatus().frame(width: 50, height: 50).padding(10)
+            }
+        }
+        .modifier(MMPlayerDownloaderModifier( url: obj.play_Url!, status: $downloadStatus))
+    }
+    
+    func generateTopViewFromDownloadStatus() -> AnyView {
+        switch self.downloadStatus {
+        case .downloading(let value):
+            let percent = String.init(format: "%.2f ％", value*100)
+            let view = ZStack {
+                ProgressUI(circleWidth: 5)
+                .value(Double(value))
+                Text(percent).foregroundColor(Color.blue).scaledToFit().padding(5).minimumScaleFactor(0.5)
+            }
+            return AnyView(view)
+
+        default:
+            return AnyView(EmptyView())
         }
     }
+
     
 }
 

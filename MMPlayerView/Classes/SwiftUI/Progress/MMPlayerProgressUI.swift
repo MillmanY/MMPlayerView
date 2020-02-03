@@ -7,7 +7,7 @@
 
 import Foundation
 import SwiftUI
-
+@available(iOS 13.0.0, *)
 public struct DefaultIndicator: View {
     @EnvironmentObject var control: MMPlayerControl
     public var body: some View {

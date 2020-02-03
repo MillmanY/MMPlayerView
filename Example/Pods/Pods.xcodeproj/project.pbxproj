@@ -30,6 +30,7 @@
 		27D3DB0523C2EDE2003B4EED /* MMPlayerProgressUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27D3DB0423C2EDE2003B4EED /* MMPlayerProgressUI.swift */; };
 		27D5CB8723A3653400DB76F9 /* MMPlayer+Constraint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27D5CB8623A3653400DB76F9 /* MMPlayer+Constraint.swift */; };
 		27DBED1723A1D8040027F7A1 /* SRT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27DBED1623A1D8040027F7A1 /* SRT.swift */; };
+		27DEF10223E7B30000F1E23F /* MMPlayerDownloaderModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27DEF10123E7B30000F1E23F /* MMPlayerDownloaderModifier.swift */; };
 		27DFC2D923BEE8AB003A8820 /* MMPlayerControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27DFC2D823BEE8AB003A8820 /* MMPlayerControl.swift */; };
 		27DFC2DB23BEEA68003A8820 /* MMPlayerContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27DFC2DA23BEEA68003A8820 /* MMPlayerContainer.swift */; };
 		27DFC2DD23BF3668003A8820 /* MMPlayer+AVPlayerItem+ConvertStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27DFC2DC23BF3668003A8820 /* MMPlayer+AVPlayerItem+ConvertStatus.swift */; };
@@ -107,6 +108,7 @@
 		27D3DB0423C2EDE2003B4EED /* MMPlayerProgressUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MMPlayerProgressUI.swift; sourceTree = "<group>"; };
 		27D5CB8623A3653400DB76F9 /* MMPlayer+Constraint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MMPlayer+Constraint.swift"; sourceTree = "<group>"; };
 		27DBED1623A1D8040027F7A1 /* SRT.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SRT.swift; sourceTree = "<group>"; };
+		27DEF10123E7B30000F1E23F /* MMPlayerDownloaderModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MMPlayerDownloaderModifier.swift; sourceTree = "<group>"; };
 		27DFC2D823BEE8AB003A8820 /* MMPlayerControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MMPlayerControl.swift; sourceTree = "<group>"; };
 		27DFC2DA23BEEA68003A8820 /* MMPlayerContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MMPlayerContainer.swift; sourceTree = "<group>"; };
 		27DFC2DC23BF3668003A8820 /* MMPlayer+AVPlayerItem+ConvertStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MMPlayer+AVPlayerItem+ConvertStatus.swift"; sourceTree = "<group>"; };
@@ -210,6 +212,7 @@
 				2787435A219E7966001B98F9 /* MMPlayerDownloadRequest.swift */,
 				27874358219E774A001B98F9 /* MMPlayerDownloadManager.swift */,
 				2717E19C219DA46800DCC8CB /* MMPlayerDownLoadVideoInfo.swift */,
+				27DEF10123E7B30000F1E23F /* MMPlayerDownloaderModifier.swift */,
 			);
 			path = Downloader;
 			sourceTree = "<group>";
@@ -701,6 +704,7 @@
 				277C0A5F23C70EE80071DBAC /* TimeInfo.swift in Sources */,
 				27E9EE1023A342C80025C529 /* SRTInfo.swift in Sources */,
 				5E4F8A9320627FC100A2B19D /* MMPlayer+UIViewController+CheckProtocol.swift in Sources */,
+				27DEF10223E7B30000F1E23F /* MMPlayerDownloaderModifier.swift in Sources */,
 				5EC40F441F4EA47100510EDF /* MMLandscapeWindow.swift in Sources */,
 				27F9B20C23AB52CE00B49152 /* MMplayer+StackView+RemoveAll.swift in Sources */,
 				27DFC2D923BEE8AB003A8820 /* MMPlayerControl.swift in Sources */,
@@ -993,7 +997,7 @@
 				GCC_PREFIX_HEADER = "Target Support Files/MMPlayerView/MMPlayerView-prefix.pch";
 				INFOPLIST_FILE = "Target Support Files/MMPlayerView/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MODULEMAP_FILE = "Target Support Files/MMPlayerView/MMPlayerView.modulemap";
 				MTL_ENABLE_DEBUG_INFO = NO;
@@ -1068,7 +1072,7 @@
 				GCC_PREFIX_HEADER = "Target Support Files/MMPlayerView/MMPlayerView-prefix.pch";
 				INFOPLIST_FILE = "Target Support Files/MMPlayerView/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MODULEMAP_FILE = "Target Support Files/MMPlayerView/MMPlayerView.modulemap";
 				MTL_ENABLE_DEBUG_INFO = YES;

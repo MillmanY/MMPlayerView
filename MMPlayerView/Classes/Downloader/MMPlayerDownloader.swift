@@ -8,6 +8,7 @@
 
 import UIKit
 import AVFoundation
+import Combine
 typealias DownloaderPath = (fullPath: URL, subPath: String)
 private let videoExpireInterval = TimeInterval(60*60*12)
 extension MMPlayerDownloader {
@@ -22,7 +23,7 @@ extension MMPlayerDownloader {
     }
 }
 
-public class MMPlayerDownloader: NSObject {    
+public class MMPlayerDownloader: NSObject {
     private var _downloadInfo = [MMPlayerDownLoadVideoInfo]()
     private let queue = DispatchQueue(label: "MMPlayerDownloader.Request")
     private let download: MMPlayerDownloadManager
@@ -43,6 +44,8 @@ public class MMPlayerDownloader: NSObject {
         guard let items = try? FileManager.default.contentsOfDirectory(atPath: NSTemporaryDirectory()) else {
             return
         }
+//        let a = try? FileManager.default.contentsOfDirectory(atPath: NSTemporaryDirectory().appending("/MMPlayerVideo/Share"))
+        
         let pathURL = items.compactMap { $0.contains(".tmp") ? URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent($0, isDirectory: false) : nil }
         pathURL.forEach {
             try? FileManager.default.removeItem(at: $0)
@@ -67,6 +70,12 @@ public class MMPlayerDownloader: NSObject {
         self.createPlist(path: plistPath.path)
         if let info = try? Data.init(contentsOf: plistPath) {
             self._downloadInfo = info.decodeObject() ?? [MMPlayerDownLoadVideoInfo]()
+        }
+    }
+    
+    public func deleteVideo(_ url: URL) {
+        if let info = MMPlayerDownloader.shared.localFileFrom(url: url)  {
+            MMPlayerDownloader.shared.deleteVideo(info)
         }
     }
     

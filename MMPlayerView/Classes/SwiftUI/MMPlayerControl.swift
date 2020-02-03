@@ -8,6 +8,7 @@
 import Foundation
 import AVFoundation
 import Combine
+@available(iOS 13.0.0, *)
 public class MMPlayerControl: ObservableObject {
     private var asset: AVURLAsset?
     private var timeObserver: Any?
@@ -65,6 +66,7 @@ public class MMPlayerControl: ObservableObject {
     }
 }
 
+@available(iOS 13.0.0, *)
 extension MMPlayerControl {
     public func set(asset: AVURLAsset?, lodDiskIfExist: Bool = true) {
         if asset?.url == self.asset?.url {
@@ -154,7 +156,7 @@ extension MMPlayerControl {
         self.coverViewGestureHandle()
     }
 }
-
+@available(iOS 13.0.0, *)
 extension MMPlayerControl {
     func coverViewGestureHandle() {
         switch autoHideCoverType {
