@@ -16,6 +16,8 @@
 		27570B4C239E10CC0082B9A7 /* MMPlayer+String+Bounds.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27570B4B239E10CC0082B9A7 /* MMPlayer+String+Bounds.swift */; };
 		27570B4E239E2F460082B9A7 /* MMPlayer+String+SRTTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27570B4D239E2F460082B9A7 /* MMPlayer+String+SRTTime.swift */; };
 		275FC92F23D551BB000CA5F2 /* MMPLayerViewUITransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 275FC92E23D551BB000CA5F2 /* MMPLayerViewUITransition.swift */; };
+		2769B4B523E914CD007442BF /* MMLandscapeWindowUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2769B4B423E914CD007442BF /* MMLandscapeWindowUI.swift */; };
+		2769B4B723E94185007442BF /* MMPlayerViewBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2769B4B623E94185007442BF /* MMPlayerViewBridge.swift */; };
 		2777706E23A9C9EB00ACEB20 /* MMPlayer+Array+Safe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2777706D23A9C9EB00ACEB20 /* MMPlayer+Array+Safe.swift */; };
 		2777707223AA0DF900ACEB20 /* MMSubtitleSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2777707123AA0DF900ACEB20 /* MMSubtitleSetting.swift */; };
 		277C0A5F23C70EE80071DBAC /* TimeInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 277C0A5E23C70EE80071DBAC /* TimeInfo.swift */; };
@@ -94,6 +96,8 @@
 		27570B4B239E10CC0082B9A7 /* MMPlayer+String+Bounds.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MMPlayer+String+Bounds.swift"; sourceTree = "<group>"; };
 		27570B4D239E2F460082B9A7 /* MMPlayer+String+SRTTime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MMPlayer+String+SRTTime.swift"; sourceTree = "<group>"; };
 		275FC92E23D551BB000CA5F2 /* MMPLayerViewUITransition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MMPLayerViewUITransition.swift; sourceTree = "<group>"; };
+		2769B4B423E914CD007442BF /* MMLandscapeWindowUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MMLandscapeWindowUI.swift; sourceTree = "<group>"; };
+		2769B4B623E94185007442BF /* MMPlayerViewBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MMPlayerViewBridge.swift; sourceTree = "<group>"; };
 		2777706D23A9C9EB00ACEB20 /* MMPlayer+Array+Safe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MMPlayer+Array+Safe.swift"; sourceTree = "<group>"; };
 		2777707123AA0DF900ACEB20 /* MMSubtitleSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MMSubtitleSetting.swift; sourceTree = "<group>"; };
 		277C0A5E23C70EE80071DBAC /* TimeInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeInfo.swift; sourceTree = "<group>"; };
@@ -264,6 +268,7 @@
 				27ED4D6923B251180054C669 /* MMPlayerView.swift */,
 				27DFC2D823BEE8AB003A8820 /* MMPlayerControl.swift */,
 				27DFC2DA23BEEA68003A8820 /* MMPlayerContainer.swift */,
+				2769B4B623E94185007442BF /* MMPlayerViewBridge.swift */,
 			);
 			path = SwiftUI;
 			sourceTree = "<group>";
@@ -429,6 +434,7 @@
 			isa = PBXGroup;
 			children = (
 				5EC40F431F4EA47100510EDF /* MMLandscapeWindow.swift */,
+				2769B4B423E914CD007442BF /* MMLandscapeWindowUI.swift */,
 			);
 			path = Landscape;
 			sourceTree = "<group>";
@@ -672,6 +678,7 @@
 			files = (
 				2787435F219E9F70001B98F9 /* MMPlayerItem.swift in Sources */,
 				27570B4E239E2F460082B9A7 /* MMPlayer+String+SRTTime.swift in Sources */,
+				2769B4B723E94185007442BF /* MMPlayerViewBridge.swift in Sources */,
 				5E9A1B7A1F4D80E600746E5B /* MMPlayerPresentAnimator.swift in Sources */,
 				27874364219EF4FF001B98F9 /* MMPlayerObservation.swift in Sources */,
 				5E9A1B731F4D80E600746E5B /* MMPlayerBasePresentationController.swift in Sources */,
@@ -682,6 +689,7 @@
 				5E862B1C20629F06000EAC20 /* MMPlayerShrinkControl.swift in Sources */,
 				5E4F8A8B206245E200A2B19D /* MMPlayer+NSObject+Replace.swift in Sources */,
 				5E3E68EE1F4FF77900122F6C /* MMPlayer+UIView+Shadow.swift in Sources */,
+				2769B4B523E914CD007442BF /* MMLandscapeWindowUI.swift in Sources */,
 				275FC92F23D551BB000CA5F2 /* MMPLayerViewUITransition.swift in Sources */,
 				5E9A1B6C1F4D80E600746E5B /* MMPlayerTransition.swift in Sources */,
 				27F9B20A23AB4A4200B49152 /* MMSubtitleView.swift in Sources */,

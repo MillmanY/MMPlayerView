@@ -18,13 +18,7 @@ public extension MMPlayerLayer {
     enum CoverFitType {
         case fitToPlayerView
         case fitToVideoRect
-    }
-        
-    enum OrientationStatus: Int {
-        case landscapeLeft
-        case landscapeRight
-        case protrait
-    }
+    }        
 }
 
 public class MMPlayerLayer: AVPlayerLayer {
@@ -217,7 +211,7 @@ public class MMPlayerLayer: AVPlayerLayer {
      mmplayerLayer.orientation = .landscapeRight
      ```
      */
-    public private(set) var orientation: OrientationStatus = .protrait {
+    public private(set) var orientation: PlayerOrientation = .protrait {
         didSet {
             self.landscapeWindow.update()
             if orientation == oldValue { return }
@@ -288,7 +282,7 @@ public class MMPlayerLayer: AVPlayerLayer {
     private var isBackgroundPause = false
     private var cahce = MMPlayerCache()
     private var playStatusBlock: ((_ status: PlayStatus) ->Void)?
-    private var layerOrientationBlock: ((_ status: OrientationStatus) ->Void)?
+    private var layerOrientationBlock: ((_ status: PlayerOrientation) ->Void)?
     private var indicator = MMProgress()
     // MARK: - Init
     public override init(layer: Any) {
@@ -326,7 +320,7 @@ extension MMPlayerLayer {
      mmplayerLayer.setOrientation(.protrait)
      ```
      */
-    public func setOrientation(_ status: MMPlayerLayer.OrientationStatus) {
+    public func setOrientation(_ status: PlayerOrientation) {
         self.orientation = status
     }
     
@@ -385,7 +379,7 @@ extension MMPlayerLayer {
     /**
      Get player orientation status
      */
-    public func getOrientationChange(status: ((_ status: OrientationStatus) ->Void)?) {
+    public func getOrientationChange(status: ((_ status: PlayerOrientation) ->Void)?) {
         self.layerOrientationBlock = status
     }
     

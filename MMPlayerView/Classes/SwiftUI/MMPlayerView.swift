@@ -7,41 +7,67 @@
 
 import SwiftUI
 import AVFoundation
-@available(iOS 13.0.0, *)
-struct MMPlayerViewBridge: UIViewRepresentable {
-    @EnvironmentObject var control: MMPlayerControl
-
-    public func updateUIView(_ uiView: MMPlayerContainer, context: UIViewRepresentableContext<MMPlayerViewBridge>) {
-    }
-    public func makeUIView(context: Context) -> MMPlayerContainer {
-        return MMPlayerContainer(player: control.player)
-    }
-    
-    static func dismantleUIView(_ uiView: MMPlayerContainer, coordinator: MMPlayerViewBridge.Coordinator) {
-        uiView.playerLayer.player = nil
-    }
-
-}
-
-
+import Combine
 @available(iOS 13.0.0, *)
 public struct MMPlayerViewUI: View {
+    @State var rect: CGRect = .zero
+    @State private var orientationCancel: AnyCancellable?
     @EnvironmentObject private var control: MMPlayerControl
     let progress: AnyView?
     let cover: AnyView?
-    @State var r: CGRect = .zero
+    
     public var body: some View {
-        return ZStack {
+        ZStack {
             MMPlayerViewBridge()
             self.cover?
                 .opacity(self.control.isCoverShow ? 1.0 : 0.0)
                 .animation(.easeOut(duration: control.coverAnimationInterval))
             self.progress
-        }            
+        }
         .gesture(self.coverTapGesture(), including: .all)
         .modifier(GlobalPlayerFramePreference())
+        .onAppear(perform: {
+            self.addOrientationObserverOnce()
+        })
+        .onDisappear {
+            self.removeOrientationObserver()
+        }
+        .onPreferenceChange(GlobalPlayerFramePreference.Key.self) { (values) in
+            if let f = values.first, f != .zero {
+                DispatchQueue.main.async {
+                    self.rect = f
+                }
+            }
+        }
     }
-
+        
+    private func addOrientationObserverOnce() {
+        self.orientationCancel = self.control.$orientation.sink { (status) in
+            let window = self.control.landscapeWindow
+            switch status {
+            case .protrait:
+                break
+//                window.isHidden = true
+            case .landscapeLeft:
+                if window.isKeyWindow {
+                    return
+                }
+                window.isHidden = false
+                window.makeKeyAndVisible()
+            case .landscapeRight:
+                if window.isKeyWindow {
+                    return
+                }
+                let windowV = MMPlayerViewWindowUI(view: self.clone(), rect: self.rect).environmentObject(self.control)
+                window.start(view: windowV)
+            }
+        }
+    }
+    
+    private func removeOrientationObserver() {
+        self.orientationCancel?.cancel()
+    }
+    
     private func coverTapGesture() -> _EndedGesture<TapGesture> {
         return TapGesture().onEnded { (_) in
             self.control.coverViewGestureHandle()
@@ -66,9 +92,12 @@ extension MMPlayerViewUI {
         self.init(pView: AnyView(DefaultIndicator()), cView: nil)
     }
 
-    init(pView: AnyView? = AnyView(DefaultIndicator()), cView: AnyView? = nil) {
+    init(pView: AnyView? = AnyView(DefaultIndicator()), cView: AnyView? = nil, isFullScreen: Bool = false) {
         self.progress = pView
         self.cover = cView
     }
+    
+    private func clone() -> some View {
+        return MMPlayerViewUI(progress: self.progress, cover: self.cover)
+    }
 }
-

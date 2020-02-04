@@ -43,9 +43,7 @@ public class MMPlayerDownloader: NSObject {
     static public func cleanTmpFile() {
         guard let items = try? FileManager.default.contentsOfDirectory(atPath: NSTemporaryDirectory()) else {
             return
-        }
-//        let a = try? FileManager.default.contentsOfDirectory(atPath: NSTemporaryDirectory().appending("/MMPlayerVideo/Share"))
-        
+        }        
         let pathURL = items.compactMap { $0.contains(".tmp") ? URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent($0, isDirectory: false) : nil }
         pathURL.forEach {
             try? FileManager.default.removeItem(at: $0)

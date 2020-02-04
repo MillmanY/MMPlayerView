@@ -10,6 +10,8 @@ import AVFoundation
 import Combine
 @available(iOS 13.0.0, *)
 public class MMPlayerControl: ObservableObject {
+    let landscapeWindow = MMLandscapeWindowUI()
+
     private var asset: AVURLAsset?
     private var timeObserver: Any?
     private var muteObserver: NSKeyValueObservation?
@@ -51,12 +53,14 @@ public class MMPlayerControl: ObservableObject {
     public var coverAnimationInterval = 0.3
     @Published
     public var error: MMPlayerViewUIError?
+    @Published
+    public var orientation: PlayerOrientation = .protrait
 
     public let player: AVPlayer
     public init(player: AVPlayer = AVPlayer()) {
         self.player = player
         self.setup()
-    }
+   }
     
     deinit {
         hideCancel = nil
@@ -259,7 +263,20 @@ extension MMPlayerControl {
 
         })
         
-        
+        NotificationCenter.default.addObserver(forName: UIDevice.orientationDidChangeNotification, object: nil, queue: nil) { [weak self] (_) in
+            guard let self = self else {return}
+            
+            switch UIDevice.current.orientation {
+            case .landscapeLeft:
+                self.orientation = .landscapeLeft
+            case .landscapeRight:
+                self.orientation = .landscapeRight
+            case .portrait:
+                self.orientation = .protrait
+            default: break
+            }
+        }
+
         NotificationCenter.default.addObserver(forName: UIApplication.willResignActiveNotification, object: nil, queue: nil, using: { [weak self] (nitification) in
             switch self?.currentPlayStatus ?? .unknown {
             case .pause:
@@ -293,6 +310,7 @@ extension MMPlayerControl {
                 }
             }
         })
+        
         muteObserver = self.player.observe(\.isMuted, options: [.new, .old], changeHandler: { [weak self] (_, value) in
             let new = value.newValue ?? false
             let old = value.newValue ?? false

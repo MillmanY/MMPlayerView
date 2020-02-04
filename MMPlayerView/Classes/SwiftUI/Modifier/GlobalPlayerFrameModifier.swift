@@ -15,8 +15,7 @@ public struct GlobalPlayerFrameModifier: ViewModifier {
         self._r = rect
     }
     public func body(content: Content) -> some View {
-        content
-            .onPreferenceChange(GlobalPlayerFramePreference.Key.self) { (values) in
+        content.onPreferenceChange(GlobalPlayerFramePreference.Key.self) { (values) in
             if let f = values.first, f != .zero, f != self.r {
                 DispatchQueue.main.async {
                     self.r = f
@@ -26,7 +25,7 @@ public struct GlobalPlayerFrameModifier: ViewModifier {
     }
 }
 @available(iOS 13.0.0, *)
-public struct GlobalPlayerFramePreference: ViewModifier {
+struct GlobalPlayerFramePreference: ViewModifier {
     public func body(content: Content) -> some View {
         content.background(GeometryReader{ (proxy) in
             return Color.clear
@@ -35,9 +34,8 @@ public struct GlobalPlayerFramePreference: ViewModifier {
         })
     }
 }
-
 @available(iOS 13.0.0, *)
-public extension GlobalPlayerFramePreference {
+extension GlobalPlayerFramePreference {
     struct Key: PreferenceKey, Equatable {
         public static var defaultValue: [CGRect] = []
         public static func reduce(value: inout [CGRect], nextValue: () -> [CGRect]) {

@@ -69,6 +69,12 @@ public enum PlayerCacheType {
     case memory(count: Int)
 }
 
+public enum PlayerOrientation: Int {
+    case landscapeLeft
+    case landscapeRight
+    case protrait
+}
+
 let VideoBasePath = NSTemporaryDirectory()
 let sharedPlayer = AVPlayer()
 let assetKeysRequiredToPlay = [
