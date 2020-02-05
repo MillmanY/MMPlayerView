@@ -19,7 +19,7 @@ struct MMPlayerViewBridge: UIViewRepresentable {
     }
  
     static func dismantleUIView(_ uiView: MMPlayerContainer, coordinator: ()) {
-                uiView.playerLayer.player = nil
+            uiView.playerLayer.player = nil
     }
 //    static func dismantleUIView(_ uiView: MMPlayerContainer, coordinator: MMPlayerViewBridge.Coordinator) {
 //        uiView.playerLayer.player = nil

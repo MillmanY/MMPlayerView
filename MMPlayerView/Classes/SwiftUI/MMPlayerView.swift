@@ -10,12 +10,13 @@ import AVFoundation
 import Combine
 @available(iOS 13.0.0, *)
 public struct MMPlayerViewUI: View {
+    var orientationObserver = OrientationObserver()
+    @State var cancel: AnyCancellable?
     @State var rect: CGRect = .zero
-    @State private var orientationCancel: AnyCancellable?
-    @EnvironmentObject private var control: MMPlayerControl
+    private let control: MMPlayerControl
+
     let progress: AnyView?
     let cover: AnyView?
-    
     public var body: some View {
         ZStack {
             MMPlayerViewBridge()
@@ -24,14 +25,17 @@ public struct MMPlayerViewUI: View {
                 .animation(.easeOut(duration: control.coverAnimationInterval))
             self.progress
         }
+        .onAppear(perform: {
+            if !self.orientationObserver.enable {
+                return
+            }
+            self.cancel = self.orientationObserver.$orientation.sink {
+                print("\($0)")
+            }
+        })
+            
         .gesture(self.coverTapGesture(), including: .all)
         .modifier(GlobalPlayerFramePreference())
-        .onAppear(perform: {
-            self.addOrientationObserverOnce()
-        })
-        .onDisappear {
-            self.removeOrientationObserver()
-        }
         .onPreferenceChange(GlobalPlayerFramePreference.Key.self) { (values) in
             if let f = values.first, f != .zero {
                 DispatchQueue.main.async {
@@ -40,36 +44,7 @@ public struct MMPlayerViewUI: View {
             }
         }
     }
-        
-    private func addOrientationObserverOnce() {
-        self.orientationCancel = self.control.$orientation.sink { (status) in
-//            let window = self.control.landscapeWindow
-//            switch status {
-//            case .protrait:
-//                break
-////                window.isHidden = true
-//            case .landscapeLeft:
-//                if window.isKeyWindow {
-//                    return
-//                }
-//                window.isHidden = false
-//                window.makeKeyAndVisible()
-//            case .landscapeRight:
-//                if window.isKeyWindow {
-//                    return
-//                }
-//                let windowV = MMPlayerViewWindowUI(view: self.clone(), rect: self.rect).environmentObject(self.control)
-//                window.start(view: windowV)
-//            }
-            print("\(status) \(self.rect)")
 
-        }
-    }
-    
-    private func removeOrientationObserver() {
-        self.orientationCancel?.cancel()
-    }
-    
     private func coverTapGesture() -> _EndedGesture<TapGesture> {
         return TapGesture().onEnded { (_) in
             self.control.coverViewGestureHandle()
@@ -78,28 +53,29 @@ public struct MMPlayerViewUI: View {
 }
 @available(iOS 13.0.0, *)
 extension MMPlayerViewUI {
-    public init<P: View>(progress: P) {
-        self.init(pView: AnyView(progress), cView: nil)
+    public init<P: View>(control: MMPlayerControl, progress: P) {
+        self.init(control: control, pView: AnyView(progress), cView: nil)
     }
 
-    public init<C: View>(cover: C) {
-        self.init(pView: AnyView(DefaultIndicator()), cView: AnyView(cover))
+    public init<C: View>(control: MMPlayerControl, cover: C) {
+        self.init(control: control, pView: AnyView(DefaultIndicator()), cView: AnyView(cover))
     }
 
-    public init<P: View,C: View>(progress: P, cover: C) {
-        self.init(pView: AnyView(progress), cView: AnyView(cover))
+    public init<P: View,C: View>(control: MMPlayerControl, progress: P, cover: C) {
+        self.init(control: control, pView: AnyView(progress), cView: AnyView(cover))
     }
     
-    public init() {
-        self.init(pView: AnyView(DefaultIndicator()), cView: nil)
+    public init(control: MMPlayerControl) {
+        self.init(control: control, pView: AnyView(DefaultIndicator()), cView: nil)
     }
 
-    init(pView: AnyView? = AnyView(DefaultIndicator()), cView: AnyView? = nil, isFullScreen: Bool = false) {
+    init(control: MMPlayerControl, pView: AnyView? = AnyView(DefaultIndicator()), cView: AnyView? = nil, isFullScreen: Bool = false) {
         self.progress = pView
         self.cover = cView
+        self.control = control
     }
     
     private func clone() -> some View {
-        return MMPlayerViewUI(progress: self.progress, cover: self.cover)
+        return MMPlayerViewUI(control: self.control, progress: self.progress, cover: self.cover)
     }
 }

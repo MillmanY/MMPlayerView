@@ -13,6 +13,7 @@
 		2717E199219D388600DCC8CB /* MMPlayerDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2717E197219D388600DCC8CB /* MMPlayerDownloader.swift */; };
 		2717E19D219DA46800DCC8CB /* MMPlayerDownLoadVideoInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2717E19C219DA46800DCC8CB /* MMPlayerDownLoadVideoInfo.swift */; };
 		2717E19F219DB17000DCC8CB /* MMPlayer+Codable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2717E19E219DB17000DCC8CB /* MMPlayer+Codable.swift */; };
+		2751E07823EA760D00EA87D3 /* OrientationObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2751E07723EA760D00EA87D3 /* OrientationObserver.swift */; };
 		27570B4C239E10CC0082B9A7 /* MMPlayer+String+Bounds.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27570B4B239E10CC0082B9A7 /* MMPlayer+String+Bounds.swift */; };
 		27570B4E239E2F460082B9A7 /* MMPlayer+String+SRTTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27570B4D239E2F460082B9A7 /* MMPlayer+String+SRTTime.swift */; };
 		275FC92F23D551BB000CA5F2 /* MMPLayerViewUITransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 275FC92E23D551BB000CA5F2 /* MMPLayerViewUITransition.swift */; };
@@ -93,6 +94,7 @@
 		2717E197219D388600DCC8CB /* MMPlayerDownloader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MMPlayerDownloader.swift; sourceTree = "<group>"; };
 		2717E19C219DA46800DCC8CB /* MMPlayerDownLoadVideoInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MMPlayerDownLoadVideoInfo.swift; sourceTree = "<group>"; };
 		2717E19E219DB17000DCC8CB /* MMPlayer+Codable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MMPlayer+Codable.swift"; sourceTree = "<group>"; };
+		2751E07723EA760D00EA87D3 /* OrientationObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrientationObserver.swift; sourceTree = "<group>"; };
 		27570B4B239E10CC0082B9A7 /* MMPlayer+String+Bounds.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MMPlayer+String+Bounds.swift"; sourceTree = "<group>"; };
 		27570B4D239E2F460082B9A7 /* MMPlayer+String+SRTTime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MMPlayer+String+SRTTime.swift"; sourceTree = "<group>"; };
 		275FC92E23D551BB000CA5F2 /* MMPLayerViewUITransition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MMPLayerViewUITransition.swift; sourceTree = "<group>"; };
@@ -205,6 +207,7 @@
 			children = (
 				27874363219EF4FF001B98F9 /* MMPlayerObservation.swift */,
 				27160EB121A1255500B8A746 /* WeakBox.swift */,
+				2751E07723EA760D00EA87D3 /* OrientationObserver.swift */,
 			);
 			path = Observer;
 			sourceTree = "<group>";
@@ -689,6 +692,7 @@
 				5E862B1C20629F06000EAC20 /* MMPlayerShrinkControl.swift in Sources */,
 				5E4F8A8B206245E200A2B19D /* MMPlayer+NSObject+Replace.swift in Sources */,
 				5E3E68EE1F4FF77900122F6C /* MMPlayer+UIView+Shadow.swift in Sources */,
+				2751E07823EA760D00EA87D3 /* OrientationObserver.swift in Sources */,
 				2769B4B523E914CD007442BF /* MMLandscapeWindowUI.swift in Sources */,
 				275FC92F23D551BB000CA5F2 /* MMPLayerViewUITransition.swift in Sources */,
 				5E9A1B6C1F4D80E600746E5B /* MMPlayerTransition.swift in Sources */,

@@ -10,12 +10,13 @@ import SwiftUI
 import MMPlayerView
 
 struct PlayCellView: View {
+    @EnvironmentObject var control: MMPlayerControl
     @State var downloadStatus: MMPlayerDownloader.DownloadStatus = .none
     let obj: DataObj
-    let isCurrent: Bool
-    init(obj: DataObj, isCurrent: Bool = false) {
+    let player: MMPlayerViewUI?
+    init(player: MMPlayerViewUI?, obj: DataObj) {
+        self.player = player
         self.obj = obj
-        self.isCurrent = isCurrent
     }
 
     var body: some View {
@@ -24,9 +25,7 @@ struct PlayCellView: View {
                 Image(uiImage: self.obj.image ?? UIImage())
                     .resizable()
                     .frame(height: 200)
-                if self.isCurrent {
-                    MMPlayerViewUI(cover: CoverAUI())
-                }
+                player
             }
             HStack {
                 Text(self.obj.title)
@@ -60,9 +59,8 @@ struct PlayCellView: View {
 
 struct PlayCellView_Previews: PreviewProvider {
     static var previews: some View {
-        PlayCellView(obj: DemoSource.shared.demoData[2])
+        PlayCellView(player: MMPlayerViewUI.init(control: MMPlayerControl()) ,obj: DemoSource.shared.demoData[2])
             .previewLayout(.sizeThatFits)
-            .environmentObject(MMPlayerControl())
     }
 }
 

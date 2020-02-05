@@ -42,23 +42,23 @@ struct PlayerListView: View {
     }
     
     @State var fromFrame = CGRect.zero
-     
+    @State var orientation: PlayerOrientation = .protrait
     var body: some View {
         let objs = playListViewModel.videoList.enumerated().map({ $0 })
         return ZStack {
             if showDetailIdx != nil {
                 DetailView(obj: self.playListViewModel.videoList[showDetailIdx!], showDetailIdx: $showDetailIdx)
                     .edgesIgnoringSafeArea(.all)
-                    .transition(.playerTransition(from: fromFrame))
+                    .transition(.playerTransition(view: MMPlayerViewUI(control: control) ,from: fromFrame))
                     .zIndex(1)
             }
                         
             NavigationView {
                 List {
-                    
                     ForEach(objs, id: \.element.title) { (offset, element) in
-                        PlayCellView(obj: element,
-                                     isCurrent: offset == self.playListViewModel.currentViewIdx)
+                        PlayCellView(player: offset == self.playListViewModel.currentViewIdx ?
+                            MMPlayerViewUI(control: self.control, cover: CoverAUI()) : nil,
+                                     obj: element)
                             .modifier(CellObserver(index: offset))
                             .modifier(GlobalPlayerFrameModifier(rect: self.$fromFrame))
                             .onTapGesture {
@@ -66,8 +66,8 @@ struct PlayerListView: View {
                                     self.showDetailIdx = offset
                                 }
                         }
+                        .id(element.title)
                     }
-
                     .listRowInsets(PlayerListView.listEdge)
                 }
 

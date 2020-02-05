@@ -7,18 +7,22 @@
 
 import Foundation
 import SwiftUI
+
 @available(iOS 13.0.0, *)
 public extension AnyTransition {
-    static func playerTransition(from: CGRect?) -> AnyTransition {
+    static func playerTransition<Content: View>(view: Content, from: CGRect?) -> AnyTransition {
         let f = from ?? .zero
-        return AnyTransition.modifier(active: MMPlayerViewTransition(from: f, percent: 0.0),
-                                      identity: MMPlayerViewTransition(from: f, percent: 1.0))
+        return AnyTransition.modifier(active: ViewTransition(pass: view, from: f, percent: 0.0),
+                                      identity: ViewTransition(pass: view, from: f, percent: 1.0))
     }
 }
 
 @available(iOS 13.0.0, *)
-struct MMPlayerViewTransition: AnimatableModifier {
+struct ViewTransition<PassView>: AnimatableModifier where PassView: View {
+    
     @EnvironmentObject var control: MMPlayerControl
+    @State var to: CGRect = .zero
+    
     var animatableData: CGFloat {
         get {
             return percent
@@ -26,11 +30,13 @@ struct MMPlayerViewTransition: AnimatableModifier {
             self.percent = newValue
         }
     }
+    
     var percentSize: CGSize {
         let w =  (from.size.width-(from.size.width-to.size.width)*percent)/(from.size.width == 0 ? 1 : from.size.width)
         let h =  (from.size.height-(from.size.height-to.size.height)*percent)/(from.size.height == 0 ? 1 : from.size.height)
         return CGSize.init(width: w, height: h)
     }
+
     var percentOffsetX: CGFloat {
         return (from.midX-to.midX)*percent
     }
@@ -40,18 +46,21 @@ struct MMPlayerViewTransition: AnimatableModifier {
     }
     
     let from: CGRect
-    @State var to: CGRect = .zero
     var percent: CGFloat = 0
-    init(from: CGRect, percent: CGFloat) {
+    let pass: PassView
+    
+    init(pass: PassView, from: CGRect, percent: CGFloat) {
         self.from = from
         self.percent = percent
+        self.pass = pass
     }
+    
     func body(content: Content) -> some View {
         return ZStack {
             content.opacity(Double(percent))
                    .modifier(GlobalPlayerFrameModifier(rect: self.$to))
             GeometryReader { (proxy) in
-                MMPlayerViewUI()
+                self.pass
                 .frame(width: self.from.size.width, height: self.from.size.height)
                 .scaleEffect(self.percentSize)
                 .offset(x: self.from.midX-proxy.size.width/2-self.percentOffsetX,

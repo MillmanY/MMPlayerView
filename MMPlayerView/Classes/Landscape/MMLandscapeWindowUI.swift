@@ -58,17 +58,17 @@ public struct MMPlayerViewWindowUI: View {
     }
     
     private func addOrientationObserverOnce() {
-        self.orientationCancel = self.control.$orientation.sink { (status) in
-            switch status {
-            case .protrait:
-                self.animate = false
-                DispatchQueue.main.asyncAfter(deadline: .now() + self.duration + 0.1) {
-                    self.control.landscapeWindow.isHidden = true
-                }
-            case .landscapeLeft, .landscapeRight:
-                self.animate = true
-            }
-        }
+//        self.orientationCancel = self.control.$orientation.sink { (status) in
+//            switch status {
+//            case .protrait:
+//                self.animate = false
+//                DispatchQueue.main.asyncAfter(deadline: .now() + self.duration + 0.1) {
+//                    self.control.landscapeWindow.isHidden = true
+//                }
+//            case .landscapeLeft, .landscapeRight:
+//                self.animate = true
+//            }
+//        }
     }
 
     private func removeOrientationObserver() {
@@ -82,14 +82,15 @@ public struct MMPlayerViewWindowUI: View {
     }
     
     private var rotationValue: Angle {
-        switch control.orientation {
-        case .protrait:
-            return Angle(degrees: 0)
-        case .landscapeRight:
-            return Angle(degrees: animate ? -90 : 0)
-        case .landscapeLeft:
-            return Angle(degrees: animate ? 90 : 0)
-        }
+        return Angle.degrees(0)
+//        switch control.orientation {
+//        case .protrait:
+//            return Angle(degrees: 0)
+//        case .landscapeRight:
+//            return Angle(degrees: animate ? -90 : 0)
+//        case .landscapeLeft:
+//            return Angle(degrees: animate ? 90 : 0)
+//        }
     }
     
     init<V: View>(view: V,rect: CGRect) {

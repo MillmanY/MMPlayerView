@@ -53,8 +53,6 @@ public class MMPlayerControl: ObservableObject {
     public var coverAnimationInterval = 0.3
     @Published
     public var error: MMPlayerViewUIError?
-    @Published
-    public var orientation: PlayerOrientation = .protrait
 
     public let player: AVPlayer
     public init(player: AVPlayer = AVPlayer()) {
@@ -241,7 +239,7 @@ extension MMPlayerControl {
     private func addPlayerObserver() {
         NotificationCenter.default.removeObserver(self)
     
-        timeObserver = self.player.addPeriodicTimeObserver(forInterval: CMTimeMake(value: 1, timescale: 100), queue: DispatchQueue.main, using: { [weak self] (time) in
+        timeObserver = self.player.addPeriodicTimeObserver(forInterval: CMTimeMake(value: 1, timescale: 30), queue: DispatchQueue.main, using: { [weak self] (time) in
             guard let total = self?.player.currentItem?.duration, !time.isIndefinite else {
                 return
             }
@@ -263,20 +261,6 @@ extension MMPlayerControl {
 
         })
         
-        NotificationCenter.default.addObserver(forName: UIDevice.orientationDidChangeNotification, object: nil, queue: nil) { [weak self] (_) in
-            guard let self = self else {return}
-            
-            switch UIDevice.current.orientation {
-            case .landscapeLeft:
-                self.orientation = .landscapeLeft
-            case .landscapeRight:
-                self.orientation = .landscapeRight
-            case .portrait:
-                self.orientation = .protrait
-            default: break
-            }
-        }
-
         NotificationCenter.default.addObserver(forName: UIApplication.willResignActiveNotification, object: nil, queue: nil, using: { [weak self] (nitification) in
             switch self?.currentPlayStatus ?? .unknown {
             case .pause:

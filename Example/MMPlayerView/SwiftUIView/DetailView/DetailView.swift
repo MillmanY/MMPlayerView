@@ -10,13 +10,14 @@ import SwiftUI
 import AVFoundation
 import MMPlayerView
 struct DetailView: View {
+    @EnvironmentObject var control: MMPlayerControl
     let obj: DataObj
     @State var downloadStatus: MMPlayerDownloader.DownloadStatus = .none
     @Binding var showDetailIdx: Int?
     var body: some View {
         VStack {
             ZStack(alignment: .topLeading) {
-                MMPlayerViewUI().frame(height: 200)
+                MMPlayerViewUI(control: control).frame(height: 200)
                 Image("ic_keyboard_arrow_left")
                     .offset(x: 15, y: 44)
                     .onTapGesture {

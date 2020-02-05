@@ -13,7 +13,6 @@ class MMPlayerContainer: UIView {
         return self.layer as! AVPlayerLayer
     }
     init(player: AVPlayer?) {
-//        self.playerLayer = AVPlayerLayer.init(player: player)
         super.init(frame: .zero)
         self.playerLayer.player = player
         self.backgroundColor = UIColor.black
