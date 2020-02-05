@@ -52,6 +52,8 @@ public struct MMPlayerViewWindowUI: View {
                 
         }.onAppear(perform: {
             self.addOrientationObserverOnce()
+        }).onDisappear(perform: {
+            self.removeOrientationObserver()
         }).edgesIgnoringSafeArea(.all)
     }
     
@@ -60,23 +62,34 @@ public struct MMPlayerViewWindowUI: View {
             switch status {
             case .protrait:
                 self.animate = false
-                DispatchQueue.main.asyncAfter(deadline: .now() + self.duration) {
+                DispatchQueue.main.asyncAfter(deadline: .now() + self.duration + 0.1) {
                     self.control.landscapeWindow.isHidden = true
                 }
             case .landscapeLeft, .landscapeRight:
                 self.animate = true
-
             }
         }
     }
 
-    
+    private func removeOrientationObserver() {
+        self.orientationCancel?.cancel()
+    }
+
+
     private var positionValue: CGPoint {
         let windowSize = UIScreen.main.bounds.size
         return animate ? CGPoint(x: windowSize.width/2, y: windowSize.height/2) : CGPoint(x: self.fromRect.midX, y: self.fromRect.midY)
     }
+    
     private var rotationValue: Angle {
-        return Angle.init(degrees: animate ? -90 : 0)
+        switch control.orientation {
+        case .protrait:
+            return Angle(degrees: 0)
+        case .landscapeRight:
+            return Angle(degrees: animate ? -90 : 0)
+        case .landscapeLeft:
+            return Angle(degrees: animate ? 90 : 0)
+        }
     }
     
     init<V: View>(view: V,rect: CGRect) {

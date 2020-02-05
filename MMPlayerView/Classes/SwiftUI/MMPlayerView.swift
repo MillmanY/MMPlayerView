@@ -43,24 +43,26 @@ public struct MMPlayerViewUI: View {
         
     private func addOrientationObserverOnce() {
         self.orientationCancel = self.control.$orientation.sink { (status) in
-            let window = self.control.landscapeWindow
-            switch status {
-            case .protrait:
-                break
-//                window.isHidden = true
-            case .landscapeLeft:
-                if window.isKeyWindow {
-                    return
-                }
-                window.isHidden = false
-                window.makeKeyAndVisible()
-            case .landscapeRight:
-                if window.isKeyWindow {
-                    return
-                }
-                let windowV = MMPlayerViewWindowUI(view: self.clone(), rect: self.rect).environmentObject(self.control)
-                window.start(view: windowV)
-            }
+//            let window = self.control.landscapeWindow
+//            switch status {
+//            case .protrait:
+//                break
+////                window.isHidden = true
+//            case .landscapeLeft:
+//                if window.isKeyWindow {
+//                    return
+//                }
+//                window.isHidden = false
+//                window.makeKeyAndVisible()
+//            case .landscapeRight:
+//                if window.isKeyWindow {
+//                    return
+//                }
+//                let windowV = MMPlayerViewWindowUI(view: self.clone(), rect: self.rect).environmentObject(self.control)
+//                window.start(view: windowV)
+//            }
+            print("\(status) \(self.rect)")
+
         }
     }
     
