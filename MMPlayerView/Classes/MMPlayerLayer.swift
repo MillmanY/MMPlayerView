@@ -281,7 +281,7 @@ public class MMPlayerLayer: AVPlayerLayer {
         return g
     }()
     
-    private lazy var landscapeWindow: MMLandscapeWindow = {
+    public private(set) lazy var landscapeWindow: MMLandscapeWindow = {
         let window = MMLandscapeWindow(playerLayer: self)
         return window
     }()
