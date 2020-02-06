@@ -40,23 +40,26 @@ struct PlayerListView: View {
         self.control = c
         playListViewModel = PlayListViewModel(control: c)
     }
-    
+    @State var status: PlayerOrientation = .protrait
     @State var fromFrame = CGRect.zero
-    @State var orientation: PlayerOrientation = .protrait
     var body: some View {
         let objs = playListViewModel.videoList.enumerated().map({ $0 })
         return ZStack {
+            Button.init("\(self.control.orientation.desc)") {
+                self.control.orientation = .landscapeLeft
+            }.zIndex(100)
+            
             if showDetailIdx != nil {
                 DetailView(obj: self.playListViewModel.videoList[showDetailIdx!], showDetailIdx: $showDetailIdx)
                     .edgesIgnoringSafeArea(.all)
                     .transition(.playerTransition(view: MMPlayerViewUI(control: control) ,from: fromFrame))
                     .zIndex(1)
             }
-                        
+
             NavigationView {
                 List {
                     ForEach(objs, id: \.element.title) { (offset, element) in
-                        PlayCellView(player: offset == self.playListViewModel.currentViewIdx ?
+                        PlayCellView(player: (offset == self.playListViewModel.currentViewIdx && self.showDetailIdx == nil) ?
                             MMPlayerViewUI(control: self.control, cover: CoverAUI()) : nil,
                                      obj: element)
                             .modifier(CellObserver(index: offset))
@@ -92,6 +95,7 @@ struct PlayerListView: View {
             }
         }
         .environmentObject(control)
+
     }
 }
 

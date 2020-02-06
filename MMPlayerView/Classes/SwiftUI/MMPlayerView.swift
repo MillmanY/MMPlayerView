@@ -10,30 +10,19 @@ import AVFoundation
 import Combine
 @available(iOS 13.0.0, *)
 public struct MMPlayerViewUI: View {
-    var orientationObserver = OrientationObserver()
-    @State var cancel: AnyCancellable?
     @State var rect: CGRect = .zero
-    private let control: MMPlayerControl
-
+    @State var cancelable: AnyCancellable?
+    @ObservedObject private var control: MMPlayerControl
     let progress: AnyView?
     let cover: AnyView?
     public var body: some View {
-        ZStack {
+        return ZStack {
             MMPlayerViewBridge()
             self.cover?
                 .opacity(self.control.isCoverShow ? 1.0 : 0.0)
                 .animation(.easeOut(duration: control.coverAnimationInterval))
             self.progress
         }
-        .onAppear(perform: {
-            if !self.orientationObserver.enable {
-                return
-            }
-            self.cancel = self.orientationObserver.$orientation.sink {
-                print("\($0)")
-            }
-        })
-            
         .gesture(self.coverTapGesture(), including: .all)
         .modifier(GlobalPlayerFramePreference())
         .onPreferenceChange(GlobalPlayerFramePreference.Key.self) { (values) in
@@ -43,9 +32,28 @@ public struct MMPlayerViewUI: View {
                 }
             }
         }
-    }
+        .onAppear(perform: {
+            if self.control.landscapeWindow.isKeyWindow {
+                return
+            }
+            self.cancelable = self.control.$orientation.sink(receiveValue: {
+                switch $0 {
+                case .protrait:
+                    break
+                default:
+                    self.control.landscapeWindow.start(view: MMPlayerViewWindowUI(view: self.clone(), rect: self.rect).environmentObject(self.control))
+                }
+                print("$ \($0)")
 
+            })
+        })
+        .onDisappear {
+            self.cancelable?.cancel()
+        }
+    }
+    
     private func coverTapGesture() -> _EndedGesture<TapGesture> {
+        
         return TapGesture().onEnded { (_) in
             self.control.coverViewGestureHandle()
         }
@@ -69,7 +77,9 @@ extension MMPlayerViewUI {
         self.init(control: control, pView: AnyView(DefaultIndicator()), cView: nil)
     }
 
-    init(control: MMPlayerControl, pView: AnyView? = AnyView(DefaultIndicator()), cView: AnyView? = nil, isFullScreen: Bool = false) {
+    init(control: MMPlayerControl,
+         pView: AnyView? = AnyView(DefaultIndicator()),
+         cView: AnyView? = nil) {
         self.progress = pView
         self.cover = cView
         self.control = control

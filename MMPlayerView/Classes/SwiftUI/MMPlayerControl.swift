@@ -22,6 +22,9 @@ public class MMPlayerControl: ObservableObject {
     private var debounceCancel: AnyCancellable?
     private var hideCancel: AnyCancellable?
     @Published
+    public var orientation: PlayerOrientation = .protrait
+
+    @Published
     public var timeInfo = TimeInfo()
     @Published
     public var isMuted = false
@@ -239,7 +242,7 @@ extension MMPlayerControl {
     private func addPlayerObserver() {
         NotificationCenter.default.removeObserver(self)
     
-        timeObserver = self.player.addPeriodicTimeObserver(forInterval: CMTimeMake(value: 1, timescale: 30), queue: DispatchQueue.main, using: { [weak self] (time) in
+        timeObserver = self.player.addPeriodicTimeObserver(forInterval: CMTimeMake(value: 1, timescale: 10), queue: nil, using: { [weak self] (time) in
             guard let total = self?.player.currentItem?.duration, !time.isIndefinite else {
                 return
             }
@@ -295,6 +298,20 @@ extension MMPlayerControl {
             }
         })
         
+        NotificationCenter.default.addObserver(forName: UIDevice.orientationDidChangeNotification,
+                                                          object: nil,
+                                                          queue: OperationQueue.main) { (_) in
+            switch UIDevice.current.orientation {
+            case .landscapeLeft:
+                self.orientation = .landscapeLeft
+            case .landscapeRight:
+                self.orientation = .landscapeRight
+            case .portrait:
+                self.orientation = .protrait
+            default: break
+            }
+        }
+
         muteObserver = self.player.observe(\.isMuted, options: [.new, .old], changeHandler: { [weak self] (_, value) in
             let new = value.newValue ?? false
             let old = value.newValue ?? false

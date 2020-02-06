@@ -73,6 +73,17 @@ public enum PlayerOrientation: Int {
     case landscapeLeft
     case landscapeRight
     case protrait
+    public var desc: String {
+        switch self {
+        case .protrait:
+            return "protrait"
+        case .landscapeLeft:
+            return "landscapeLeft"
+        case .landscapeRight:
+            return "landscapeRight"
+
+        }
+    }
 }
 
 let VideoBasePath = NSTemporaryDirectory()
