@@ -29,7 +29,6 @@ public class MMLandscapeWindowUI: UIWindow {
         self.rootViewController = UIHostingController(rootView: view)
         self.rootViewController?.view.backgroundColor = .clear
     }
-    
 }
 
 @available(iOS 13.0.0, *)
@@ -41,7 +40,6 @@ public struct MMPlayerViewWindowUI: View {
     let fromRect: CGRect
     @State var animate = false
     public var body: some View {
-        
         ZStack {
             Color.clear
             view.frame(width: animate ? UIScreen.main.bounds.height : self.fromRect.width,

@@ -45,10 +45,6 @@ struct PlayerListView: View {
     var body: some View {
         let objs = playListViewModel.videoList.enumerated().map({ $0 })
         return ZStack {
-            Button.init("\(self.control.orientation.desc)") {
-                self.control.orientation = .landscapeLeft
-            }.zIndex(100)
-            
             if showDetailIdx != nil {
                 DetailView(obj: self.playListViewModel.videoList[showDetailIdx!], showDetailIdx: $showDetailIdx)
                     .edgesIgnoringSafeArea(.all)
@@ -59,16 +55,13 @@ struct PlayerListView: View {
             NavigationView {
                 List {
                     ForEach(objs, id: \.element.title) { (offset, element) in
-                        PlayCellView(player: (offset == self.playListViewModel.currentViewIdx && self.showDetailIdx == nil) ?
-                            MMPlayerViewUI(control: self.control, cover: CoverAUI()) : nil,
-                                     obj: element)
-                            .modifier(CellObserver(index: offset))
-                            .modifier(GlobalPlayerFrameModifier(rect: self.$fromFrame))
-                            .onTapGesture {
-                                withAnimation {
-                                    self.showDetailIdx = offset
-                                }
+                        PlayCellView(player: self.cellPlayerOn(index: offset) , obj: element) { rect in
+                            withAnimation {
+                                self.fromFrame = rect
+                                self.showDetailIdx = offset
+                            }
                         }
+                        .modifier(CellObserver(index: offset))
                         .id(element.title)
                     }
                     .listRowInsets(PlayerListView.listEdge)
@@ -96,6 +89,10 @@ struct PlayerListView: View {
         }
         .environmentObject(control)
 
+    }
+    
+    func cellPlayerOn(index: Int) -> MMPlayerViewUI? {
+        return index == self.playListViewModel.currentViewIdx && self.showDetailIdx == nil ? MMPlayerViewUI(control: self.control, cover: CoverAUI()) : nil
     }
 }
 

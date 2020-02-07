@@ -24,14 +24,8 @@ public struct MMPlayerViewUI: View {
             self.progress
         }
         .gesture(self.coverTapGesture(), including: .all)
-        .modifier(GlobalPlayerFramePreference())
-        .onPreferenceChange(GlobalPlayerFramePreference.Key.self) { (values) in
-            if let f = values.first, f != .zero {
-                DispatchQueue.main.async {
-                    self.rect = f
-                }
-            }
-        }
+        .modifier(GlobalFramePreference())
+        .modifier(FrameModifier<GlobalFramePreference.Key>(rect: $rect))
         .onAppear(perform: {
             if self.control.landscapeWindow.isKeyWindow {
                 return
@@ -43,8 +37,6 @@ public struct MMPlayerViewUI: View {
                 default:
                     self.control.landscapeWindow.start(view: MMPlayerViewWindowUI(view: self.clone(), rect: self.rect).environmentObject(self.control))
                 }
-                print("$ \($0)")
-
             })
         })
         .onDisappear {

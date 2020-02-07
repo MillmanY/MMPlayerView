@@ -12,11 +12,15 @@ import MMPlayerView
 struct PlayCellView: View {
     @EnvironmentObject var control: MMPlayerControl
     @State var downloadStatus: MMPlayerDownloader.DownloadStatus = .none
+    @State var fromFrame = CGRect.zero
+
     let obj: DataObj
     let player: MMPlayerViewUI?
-    init(player: MMPlayerViewUI?, obj: DataObj) {
+    let click: ((CGRect)->Void)
+    init(player: MMPlayerViewUI?, obj: DataObj, click: @escaping (CGRect)->Void) {
         self.player = player
         self.obj = obj
+        self.click = click
     }
 
     var body: some View {
@@ -27,6 +31,7 @@ struct PlayCellView: View {
                     .frame(height: 200)
                 player
             }
+            .modifier(ObserverFrame(binding: $fromFrame))
             HStack {
                 Text(self.obj.title)
                     .multilineTextAlignment(.leading)
@@ -34,6 +39,9 @@ struct PlayCellView: View {
                 Spacer()
                 self.generateTopViewFromDownloadStatus().frame(width: 50, height: 50).padding(10)
             }
+        }
+        .onTapGesture {
+            self.click(self.fromFrame)
         }
         .modifier(MMPlayerDownloaderModifier( url: obj.play_Url!, status: $downloadStatus))
     }
@@ -56,26 +64,13 @@ struct PlayCellView: View {
 
     
 }
-
-struct PlayCellView_Previews: PreviewProvider {
-    static var previews: some View {
-        PlayCellView(player: MMPlayerViewUI.init(control: MMPlayerControl()) ,obj: DemoSource.shared.demoData[2])
-            .previewLayout(.sizeThatFits)
-    }
-}
-
-
-struct GlobalFrameHandler: View {
-    let block: ((CGRect)->Void)
-    var body: some View {
-        GeometryReader.init { (proxy) -> AnyView  in
-            let proxyF = proxy.frame(in: .global)
-            DispatchQueue.main.async {
-                self.block(proxyF)
-            }
-            return AnyView(EmptyView())
-        }
-    }
-}
+//
+//struct PlayCellView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        PlayCellView(player: MMPlayerViewUI.init(control: MMPlayerControl()) ,obj: DemoSource.shared.demoData[2], click: <#(CGRect) -> Void#>)
+//            .previewLayout(.sizeThatFits)
+//    }
+//}
+//
 
 

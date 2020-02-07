@@ -26,17 +26,24 @@ struct CoverAUI: View {
             }.foregroundColor(Color.white)
             Spacer()
             HStack {
+                Image("fullscreen").foregroundColor(.white).padding(.leading, 15).onTapGesture {
+                    switch self.control.orientation {
+                    case .landscapeLeft, .landscapeRight:
+                        self.control.orientation = .protrait
+                    case .protrait:
+                        self.control.orientation = .landscapeRight
+                    }
+                }
+
                 Text(self.control.timeInfo.current.seconds.convertSecondString())
                     .font(Font.custom("Courier", size: 17))
                     .foregroundColor(Color.white)
                     .multilineTextAlignment(.center)
-                    .padding(.leading, 15)
                 Slider(value: currentValue, in: 0...self.control.timeInfo.total.seconds) { (isScroll) in
                     self.isSliderScroll = true
                     if isScroll { return }
                     let time =  CMTimeMake(value: Int64(self.scrollValue), timescale: 1)
                     self.control.player.seek(to: time) { (value) in
-                        print("Completed \(value)")
                         self.isSliderScroll = false
                         self.control.toggleCoverShowStatus()
                     }

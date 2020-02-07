@@ -57,8 +57,8 @@ struct ViewTransition<PassView>: AnimatableModifier where PassView: View {
     
     func body(content: Content) -> some View {
         return ZStack {
-            content.opacity(Double(percent))
-                   .modifier(GlobalPlayerFrameModifier(rect: self.$to))
+            
+            content.opacity(Double(percent)).modifier(FrameModifier<TransitionFramePreference.Key>(rect: $to))
             GeometryReader { (proxy) in
                 self.pass
                 .frame(width: self.from.size.width, height: self.from.size.height)
@@ -70,3 +70,4 @@ struct ViewTransition<PassView>: AnimatableModifier where PassView: View {
         }
     }
 }
+

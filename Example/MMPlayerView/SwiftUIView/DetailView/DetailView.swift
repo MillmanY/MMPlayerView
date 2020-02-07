@@ -26,6 +26,7 @@ struct DetailView: View {
                         }
                 }
             }
+            .modifier(TransitionFramePreference())
             self.generateTopViewFromDownloadStatus().frame(height: 44)
             ScrollView(.vertical, showsIndicators: false) {
                 VStack(alignment: .leading, spacing: 5) {
