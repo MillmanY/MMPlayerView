@@ -26,9 +26,9 @@ struct PlayerListView: View {
             }
         }
     }
-    @State var topInfo = [CellObserver.CellFrameIndexPreferenceKey.Info]() {
+    @State var topInfo = [CellPlayerFramePreference.Key.Info]() {
         didSet {
-            if let new = topInfo.first(where: { $0.frame.origin.y > 0 }), new.idx != oldValue.first?.idx, showDetailIdx == nil {
+            if let new = topInfo.first(where: { $0.frame.origin.y > 0 }), new.idx != self.playListViewModel.currentViewIdx, showDetailIdx == nil {
                 self.playListViewModel.updatePlayView(idx: new.idx)
             }
         }
@@ -55,19 +55,16 @@ struct PlayerListView: View {
             NavigationView {
                 List {
                     ForEach(objs, id: \.element.title) { (offset, element) in
-                        PlayCellView(player: self.cellPlayerOn(index: offset) , obj: element) { rect in
+                        PlayCellView(player: self.cellPlayerOn(index: offset), obj: element, idx: offset) { rect in
                             withAnimation {
                                 self.fromFrame = rect
                                 self.showDetailIdx = offset
                             }
                         }
-                        .modifier(CellObserver(index: offset))
-                        .id(element.title)
                     }
                     .listRowInsets(PlayerListView.listEdge)
-                }
-
-                .modifier(CellVisibleObserver(list: Binding<[CellObserver.CellFrameIndexPreferenceKey.Info]>(get: {
+                    }
+                .modifier(CellPlayerVisiblePreference(list: Binding<[CellPlayerFramePreference.Key.Info]>(get: {
                     self.topInfo
                 }) {
                     self.topInfo = $0

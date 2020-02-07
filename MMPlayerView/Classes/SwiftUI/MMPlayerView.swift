@@ -24,8 +24,8 @@ public struct MMPlayerViewUI: View {
             self.progress
         }
         .gesture(self.coverTapGesture(), including: .all)
-        .modifier(GlobalFramePreference())
-        .modifier(FrameModifier<GlobalFramePreference.Key>(rect: $rect))
+        .modifier(PlayerFramePreference())
+        .modifier(FrameModifier<PlayerFramePreference.Key>(rect: $rect))
         .onAppear(perform: {
             if self.control.landscapeWindow.isKeyWindow {
                 return

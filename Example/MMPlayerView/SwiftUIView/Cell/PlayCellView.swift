@@ -17,13 +17,16 @@ struct PlayCellView: View {
     let obj: DataObj
     let player: MMPlayerViewUI?
     let click: ((CGRect)->Void)
-    init(player: MMPlayerViewUI?, obj: DataObj, click: @escaping (CGRect)->Void) {
+    let idx: Int
+    init(player: MMPlayerViewUI?, obj: DataObj, idx: Int, click: @escaping (CGRect)->Void) {
         self.player = player
         self.obj = obj
         self.click = click
+        self.idx = idx
     }
 
     var body: some View {
+        
         return VStack {
             ZStack {
                 Image(uiImage: self.obj.image ?? UIImage())
@@ -31,7 +34,7 @@ struct PlayCellView: View {
                     .frame(height: 200)
                 player
             }
-            .modifier(ObserverFrame(binding: $fromFrame))
+            .modifier(CellPlayerFramePreference(index: idx, frame: $fromFrame))
             HStack {
                 Text(self.obj.title)
                     .multilineTextAlignment(.leading)
