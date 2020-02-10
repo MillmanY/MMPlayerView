@@ -62,6 +62,7 @@ public struct MMPlayerViewWindowUI: View {
                 self.animate = false
                 DispatchQueue.main.asyncAfter(deadline: .now() + self.duration + 0.1) {
                     self.control.landscapeWindow.isHidden = true
+                    self.control.landscapeWindow.rootViewController = nil
                 }
             case .landscapeLeft, .landscapeRight:
                 self.animate = true
@@ -72,7 +73,6 @@ public struct MMPlayerViewWindowUI: View {
     private func removeOrientationObserver() {
         self.orientationCancel?.cancel()
     }
-
 
     private var positionValue: CGPoint {
         let windowSize = UIScreen.main.bounds.size

@@ -12,12 +12,13 @@ import Combine
 public struct MMPlayerViewUI: View {
     @State var rect: CGRect = .zero
     @State var cancelable: AnyCancellable?
+    @State var bridge: MMPlayerViewBridge?
     @ObservedObject private var control: MMPlayerControl
     let progress: AnyView?
     let cover: AnyView?
     public var body: some View {
         return ZStack {
-            MMPlayerViewBridge()
+            bridge
             self.cover?
                 .opacity(self.control.isCoverShow ? 1.0 : 0.0)
                 .animation(.easeOut(duration: control.coverAnimationInterval))
@@ -27,6 +28,7 @@ public struct MMPlayerViewUI: View {
         .modifier(PlayerFramePreference())
         .modifier(FrameModifier<PlayerFramePreference.Key>(rect: $rect))
         .onAppear(perform: {
+            self.bridge = MMPlayerViewBridge()
             if self.control.landscapeWindow.isKeyWindow {
                 return
             }
@@ -40,6 +42,7 @@ public struct MMPlayerViewUI: View {
             })
         })
         .onDisappear {
+            self.bridge = nil
             self.cancelable?.cancel()
         }
     }

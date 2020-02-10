@@ -55,15 +55,19 @@ struct PlayerListView: View {
             NavigationView {
                 List {
                     ForEach(objs, id: \.element.title) { (offset, element) in
-                        PlayCellView(player: self.cellPlayerOn(index: offset), obj: element, idx: offset) { rect in
-                            withAnimation {
-                                self.fromFrame = rect
-                                self.showDetailIdx = offset
+                        PlayCellView(player: self.cellPlayerOn(index: offset),
+                                          obj: element,
+                                          idx: offset).onTapGesture {
+                            if let obj = self.topInfo.first(where: { $0.idx == offset }) {
+                                withAnimation {
+                                    self.fromFrame = obj.frame
+                                    self.showDetailIdx = offset
+                                }
                             }
                         }
                     }
                     .listRowInsets(PlayerListView.listEdge)
-                    }
+                }
                 .modifier(CellPlayerVisiblePreference(list: Binding<[CellPlayerFramePreference.Key.Info]>(get: {
                     self.topInfo
                 }) {
@@ -85,7 +89,6 @@ struct PlayerListView: View {
             }
         }
         .environmentObject(control)
-
     }
     
     func cellPlayerOn(index: Int) -> MMPlayerViewUI? {

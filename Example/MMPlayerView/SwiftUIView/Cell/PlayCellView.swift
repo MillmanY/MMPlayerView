@@ -12,16 +12,13 @@ import MMPlayerView
 struct PlayCellView: View {
     @EnvironmentObject var control: MMPlayerControl
     @State var downloadStatus: MMPlayerDownloader.DownloadStatus = .none
-    @State var fromFrame = CGRect.zero
 
     let obj: DataObj
     let player: MMPlayerViewUI?
-    let click: ((CGRect)->Void)
     let idx: Int
-    init(player: MMPlayerViewUI?, obj: DataObj, idx: Int, click: @escaping (CGRect)->Void) {
+    init(player: MMPlayerViewUI?, obj: DataObj, idx: Int) {
         self.player = player
         self.obj = obj
-        self.click = click
         self.idx = idx
     }
 
@@ -34,7 +31,7 @@ struct PlayCellView: View {
                     .frame(height: 200)
                 player
             }
-            .modifier(CellPlayerFramePreference(index: idx, frame: $fromFrame))
+            .modifier(CellPlayerFramePreference(index: idx))
             HStack {
                 Text(self.obj.title)
                     .multilineTextAlignment(.leading)
@@ -42,9 +39,6 @@ struct PlayCellView: View {
                 Spacer()
                 self.generateTopViewFromDownloadStatus().frame(width: 50, height: 50).padding(10)
             }
-        }
-        .onTapGesture {
-            self.click(self.fromFrame)
         }
         .modifier(MMPlayerDownloaderModifier( url: obj.play_Url!, status: $downloadStatus))
     }
