@@ -49,9 +49,10 @@ struct PlayerListView: View {
                 DetailView(obj: self.playListViewModel.videoList[showDetailIdx!], showDetailIdx: $showDetailIdx)
                     .edgesIgnoringSafeArea(.all)
                     .transition(.playerTransition(view: MMPlayerViewUI(control: control) ,from: fromFrame))
-                    .zIndex(1)
+                    .zIndex(100)
+                    .environmentObject(control)
             }
-
+            
             NavigationView {
                 List {
                     ForEach(objs, id: \.element.title) { (offset, element) in
@@ -88,7 +89,7 @@ struct PlayerListView: View {
                 }))
             }
         }
-        .environmentObject(control)
+//        .environmentObject(control)
     }
     
     func cellPlayerOn(index: Int) -> MMPlayerViewUI? {

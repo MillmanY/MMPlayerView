@@ -12,10 +12,10 @@ import SwiftUI
 public struct TransitionFramePreference: ViewModifier {
     public init() {}
     public func body(content: Content) -> some View {
-        content.background(GeometryReader{ (proxy) -> AnyView in
-            return AnyView(Color.clear
+        content.background(GeometryReader{ (proxy)  in
+            return Color.clear
             .preference(key: Key.self,
-                        value: [proxy.frame(in: .global)]))
+                        value: [proxy.frame(in: .global)])
         })
     }
     

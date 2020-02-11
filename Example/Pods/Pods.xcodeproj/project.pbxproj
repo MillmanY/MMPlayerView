@@ -236,6 +236,24 @@
 			path = Subtitles;
 			sourceTree = "<group>";
 		};
+		2749B1B623F28AD800B8A0AC /* Control */ = {
+			isa = PBXGroup;
+			children = (
+				27DFC2D823BEE8AB003A8820 /* MMPlayerControl.swift */,
+			);
+			path = Control;
+			sourceTree = "<group>";
+		};
+		2749B1B723F28AEA00B8A0AC /* PlayerView */ = {
+			isa = PBXGroup;
+			children = (
+				27ED4D6923B251180054C669 /* MMPlayerView.swift */,
+				27DFC2DA23BEEA68003A8820 /* MMPlayerContainer.swift */,
+				2769B4B623E94185007442BF /* MMPlayerViewBridge.swift */,
+			);
+			path = PlayerView;
+			sourceTree = "<group>";
+		};
 		275FC92D23D55194000CA5F2 /* Transition */ = {
 			isa = PBXGroup;
 			children = (
@@ -265,14 +283,12 @@
 		27989C2B23B1A73E008489FB /* SwiftUI */ = {
 			isa = PBXGroup;
 			children = (
+				2749B1B723F28AEA00B8A0AC /* PlayerView */,
+				2749B1B623F28AD800B8A0AC /* Control */,
 				27CDFE2623D6D7A800CBB712 /* Modifier */,
 				275FC92D23D55194000CA5F2 /* Transition */,
 				27F3272523D18FD900DB55EA /* Error */,
 				27D3DB0323C2EDD1003B4EED /* Progress */,
-				27ED4D6923B251180054C669 /* MMPlayerView.swift */,
-				27DFC2D823BEE8AB003A8820 /* MMPlayerControl.swift */,
-				27DFC2DA23BEEA68003A8820 /* MMPlayerContainer.swift */,
-				2769B4B623E94185007442BF /* MMPlayerViewBridge.swift */,
 			);
 			path = SwiftUI;
 			sourceTree = "<group>";

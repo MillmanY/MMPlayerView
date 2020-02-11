@@ -14,15 +14,15 @@ public extension AnyTransition {
         let f = from ?? .zero
         return AnyTransition.modifier(active: ViewTransition(pass: view, from: f, percent: 0.0),
                                       identity: ViewTransition(pass: view, from: f, percent: 1.0))
+        
+        
     }
 }
 
 @available(iOS 13.0.0, *)
 struct ViewTransition<PassView>: AnimatableModifier where PassView: View {
     
-    @EnvironmentObject var control: MMPlayerControl
     @State var to: CGRect = .zero
-    
     var animatableData: CGFloat {
         get {
             return percent
@@ -57,7 +57,6 @@ struct ViewTransition<PassView>: AnimatableModifier where PassView: View {
     
     func body(content: Content) -> some View {
         return ZStack {
-            
             content.opacity(Double(percent)).modifier(FrameModifier<TransitionFramePreference.Key>(rect: $to))
             GeometryReader { (proxy) in
                 self.pass
@@ -65,7 +64,7 @@ struct ViewTransition<PassView>: AnimatableModifier where PassView: View {
                 .scaleEffect(self.percentSize)
                 .offset(x: self.from.midX-proxy.size.width/2-self.percentOffsetX,
                         y: self.from.midY-proxy.size.height/2-self.percentOffsetY)
-                .opacity(self.percent == 1.0 ? 0 : 1)
+                    .opacity(self.percent != 1.0 ? 1 : 0.0)
             }.edgesIgnoringSafeArea(.all)
         }
     }

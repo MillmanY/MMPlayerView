@@ -17,7 +17,7 @@ struct DetailView: View {
     var body: some View {
         VStack {
             ZStack(alignment: .topLeading) {
-                MMPlayerViewUI(control: control).frame(height: 200)
+                MMPlayerViewUI(control: control)
                 Image("ic_keyboard_arrow_left")
                     .offset(x: 15, y: 44)
                     .onTapGesture {
@@ -25,7 +25,7 @@ struct DetailView: View {
                             self.showDetailIdx = nil
                         }
                 }
-            }
+            }.frame(height: 200)
             .modifier(TransitionFramePreference())
             self.generateTopViewFromDownloadStatus().frame(height: 44)
             ScrollView(.vertical, showsIndicators: false) {

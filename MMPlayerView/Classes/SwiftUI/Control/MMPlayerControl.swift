@@ -56,7 +56,7 @@ public class MMPlayerControl: ObservableObject {
     public var coverAnimationInterval = 0.3
     @Published
     public var error: MMPlayerViewUIError?
-
+    
     public let player: AVPlayer
     public init(player: AVPlayer = AVPlayer()) {
         self.player = player
@@ -260,7 +260,7 @@ extension MMPlayerControl {
 //                }
 //
             
-                self?.timeInfo = TimeInfo(current: time, total: total)
+//                self?.timeInfo = TimeInfo(current: time, total: total)
 
         })
         

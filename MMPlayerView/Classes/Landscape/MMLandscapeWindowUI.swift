@@ -29,6 +29,11 @@ public class MMLandscapeWindowUI: UIWindow {
         self.rootViewController = UIHostingController(rootView: view)
         self.rootViewController?.view.backgroundColor = .clear
     }
+    
+    func stop() {
+        self.isHidden = true
+        self.rootViewController = nil
+    }
 }
 
 @available(iOS 13.0.0, *)
@@ -61,8 +66,7 @@ public struct MMPlayerViewWindowUI: View {
             case .protrait:
                 self.animate = false
                 DispatchQueue.main.asyncAfter(deadline: .now() + self.duration + 0.1) {
-                    self.control.landscapeWindow.isHidden = true
-                    self.control.landscapeWindow.rootViewController = nil
+                    self.control.landscapeWindow.stop()
                 }
             case .landscapeLeft, .landscapeRight:
                 self.animate = true

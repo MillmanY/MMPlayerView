@@ -24,15 +24,18 @@ public struct MMPlayerViewUI: View {
                 .animation(.easeOut(duration: control.coverAnimationInterval))
             self.progress
         }
+        .environmentObject(control)
+
         .gesture(self.coverTapGesture(), including: .all)
-        .modifier(PlayerFramePreference())
-        .modifier(FrameModifier<PlayerFramePreference.Key>(rect: $rect))
+//        .modifier(PlayerFramePreference())
+//        .modifier(FrameModifier<PlayerFramePreference.Key>(rect: $rect))
         .onAppear(perform: {
-            self.bridge = MMPlayerViewBridge()
-            if self.control.landscapeWindow.isKeyWindow {
-                return
-            }
+            self.bridge = MMPlayerViewBridge.init(player: self.control.player)
             self.cancelable = self.control.$orientation.sink(receiveValue: {
+                if self.control.landscapeWindow.isKeyWindow {
+                    return
+                }
+
                 switch $0 {
                 case .protrait:
                     break

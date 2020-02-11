@@ -10,7 +10,6 @@ import SwiftUI
 import MMPlayerView
 
 struct PlayCellView: View {
-    @EnvironmentObject var control: MMPlayerControl
     @State var downloadStatus: MMPlayerDownloader.DownloadStatus = .none
 
     let obj: DataObj
