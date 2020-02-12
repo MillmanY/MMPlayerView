@@ -19,9 +19,7 @@ class DemoListViewController: UITableViewController {
     }
     
     @IBSegueAction func swiftUIDemo(_ coder: NSCoder) -> UIViewController? {
-        return UIHostingController(coder: coder, rootView: PlayerListView.init(dismiss: {
-            self.dismiss(animated: true, completion: nil)
-        }))
+        return UIHostingController(coder: coder, rootView: PlayerListView.init(vc: self))
     }
     
     /*

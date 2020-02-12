@@ -23,7 +23,6 @@ public class MMPlayerControl: ObservableObject {
     private var hideCancel: AnyCancellable?
     @Published
     public var orientation: PlayerOrientation = .protrait
-
     @Published
     public var timeInfo = TimeInfo()
     @Published
@@ -260,7 +259,7 @@ extension MMPlayerControl {
 //                }
 //
             
-//                self?.timeInfo = TimeInfo(current: time, total: total)
+            self?.timeInfo = TimeInfo(current: time, total: total)
 
         })
         

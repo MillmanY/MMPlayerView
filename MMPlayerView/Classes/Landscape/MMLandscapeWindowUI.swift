@@ -42,7 +42,7 @@ public struct MMPlayerViewWindowUI: View {
     @EnvironmentObject private var control: MMPlayerControl
     @State private var orientationCancel: AnyCancellable?
     let view: AnyView
-    let fromRect: CGRect
+    @Binding var fromRect: CGRect
     @State var animate = false
     public var body: some View {
         ZStack {
@@ -52,7 +52,6 @@ public struct MMPlayerViewWindowUI: View {
                 .rotationEffect(rotationValue)
                 .animation(.easeInOut(duration: duration))
                 .position(positionValue)
-                
         }.onAppear(perform: {
             self.addOrientationObserverOnce()
         }).onDisappear(perform: {
@@ -80,7 +79,7 @@ public struct MMPlayerViewWindowUI: View {
 
     private var positionValue: CGPoint {
         let windowSize = UIScreen.main.bounds.size
-        return animate ? CGPoint(x: windowSize.width/2, y: windowSize.height/2) : CGPoint(x: self.fromRect.midX, y: self.fromRect.midY)
+        return animate ? CGPoint(x: windowSize.width/2, y: windowSize.height/2) : CGPoint(x: self.$fromRect.wrappedValue.midX, y: self.$fromRect.wrappedValue.midY)
     }
     
     private var rotationValue: Angle {
@@ -94,8 +93,8 @@ public struct MMPlayerViewWindowUI: View {
         }
     }
     
-    init<V: View>(view: V,rect: CGRect) {
+    init<V: View>(view: V,rect: Binding<CGRect>) {
         self.view = AnyView.init(view)
-        self.fromRect = rect == .zero ? CGRect.init(x: 0, y: 0, width: 1, height: 1) : rect
+        self._fromRect = rect
     }
 }

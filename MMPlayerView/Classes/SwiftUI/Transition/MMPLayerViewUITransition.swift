@@ -14,8 +14,6 @@ public extension AnyTransition {
         let f = from ?? .zero
         return AnyTransition.modifier(active: ViewTransition(pass: view, from: f, percent: 0.0),
                                       identity: ViewTransition(pass: view, from: f, percent: 1.0))
-        
-        
     }
 }
 

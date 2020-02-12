@@ -6,12 +6,9 @@
 //
 
 import SwiftUI
-import AVFoundation
-import Combine
 @available(iOS 13.0.0, *)
 public struct MMPlayerViewUI: View {
     @State var rect: CGRect = .zero
-    @State var cancelable: AnyCancellable?
     @State var bridge: MMPlayerViewBridge?
     @ObservedObject private var control: MMPlayerControl
     let progress: AnyView?
@@ -23,35 +20,28 @@ public struct MMPlayerViewUI: View {
                 .opacity(self.control.isCoverShow ? 1.0 : 0.0)
                 .animation(.easeOut(duration: control.coverAnimationInterval))
             self.progress
+            self.landscapeView()
         }
         .environmentObject(control)
-
         .gesture(self.coverTapGesture(), including: .all)
-//        .modifier(PlayerFramePreference())
-//        .modifier(FrameModifier<PlayerFramePreference.Key>(rect: $rect))
+        .modifier(PlayerFramePreference())
+        .modifier(FrameModifier<PlayerFramePreference.Key>(rect: $rect))
         .onAppear(perform: {
-            self.bridge = MMPlayerViewBridge.init(player: self.control.player)
-            self.cancelable = self.control.$orientation.sink(receiveValue: {
-                if self.control.landscapeWindow.isKeyWindow {
-                    return
-                }
-
-                switch $0 {
-                case .protrait:
-                    break
-                default:
-                    self.control.landscapeWindow.start(view: MMPlayerViewWindowUI(view: self.clone(), rect: self.rect).environmentObject(self.control))
-                }
-            })
+            self.bridge = MMPlayerViewBridge()
         })
         .onDisappear {
             self.bridge = nil
-            self.cancelable?.cancel()
         }
     }
     
+    private func landscapeView() -> some View {
+        if self.control.orientation != .protrait && !self.control.landscapeWindow.isKeyWindow && self.bridge != nil {
+            self.control.landscapeWindow.start(view: MMPlayerViewWindowUI(view: self.clone(), rect: self.$rect).environmentObject(self.control))
+        }
+        return EmptyView()
+    }
+    
     private func coverTapGesture() -> _EndedGesture<TapGesture> {
-        
         return TapGesture().onEnded { (_) in
             self.control.coverViewGestureHandle()
         }

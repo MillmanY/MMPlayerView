@@ -16,7 +16,7 @@ class MMPlayerContainer: UIView {
         super.init(frame: .zero)
         self.playerLayer.player = player
         self.backgroundColor = UIColor.black
-        self.playerLayer.videoGravity = .resizeAspectFill
+        self.playerLayer.videoGravity = .resizeAspect
     }
     
     required init?(coder: NSCoder) {

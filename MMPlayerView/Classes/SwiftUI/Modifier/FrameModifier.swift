@@ -15,7 +15,7 @@ public struct FrameModifier<K: PreferenceKey>: ViewModifier where K.Value == [CG
     }
     public func body(content: Content) -> some View {
         content.onPreferenceChange(K.self) { (values) in
-            if let f = values.first, f != .zero {
+            if let f = values.first {
                 DispatchQueue.main.async {
                     self.r = f
                 }

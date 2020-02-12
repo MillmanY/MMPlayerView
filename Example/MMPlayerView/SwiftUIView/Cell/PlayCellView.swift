@@ -11,25 +11,27 @@ import MMPlayerView
 
 struct PlayCellView: View {
     @State var downloadStatus: MMPlayerDownloader.DownloadStatus = .none
+    @EnvironmentObject var control: MMPlayerControl
+    @EnvironmentObject var playListViewModel: PlayListViewModel
 
     let obj: DataObj
-    let player: MMPlayerViewUI?
     let idx: Int
-    init(player: MMPlayerViewUI?, obj: DataObj, idx: Int) {
-        self.player = player
-        self.obj = obj
-        self.idx = idx
+    let showDetailIdx: Int?
+    
+    var isCurrent: Bool {
+        idx == playListViewModel.currentViewIdx
     }
 
     var body: some View {
-        
         return VStack {
             ZStack {
                 Image(uiImage: self.obj.image ?? UIImage())
                     .resizable()
-                    .frame(height: 200)
-                player
+                if isCurrent && showDetailIdx == nil {
+                    MMPlayerViewUI(control: self.control, cover: CoverAUI())
+                }
             }
+            .frame(height: 200)
             .modifier(CellPlayerFramePreference(index: idx))
             HStack {
                 Text(self.obj.title)
@@ -39,7 +41,7 @@ struct PlayCellView: View {
                 self.generateTopViewFromDownloadStatus().frame(width: 50, height: 50).padding(10)
             }
         }
-        .modifier(MMPlayerDownloaderModifier( url: obj.play_Url!, status: $downloadStatus))
+        .modifier(MMPlayerDownloaderModifier(url: obj.play_Url!, status: $downloadStatus))
     }
     
     func generateTopViewFromDownloadStatus() -> AnyView {
@@ -57,8 +59,6 @@ struct PlayCellView: View {
             return AnyView(EmptyView())
         }
     }
-
-    
 }
 //
 //struct PlayCellView_Previews: PreviewProvider {

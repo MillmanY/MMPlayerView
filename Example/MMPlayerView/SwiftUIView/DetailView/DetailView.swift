@@ -25,7 +25,7 @@ struct DetailView: View {
                             self.showDetailIdx = nil
                         }
                 }
-            }.frame(height: 200)
+            }.frame(width: UIScreen.main.bounds.width,height: 200)
             .modifier(TransitionFramePreference())
             self.generateTopViewFromDownloadStatus().frame(height: 44)
             ScrollView(.vertical, showsIndicators: false) {

@@ -13,7 +13,7 @@ extension PlayerListView {
     static let listEdge = EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
 }
 struct PlayerListView: View {
-    let dismiss: (() -> Void)
+    let presentVC: UIViewController
     @ObservedObject var control: MMPlayerControl
     @ObservedObject var playListViewModel: PlayListViewModel
     @State var showDetailIdx: Int? = nil {
@@ -34,8 +34,8 @@ struct PlayerListView: View {
         }
     }
 
-    init(dismiss: @escaping (()->Void)) {
-        self.dismiss = dismiss
+    init(vc: UIViewController) {
+        self.presentVC = vc
         let c = MMPlayerControl()
         self.control = c
         playListViewModel = PlayListViewModel(control: c)
@@ -49,22 +49,24 @@ struct PlayerListView: View {
                 DetailView(obj: self.playListViewModel.videoList[showDetailIdx!], showDetailIdx: $showDetailIdx)
                     .edgesIgnoringSafeArea(.all)
                     .transition(.playerTransition(view: MMPlayerViewUI(control: control) ,from: fromFrame))
-                    .zIndex(100)
-                    .environmentObject(control)
+                    .zIndex(1)
             }
             
             NavigationView {
                 List {
                     ForEach(objs, id: \.element.title) { (offset, element) in
-                        PlayCellView(player: self.cellPlayerOn(index: offset),
-                                          obj: element,
-                                          idx: offset).onTapGesture {
-                            if let obj = self.topInfo.first(where: { $0.idx == offset }) {
-                                withAnimation {
-                                    self.fromFrame = obj.frame
-                                    self.showDetailIdx = offset
+                        PlayCellView(obj: element,
+                                     idx: offset,
+                                     showDetailIdx: self.showDetailIdx)
+                            .environmentObject(self.control)
+                            .environmentObject(self.playListViewModel)
+                            .onTapGesture {
+                                if let obj = self.topInfo.first(where: { $0.idx == offset }) {
+                                    withAnimation { 
+                                        self.fromFrame = obj.frame
+                                        self.showDetailIdx = offset
+                                    }
                                 }
-                            }
                         }
                     }
                     .listRowInsets(PlayerListView.listEdge)
@@ -74,6 +76,11 @@ struct PlayerListView: View {
                 }) {
                     self.topInfo = $0
                 }))
+                .navigationBarItems(leading: Image("ic_keyboard_arrow_left")
+                .frame(width: 44, height: 44)
+                .onTapGesture {
+                    self.presentVC.dismiss(animated: true, completion: nil)
+                })
                 .navigationBarConfig(config: { (nav) in
                         nav.navigationBar.barTintColor = UIColor(red: 0/255, green: 77/255, blue: 64/255, alpha: 1.0)
                 })
@@ -84,23 +91,17 @@ struct PlayerListView: View {
                             dismissButton: .default(Text("OK"))
                     )
                 }
-                .navigationBarItems(leading:  Button.init("Dismiss", action: {
-                    self.dismiss()
-                }))
             }
         }
-//        .environmentObject(control)
+        .environmentObject(control)
     }
     
-    func cellPlayerOn(index: Int) -> MMPlayerViewUI? {
-        return index == self.playListViewModel.currentViewIdx && self.showDetailIdx == nil ? MMPlayerViewUI(control: self.control, cover: CoverAUI()) : nil
-    }
 }
-
-struct PlayerListView_Previews: PreviewProvider {
-    static var previews: some View {
-        PlayerListView.init {
-            
-        }
-    }
-}
+//
+//struct PlayerListView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        PlayerListView.init {
+//            
+//        }
+//    }
+//}
