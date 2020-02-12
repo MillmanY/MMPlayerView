@@ -5,7 +5,7 @@
 [![Version](https://img.shields.io/cocoapods/v/MMPlayerView.svg?style=flat)](http://cocoapods.org/pods/MMPlayerView)
 [![License](https://img.shields.io/cocoapods/l/MMPlayerView.svg?style=flat)](http://cocoapods.org/pods/MMPlayerView)
 [![Platform](https://img.shields.io/cocoapods/p/MMPlayerView.svg?style=flat)](http://cocoapods.org/pods/MMPlayerView)
-## Demo
+## Demo-Swift
 
 ## List / Shrink / Transition / Landscape
 ![list](https://github.com/MillmanY/MMPlayerView/blob/master/demo/list_demo.gif)
@@ -146,6 +146,54 @@
         }
         // Check player is shrink or not
         self.mmPlayerL.isShrink
+## Demo-SwiftUI
+
+### Control
+    let control = MMPlayerControl()
+    //Play
+    control.set(url: self.videoList[idx].play_Url)
+    control.resume()
+    //InValidate
+    control.invalidate()
+    //Observation parameter
+    @Published
+    public var orientation: PlayerOrientation = .protrait
+    @Published
+    public var timeInfo = TimeInfo()
+    @Published
+    public var isMuted = false
+    @Published
+    public var isBackgroundPause = true
+    @Published
+    @Published
+    public var repeatWhenEnd: Bool = false
+    @Published
+    public var isLoading: Bool = false
+    public var cacheType: PlayerCacheType = .none
+    @Published
+    public private(set) var isCoverShow = false
+    @Published
+    public var autoHideCoverType = CoverAutoHideType.disable
+    public var coverAnimationInterval = 0.3
+    @Published
+    public var error: MMPlayerViewUIError?
+### Init View
+    let player = MMPlayerViewUI(control: self.control, cover: CoverAUI())
+### Download
+    view.modifier(MMPlayerDownloaderModifier(url: obj.play_Url!, status: $downloadStatus))
+### Transition Player
+    //func playerTransition<Content: View>(view: Content, from: CGRect?) -> AnyTransition
+    if showDetailIdx != nil {
+        DetailView(obj: self.playListViewModel.videoList[showDetailIdx!], showDetailIdx: $showDetailIdx)
+           .edgesIgnoringSafeArea(.all)
+           .transition(.playerTransition(view: MMPlayerViewUI(control: control) ,from: fromFrame))
+            .zIndex(1)
+    }
+    // Trigger transition
+    withAnimation { 
+          self.fromFrame = obj.frame
+          self.showDetailIdx = offset
+    }
 ## Requirements
 
     iOS 12.0+
