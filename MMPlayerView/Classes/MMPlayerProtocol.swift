@@ -8,6 +8,7 @@
 
 import Foundation
 import AVFoundation
+import SwiftUI
 @objc public protocol MMPlayerBasePlayerProtocol: class {
     weak var playLayer: MMPlayerLayer? { set get }
     @objc optional func player(isMuted: Bool)
@@ -19,7 +20,7 @@ import AVFoundation
 }
 
 public protocol MMPlayerCoverViewProtocol: MMPlayerBasePlayerProtocol {
-    func currentPlayer(status: MMPlayerLayer.PlayStatus)
+    func currentPlayer(status: PlayStatus)
 }
 
 public protocol MMProgressProtocol {
@@ -38,4 +39,17 @@ public protocol ConverterProtocol {
 }
 
 
-let VideoBasePath = NSTemporaryDirectory()
+// SwiftUI
+@available(iOS 13.0.0, *)
+public protocol ProgressUIProtocol {
+//    init(isStart: Binding<Bool>)
+    associatedtype Content: View
+    func start(isStart: Bool) -> Self.Content
+}
+
+@available(iOS 13.0.0, *)
+public typealias ProgressContent = View
+@available(iOS 13.0.0, *)
+public typealias CoverProtocol = View
+
+
