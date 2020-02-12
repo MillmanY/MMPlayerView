@@ -206,7 +206,7 @@ it, simply add the following line to your Podfile:
 
 ```ruby
 Swift 5 
-pod 'MMPlayerView
+pod 'MMPlayerView'
 ```
 ## Author
 
