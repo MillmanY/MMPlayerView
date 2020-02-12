@@ -26,7 +26,7 @@ public class MMPlayerShrinkControl {
     private var videoRectObserver: NSKeyValueObservation?
     public private(set) var isShrink = false
     lazy var  containerGesture: UIPanGestureRecognizer = {
-        let g = UIPanGestureRecognizer.init(target: self, action: #selector(pan(gesture:)))
+        let g = UIPanGestureRecognizer(target: self, action: #selector(pan(gesture:)))
         return g
     }()
     

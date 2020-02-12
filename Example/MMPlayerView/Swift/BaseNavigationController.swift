@@ -20,7 +20,7 @@ class BaseNavigationController: UINavigationController {
     }
     
     func setOriginalColor() {
-        let barColor = UIColor.init(red: 0/255, green: 77/255, blue: 64/255, alpha: 1.0)
+        let barColor = UIColor(red: 0/255, green: 77/255, blue: 64/255, alpha: 1.0)
         self.setBarColor(color: barColor)
     }
     func setNavBarClear() {

@@ -14,46 +14,11 @@ public extension MMPlayerLayer {
     enum SubtitleType {
         case srt(info: String)
     }
-    enum PlayerCacheType {
-        case none
-        case memory(count: Int)
-    }
-    
-    enum PlayStatus {
-        case ready
-        case unknown
-        case failed(err: String)
-        case playing
-        case pause
-        case end
         
-        static func == (lhs: PlayStatus, rhs: PlayStatus) -> Bool {
-            switch (lhs, rhs) {
-            case (.ready, .ready), (.unknown, .unknown), (.playing, .playing), (.pause, .pause), (.end, .end):
-                return true
-            case (.failed(let l), .failed(let r)):
-                return l == r
-            default:
-                return false
-            }
-        }
-    }
-    
     enum CoverFitType {
         case fitToPlayerView
         case fitToVideoRect
-    }
-    
-    enum CoverAutoHideType {
-        case autoHide(after: TimeInterval)
-        case disable
-    }
-    
-    enum OrientationStatus: Int {
-        case landscapeLeft
-        case landscapeRight
-        case protrait
-    }
+    }        
 }
 
 public class MMPlayerLayer: AVPlayerLayer {
@@ -108,7 +73,7 @@ public class MMPlayerLayer: AVPlayerLayer {
      mmplayerLayer.autoHideCoverType = .disable
      ```
      */
-    public var autoHideCoverType = MMPlayerLayer.CoverAutoHideType.autoHide(after: 3.0) {
+    public var autoHideCoverType = CoverAutoHideType.autoHide(after: 3.0) {
         didSet {
             switch autoHideCoverType {
             case .disable:
@@ -246,7 +211,7 @@ public class MMPlayerLayer: AVPlayerLayer {
      mmplayerLayer.orientation = .landscapeRight
      ```
      */
-    public private(set) var orientation: OrientationStatus = .protrait {
+    public private(set) var orientation: PlayerOrientation = .protrait {
         didSet {
             self.landscapeWindow.update()
             if orientation == oldValue { return }
@@ -269,11 +234,15 @@ public class MMPlayerLayer: AVPlayerLayer {
         v.translatesAutoresizingMaskIntoConstraints = false
         v.addSubview(self.thumbImageView)
         v.addSubview(self.indicator)
+//        self.indicator
+//            .mmLayout
+//            .setCenterX(anchor: v.centerXAnchor, type: .equal(constant: 0))
+//            .setCentoMerY(anchor: v.centerYAnchor, type: .equal(constant: 0))
+
         self.indicator.mmLayout.layoutFitSuper()
         self.thumbImageView.mmLayout.layoutFitSuper()
         v.frame = .zero
         v.backgroundColor = UIColor.clear
-        v.layer.insertSublayer(self, at: 0)
         return v
     }()
    
@@ -290,17 +259,20 @@ public class MMPlayerLayer: AVPlayerLayer {
     weak private var _playView: UIView? {
         willSet {
             bgView.removeFromSuperview()
+            self.removeFromSuperlayer()
             _playView?.removeGestureRecognizer(tapGesture)
         } didSet {
             guard let new = _playView else {
                 return
             }
+            new.layer.insertSublayer(self, at: 0)
             new.addSubview(self.bgView)
             self.bgView.mmLayout.layoutFitSuper()
             new.layoutIfNeeded()
             self.updateCoverConstraint()
             new.isUserInteractionEnabled = true
             new.addGestureRecognizer(tapGesture)
+
         }
     }
     private var asset: AVURLAsset?
@@ -310,14 +282,8 @@ public class MMPlayerLayer: AVPlayerLayer {
     private var isBackgroundPause = false
     private var cahce = MMPlayerCache()
     private var playStatusBlock: ((_ status: PlayStatus) ->Void)?
-    private var layerOrientationBlock: ((_ status: OrientationStatus) ->Void)?
+    private var layerOrientationBlock: ((_ status: PlayerOrientation) ->Void)?
     private var indicator = MMProgress()
-    private let assetKeysRequiredToPlay = [
-        "duration",
-        "playable",
-        "hasProtectedContent",
-        ]
-    
     // MARK: - Init
     public override init(layer: Any) {
         isInitLayer = true
@@ -354,7 +320,7 @@ extension MMPlayerLayer {
      mmplayerLayer.setOrientation(.protrait)
      ```
      */
-    public func setOrientation(_ status: MMPlayerLayer.OrientationStatus) {
+    public func setOrientation(_ status: PlayerOrientation) {
         self.orientation = status
     }
     
@@ -413,7 +379,7 @@ extension MMPlayerLayer {
     /**
      Get player orientation status
      */
-    public func getOrientationChange(status: ((_ status: OrientationStatus) ->Void)?) {
+    public func getOrientationChange(status: ((_ status: PlayerOrientation) ->Void)?) {
         self.layerOrientationBlock = status
     }
     
@@ -481,7 +447,8 @@ extension MMPlayerLayer {
         } else {
             current.loadValuesAsynchronously(forKeys: assetKeysRequiredToPlay) { [weak self] in
                 DispatchQueue.main.async {
-                    if let a = self?.asset, let keys = self?.assetKeysRequiredToPlay {
+                    let keys = assetKeysRequiredToPlay
+                    if let a = self?.asset {
                         for key in keys {
                             var error: NSError?
                             let _ =  a.statusOfValue(forKey: key, error: &error)
@@ -711,21 +678,8 @@ extension MMPlayerLayer {
         }
     }
 
-    private func convertItemStatus() -> MMPlayerLayer.PlayStatus {
-        if let item = self.player?.currentItem {
-            switch item.status {
-            case .failed:
-                let msg =  item.error?.localizedDescription ??  ""
-                return .failed(err: msg)
-            case .readyToPlay:
-                return .ready
-            case .unknown:
-                return .unknown
-            @unknown default:
-                return .unknown
-            }
-        }
-        return .unknown
+    private func convertItemStatus() -> PlayStatus {
+        return self.player?.currentItem?.convertStatus() ?? .unknown
     }
     
     private func initStatus() {
@@ -741,6 +695,7 @@ extension MMPlayerLayer {
     
     public func download(observer status: @escaping ((MMPlayerDownloader.DownloadStatus)->Void)) -> MMPlayerObservation? {
         guard let asset = self.asset else {
+            
             status(.failed(err: "URL empty"))
             return nil
         }

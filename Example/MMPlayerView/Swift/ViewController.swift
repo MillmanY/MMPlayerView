@@ -25,8 +25,6 @@ class ViewController: UIViewController {
     @IBOutlet weak var playerCollect: UICollectionView!
     override func viewDidLoad() {
         super.viewDidLoad()
-        // remove previous download fails file
-        MMPlayerDownloader.cleanTmpFile()
         self.navigationController?.mmPlayerTransition.push.pass(setting: { (_) in
             
         })

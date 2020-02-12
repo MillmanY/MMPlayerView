@@ -8,8 +8,18 @@
 
 /* Begin PBXBuildFile section */
 		0236E0805A163A3B6387BBA1 /* Pods_MMPlayerView_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 149D9519B965390863A86A76 /* Pods_MMPlayerView_Example.framework */; };
+		270B251E23B1B0EF00860278 /* DemoListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 270B251D23B1B0EF00860278 /* DemoListViewController.swift */; };
+		270B252123B1B17000860278 /* PlayerListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 270B252023B1B17000860278 /* PlayerListView.swift */; };
+		270B252523B1B5EF00860278 /* PlayCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 270B252423B1B5EF00860278 /* PlayCellView.swift */; };
+		2738B9FA23E3F853005BCAAD /* ProgressUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2738B9F923E3F853005BCAAD /* ProgressUI.swift */; };
 		27421CAC233C8A21000DE6BF /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 27421CAB233C8A21000DE6BF /* Images.xcassets */; };
+		275CD0D323C8351900F181F4 /* PlayerListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 275CD0D223C8351900F181F4 /* PlayerListViewModel.swift */; };
+		276C77B123CEECE9008AB1AA /* ObserverCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 276C77B023CEECE9008AB1AA /* ObserverCell.swift */; };
+		277C0A5D23C701870071DBAC /* CoverAUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 277C0A5C23C701870071DBAC /* CoverAUI.swift */; };
+		277C0A6223C70F8D0071DBAC /* String+second.swift in Sources */ = {isa = PBXBuildFile; fileRef = 277C0A6123C70F8D0071DBAC /* String+second.swift */; };
+		27CDFE2523D6A9A100CBB712 /* NavigationConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27CDFE2423D6A9A100CBB712 /* NavigationConfig.swift */; };
 		27DBED1923A1DCCF0027F7A1 /* srtDemo.srt in Resources */ = {isa = PBXBuildFile; fileRef = 27DBED1823A1DCCF0027F7A1 /* srtDemo.srt */; };
+		27F8A75A23C8501E00A3AB09 /* DetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27F8A75923C8501E00A3AB09 /* DetailView.swift */; };
 		495E9D3BBAC57867503EF6B3 /* Pods_MMPlayerView_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 315B9ED065A93AD9533BBCBE /* Pods_MMPlayerView_Tests.framework */; };
 		5E105C411F4C78C000774714 /* CoverA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E105C401F4C78C000774714 /* CoverA.swift */; };
 		5E105C431F4C78CE00774714 /* CoverA.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5E105C421F4C78CE00774714 /* CoverA.xib */; };
@@ -37,8 +47,18 @@
 /* Begin PBXFileReference section */
 		0698FB05CAE23C014679C1C1 /* MMPlayerView.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = MMPlayerView.podspec; path = ../MMPlayerView.podspec; sourceTree = "<group>"; };
 		149D9519B965390863A86A76 /* Pods_MMPlayerView_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MMPlayerView_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		270B251D23B1B0EF00860278 /* DemoListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoListViewController.swift; sourceTree = "<group>"; };
+		270B252023B1B17000860278 /* PlayerListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerListView.swift; sourceTree = "<group>"; };
+		270B252423B1B5EF00860278 /* PlayCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayCellView.swift; sourceTree = "<group>"; };
+		2738B9F923E3F853005BCAAD /* ProgressUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressUI.swift; sourceTree = "<group>"; };
 		27421CAB233C8A21000DE6BF /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		275CD0D223C8351900F181F4 /* PlayerListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerListViewModel.swift; sourceTree = "<group>"; };
+		276C77B023CEECE9008AB1AA /* ObserverCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObserverCell.swift; sourceTree = "<group>"; };
+		277C0A5C23C701870071DBAC /* CoverAUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoverAUI.swift; sourceTree = "<group>"; };
+		277C0A6123C70F8D0071DBAC /* String+second.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+second.swift"; sourceTree = "<group>"; };
+		27CDFE2423D6A9A100CBB712 /* NavigationConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationConfig.swift; sourceTree = "<group>"; };
 		27DBED1823A1DCCF0027F7A1 /* srtDemo.srt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = srtDemo.srt; sourceTree = "<group>"; };
+		27F8A75923C8501E00A3AB09 /* DetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailView.swift; sourceTree = "<group>"; };
 		315B9ED065A93AD9533BBCBE /* Pods_MMPlayerView_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MMPlayerView_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		354BF52B760A47E8C62F4FA4 /* Pods-MMPlayerView_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MMPlayerView_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MMPlayerView_Tests/Pods-MMPlayerView_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		3FFE938993FA973D30C8C3F0 /* Pods-MMPlayerView_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MMPlayerView_Example.release.xcconfig"; path = "Pods/Target Support Files/Pods-MMPlayerView_Example/Pods-MMPlayerView_Example.release.xcconfig"; sourceTree = "<group>"; };
@@ -83,6 +103,98 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		270B251F23B1B13200860278 /* SwiftUIView */ = {
+			isa = PBXGroup;
+			children = (
+				2738B9F823E3F834005BCAAD /* Progress */,
+				27CDFE2323D6A97A00CBB712 /* NavigationConfig */,
+				27F8A75823C84FFF00A3AB09 /* DetailView */,
+				275CD0D123C834FE00F181F4 /* PlayerListView */,
+				277C0A5B23C7015C0071DBAC /* Cover */,
+				275AC84823B59209000AFF8D /* Modifier */,
+				270B252223B1B5BD00860278 /* Cell */,
+			);
+			path = SwiftUIView;
+			sourceTree = "<group>";
+		};
+		270B252223B1B5BD00860278 /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				270B252423B1B5EF00860278 /* PlayCellView.swift */,
+			);
+			path = Cell;
+			sourceTree = "<group>";
+		};
+		2738B9F823E3F834005BCAAD /* Progress */ = {
+			isa = PBXGroup;
+			children = (
+				2738B9F923E3F853005BCAAD /* ProgressUI.swift */,
+			);
+			path = Progress;
+			sourceTree = "<group>";
+		};
+		275AC84823B59209000AFF8D /* Modifier */ = {
+			isa = PBXGroup;
+			children = (
+				276C77B023CEECE9008AB1AA /* ObserverCell.swift */,
+			);
+			path = Modifier;
+			sourceTree = "<group>";
+		};
+		275CD0D123C834FE00F181F4 /* PlayerListView */ = {
+			isa = PBXGroup;
+			children = (
+				270B252023B1B17000860278 /* PlayerListView.swift */,
+				275CD0D223C8351900F181F4 /* PlayerListViewModel.swift */,
+			);
+			path = PlayerListView;
+			sourceTree = "<group>";
+		};
+		277C0A5B23C7015C0071DBAC /* Cover */ = {
+			isa = PBXGroup;
+			children = (
+				277C0A5C23C701870071DBAC /* CoverAUI.swift */,
+			);
+			path = Cover;
+			sourceTree = "<group>";
+		};
+		277C0A6023C70F760071DBAC /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+				277C0A6123C70F8D0071DBAC /* String+second.swift */,
+			);
+			path = Extension;
+			sourceTree = "<group>";
+		};
+		27CDFE2123D6A90500CBB712 /* Swift */ = {
+			isa = PBXGroup;
+			children = (
+				5E105C3F1F4C787D00774714 /* CoverView */,
+				5E9A1B871F4D865E00746E5B /* DetailViewController.swift */,
+				5E9A1B891F4D865E00746E5B /* ViewController.swift */,
+				5EB350751F4DC84E007C5098 /* BaseNavigationController.swift */,
+				270B251D23B1B0EF00860278 /* DemoListViewController.swift */,
+				5E9A1B821F4D865E00746E5B /* Cell */,
+			);
+			path = Swift;
+			sourceTree = "<group>";
+		};
+		27CDFE2323D6A97A00CBB712 /* NavigationConfig */ = {
+			isa = PBXGroup;
+			children = (
+				27CDFE2423D6A9A100CBB712 /* NavigationConfig.swift */,
+			);
+			path = NavigationConfig;
+			sourceTree = "<group>";
+		};
+		27F8A75823C84FFF00A3AB09 /* DetailView */ = {
+			isa = PBXGroup;
+			children = (
+				27F8A75923C8501E00A3AB09 /* DetailView.swift */,
+			);
+			path = DetailView;
+			sourceTree = "<group>";
+		};
 		2E5EB0ECE7F1EBC6ED4566F5 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -129,16 +241,6 @@
 			path = Datasource;
 			sourceTree = "<group>";
 		};
-		5E9A1B861F4D865E00746E5B /* ViewController */ = {
-			isa = PBXGroup;
-			children = (
-				5E9A1B871F4D865E00746E5B /* DetailViewController.swift */,
-				5E9A1B891F4D865E00746E5B /* ViewController.swift */,
-				5EB350751F4DC84E007C5098 /* BaseNavigationController.swift */,
-			);
-			path = ViewController;
-			sourceTree = "<group>";
-		};
 		607FACC71AFB9204008FA782 = {
 			isa = PBXGroup;
 			children = (
@@ -163,11 +265,11 @@
 		607FACD21AFB9204008FA782 /* Example for MMPlayerView */ = {
 			isa = PBXGroup;
 			children = (
+				277C0A6023C70F760071DBAC /* Extension */,
+				27CDFE2123D6A90500CBB712 /* Swift */,
 				27421CAB233C8A21000DE6BF /* Images.xcassets */,
-				5E9A1B821F4D865E00746E5B /* Cell */,
+				270B251F23B1B13200860278 /* SwiftUIView */,
 				5E9A1B841F4D865E00746E5B /* Datasource */,
-				5E9A1B861F4D865E00746E5B /* ViewController */,
-				5E105C3F1F4C787D00774714 /* CoverView */,
 				607FACD91AFB9204008FA782 /* Main.storyboard */,
 				607FACD51AFB9204008FA782 /* AppDelegate.swift */,
 				607FACDE1AFB9204008FA782 /* LaunchScreen.xib */,
@@ -421,11 +523,21 @@
 			files = (
 				5EB350761F4DC84E007C5098 /* BaseNavigationController.swift in Sources */,
 				5E9A1B8A1F4D865E00746E5B /* PlayerCell.swift in Sources */,
+				277C0A6223C70F8D0071DBAC /* String+second.swift in Sources */,
+				277C0A5D23C701870071DBAC /* CoverAUI.swift in Sources */,
+				276C77B123CEECE9008AB1AA /* ObserverCell.swift in Sources */,
+				27CDFE2523D6A9A100CBB712 /* NavigationConfig.swift in Sources */,
+				270B252523B1B5EF00860278 /* PlayCellView.swift in Sources */,
 				5E9A1B8B1F4D865E00746E5B /* DemoSource.swift in Sources */,
 				5E9A1B8C1F4D865E00746E5B /* DetailViewController.swift in Sources */,
+				270B252123B1B17000860278 /* PlayerListView.swift in Sources */,
 				607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */,
 				5E9A1B8E1F4D865E00746E5B /* ViewController.swift in Sources */,
+				275CD0D323C8351900F181F4 /* PlayerListViewModel.swift in Sources */,
+				2738B9FA23E3F853005BCAAD /* ProgressUI.swift in Sources */,
 				5E105C411F4C78C000774714 /* CoverA.swift in Sources */,
+				27F8A75A23C8501E00A3AB09 /* DetailView.swift in Sources */,
+				270B251E23B1B0EF00860278 /* DemoListViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -512,7 +624,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -560,7 +672,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
@@ -577,7 +689,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = 2SMXTR7629;
 				INFOPLIST_FILE = MMPlayerView/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MODULE_NAME = ExampleApp;
 				PRODUCT_BUNDLE_IDENTIFIER = com.test.MMPlayerViews;
@@ -595,7 +707,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = 2SMXTR7629;
 				INFOPLIST_FILE = MMPlayerView/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MODULE_NAME = ExampleApp;
 				PRODUCT_BUNDLE_IDENTIFIER = com.test.MMPlayerViews;
