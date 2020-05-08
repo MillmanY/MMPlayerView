@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+@available(iOS 13.0.0, *)
 extension ProgressUI {
     class Status: ObservableObject {
         static let defaultColor = Color.blue
@@ -22,6 +23,7 @@ extension ProgressUI {
         var barFrame: (width: CGFloat?, height: CGFloat?)
     }
 }
+@available(iOS 13.0.0, *)
 struct ProgressUI: View {
     enum BarType {
         case circle
@@ -93,7 +95,7 @@ struct ProgressUI: View {
     }
 
 }
-
+@available(iOS 13.0.0, *)
 struct ProgressUI_Previews: PreviewProvider {
     static var previews: some View {
         VStack {

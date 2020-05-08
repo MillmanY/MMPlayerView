@@ -9,6 +9,7 @@
 import Foundation
 import Combine
 import MMPlayerView
+@available(iOS 13.0.0, *)
 class PlayListViewModel: ObservableObject {
     let videoList = DemoSource.shared.demoData
 

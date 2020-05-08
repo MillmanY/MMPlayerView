@@ -9,6 +9,7 @@
 import Foundation
 import SwiftUI
 import MMPlayerView
+@available(iOS 13.0.0, *)
 struct CellPlayerFramePreference: ViewModifier {
     let index: Int
 //    @Binding var frame: CGRect
@@ -43,7 +44,7 @@ struct CellPlayerFramePreference: ViewModifier {
     }
 }
 
-
+@available(iOS 13.0.0, *)
 struct CellPlayerVisiblePreference: ViewModifier {
     @State var r: CGRect = .zero
     @Binding var list: [CellPlayerFramePreference.Key.Info]

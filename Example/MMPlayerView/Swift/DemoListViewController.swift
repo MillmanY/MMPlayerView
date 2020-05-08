@@ -9,6 +9,7 @@
 import UIKit
 import SwiftUI
 import MMPlayerView
+
 class DemoListViewController: UITableViewController {
 
     override func viewDidLoad() {
@@ -19,7 +20,8 @@ class DemoListViewController: UITableViewController {
     }
     
     @IBSegueAction func swiftUIDemo(_ coder: NSCoder) -> UIViewController? {
-        return UIHostingController(coder: coder, rootView: PlayerListView.init(vc: self))
+        return nil
+//        return UIHostingController(coder: coder, rootView: PlayerListView.init(vc: self))
     }
     
     /*

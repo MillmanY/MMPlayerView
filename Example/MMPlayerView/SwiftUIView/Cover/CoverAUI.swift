@@ -9,6 +9,7 @@
 import SwiftUI
 import MMPlayerView
 import AVFoundation
+@available(iOS 13.0.0, *)
 struct CoverAUI: View {
     @EnvironmentObject var control: MMPlayerControl
     @State var scrollValue = 0.0
@@ -70,7 +71,7 @@ struct CoverAUI: View {
         return control.player.rate == 0 ? "ic_play_circle_filled" : "ic_pause_circle_filled"
     }
 }
-
+@available(iOS 13.0.0, *)
 struct CoverAUI_Previews: PreviewProvider {
     static var previews: some View {
         CoverAUI()

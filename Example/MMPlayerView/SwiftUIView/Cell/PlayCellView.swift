@@ -8,7 +8,7 @@
 
 import SwiftUI
 import MMPlayerView
-
+@available(iOS 13.0.0, *)
 struct PlayCellView: View {
     @State var downloadStatus: MMPlayerDownloader.DownloadStatus = .none
     @EnvironmentObject var control: MMPlayerControl

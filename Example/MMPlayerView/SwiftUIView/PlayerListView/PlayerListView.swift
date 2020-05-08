@@ -8,10 +8,11 @@
 
 import SwiftUI
 import MMPlayerView
-
+@available(iOS 13.0.0, *)
 extension PlayerListView {
     static let listEdge = EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
 }
+@available(iOS 13.0.0, *)
 struct PlayerListView: View {
     let presentVC: UIViewController
     @ObservedObject var control: MMPlayerControl
