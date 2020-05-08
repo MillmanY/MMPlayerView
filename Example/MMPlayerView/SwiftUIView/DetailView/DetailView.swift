@@ -21,11 +21,12 @@ struct DetailView: View {
                 MMPlayerViewUI(control: control)
                 Image("ic_keyboard_arrow_left")
                     .offset(x: 15, y: 44)
-                    .onTapGesture {
-                        withAnimation {
-                            self.showDetailIdx = nil
-                        }
-                }
+                //TODO
+//                    .onTapGesture {
+//                        withAnimation {
+//                            self.showDetailIdx = nil
+//                        }
+//                }
             }.frame(width: UIScreen.main.bounds.width,height: 200)
             .modifier(TransitionFramePreference())
             self.generateTopViewFromDownloadStatus().frame(height: 44)
@@ -70,7 +71,7 @@ struct DetailView: View {
         }
     }
 }
-
+#if DEBUG
 @available(iOS 13.0.0, *)
 struct DetailView_Previews: PreviewProvider {
     static var previews: some View {
@@ -79,3 +80,4 @@ struct DetailView_Previews: PreviewProvider {
 
     }
 }
+#endif

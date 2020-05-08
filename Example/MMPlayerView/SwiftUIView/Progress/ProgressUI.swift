@@ -95,6 +95,7 @@ struct ProgressUI: View {
     }
 
 }
+#if DEBUG
 @available(iOS 13.0.0, *)
 struct ProgressUI_Previews: PreviewProvider {
     static var previews: some View {
@@ -103,7 +104,8 @@ struct ProgressUI_Previews: PreviewProvider {
                 .value(0.5)
                 .frame(width: 200, height: 20)
                 .previewLayout(.fixed(width: 375, height: 44))
-            
+
         }
     }
 }
+#endif

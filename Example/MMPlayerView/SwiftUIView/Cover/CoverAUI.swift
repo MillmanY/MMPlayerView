@@ -22,19 +22,23 @@ struct CoverAUI: View {
         }
         return VStack {
             Spacer()
-            Image(self.imageName).onTapGesture {
-                self.playAction()
-            }.foregroundColor(Color.white)
+            Image(self.imageName)
+            //TODO
+//                .onTapGesture {
+//                self.playAction()
+//            }
+//        .foregroundColor(Color.white)
             Spacer()
             HStack {
-                Image("fullscreen").foregroundColor(.white).padding(.leading, 15).onTapGesture {
-                    switch self.control.orientation {
-                    case .landscapeLeft, .landscapeRight:
-                        self.control.orientation = .protrait
-                    case .protrait:
-                        self.control.orientation = .landscapeRight
-                    }
-                }
+                Image("fullscreen").foregroundColor(.white).padding(.leading, 15)
+//                    .onTapGesture {
+//                    switch self.control.orientation {
+//                    case .landscapeLeft, .landscapeRight:
+//                        self.control.orientation = .protrait
+//                    case .protrait:
+//                        self.control.orientation = .landscapeRight
+//                    }
+//                }
 
                 Text(self.control.timeInfo.current.seconds.convertSecondString())
                     .font(Font.custom("Courier", size: 17))
@@ -71,6 +75,8 @@ struct CoverAUI: View {
         return control.player.rate == 0 ? "ic_play_circle_filled" : "ic_pause_circle_filled"
     }
 }
+
+#if DEBUG
 @available(iOS 13.0.0, *)
 struct CoverAUI_Previews: PreviewProvider {
     static var previews: some View {
@@ -79,3 +85,4 @@ struct CoverAUI_Previews: PreviewProvider {
             .previewLayout(.fixed(width: 375, height: 300))
     }
 }
+#endif

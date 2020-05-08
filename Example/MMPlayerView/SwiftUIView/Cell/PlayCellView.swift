@@ -32,7 +32,7 @@ struct PlayCellView: View {
                 }
             }
             .frame(height: 200)
-            .modifier(CellPlayerFramePreference(index: idx))
+            .modifier(CellPlayerFramePreference(index: idx, frame: .constant(.zero)))
             HStack {
                 Text(self.obj.title)
                     .multilineTextAlignment(.leading)

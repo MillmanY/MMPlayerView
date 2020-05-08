@@ -12,7 +12,7 @@ public struct MMPlayerDownloaderModifier: ViewModifier {
     @ObservedObject var status: MMPlayerDownloaderModifierStatus
     public init(downloader: MMPlayerDownloader = MMPlayerDownloader.shared,
                 url: URL,
-                status: Binding<MMPlayerDownloader.DownloadStatus> = .constant(.none)) {
+                status: Binding<MMPlayerDownloader.DownloadStatus>) {
         self.status = MMPlayerDownloaderModifierStatus(downloader: downloader, url: url, status: status)
     }
     

@@ -10,6 +10,7 @@ import SwiftUI
 
 @available(iOS 13.0.0, *)
 public extension AnyTransition {
+    @available(iOS 13.0.0, *)
     static func playerTransition<Content: View>(view: Content, from: CGRect?) -> AnyTransition {
         let f = from ?? .zero
         return AnyTransition.modifier(active: ViewTransition(pass: view, from: f, percent: 0.0),

@@ -10,7 +10,7 @@ import SwiftUI
 @available(iOS 13.0.0, *)
 public struct FrameModifier<K: PreferenceKey>: ViewModifier where K.Value == [CGRect] {
     @Binding var r: CGRect
-    public init (rect: Binding<CGRect> = .constant(.zero)) {
+    public init (rect: Binding<CGRect>) {
         self._r = rect
     }
     public func body(content: Content) -> some View {

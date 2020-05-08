@@ -19,9 +19,16 @@ class DemoListViewController: UITableViewController {
         // Do any additional setup after loading the view.
     }
     
-    @IBSegueAction func swiftUIDemo(_ coder: NSCoder) -> UIViewController? {
-        return nil
-//        return UIHostingController(coder: coder, rootView: PlayerListView.init(vc: self))
+    @IBAction func swiftUIDemo() {
+        
+        if #available(iOS 13.0, *) {
+            let host = UIHostingController.init(rootView: PlayerListView.init(vc: self))
+            self.present(host, animated: true, completion: nil)
+        } else {
+            let alert = UIAlertController(title: "Only avaiable on ios 13", message: "", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+        }
     }
     
     /*

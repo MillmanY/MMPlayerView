@@ -12,7 +12,7 @@ import MMPlayerView
 @available(iOS 13.0.0, *)
 struct CellPlayerFramePreference: ViewModifier {
     let index: Int
-//    @Binding var frame: CGRect
+    @Binding var frame: CGRect
     func body(content: Content) -> some View {
             content
             .background(GeometryReader{ (proxy) in
@@ -20,11 +20,11 @@ struct CellPlayerFramePreference: ViewModifier {
                 .preference(key: Key.self,
                             value: [Key.Info(idx: self.index, frame: proxy.frame(in: .global))])
             })
-//            .onPreferenceChange(Key.self) { (value) in
-//                if let f = value.first {
-//                    self.frame = f.frame
-//                }
-//            }
+            .onPreferenceChange(Key.self) { (value) in
+                if let f = value.first {
+                    self.frame = f.frame
+                }
+            }
     }
     
     struct Key: PreferenceKey, Equatable {
@@ -48,7 +48,7 @@ struct CellPlayerFramePreference: ViewModifier {
 struct CellPlayerVisiblePreference: ViewModifier {
     @State var r: CGRect = .zero
     @Binding var list: [CellPlayerFramePreference.Key.Info]
-    init(list: Binding<[CellPlayerFramePreference.Key.Info]> = .constant([CellPlayerFramePreference.Key.Info]())) {
+    init(list: Binding<[CellPlayerFramePreference.Key.Info]>) {
         self._list = list
     }
     
