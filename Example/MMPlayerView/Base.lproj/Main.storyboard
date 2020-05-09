@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="UdE-QW-nJ0">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16096" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="UdE-QW-nJ0">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -116,7 +117,7 @@
                                                         <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     </state>
                                                     <connections>
-                                                        <segue destination="EEa-Nw-LcY" kind="presentation" destinationCreationSelector="swiftUIDemo:" modalPresentationStyle="fullScreen" id="f8f-3h-hqD"/>
+                                                        <action selector="swiftUIDemo" destination="YEs-SX-4vq" eventType="touchUpInside" id="Ljs-YR-GDg"/>
                                                     </connections>
                                                 </button>
                                             </subviews>
@@ -150,16 +151,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3lZ-MQ-C7K" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-2764" y="385"/>
-        </scene>
-        <!--Hosting Controller-->
-        <scene sceneID="euc-WS-YZo">
-            <objects>
-                <hostingController id="EEa-Nw-LcY" sceneMemberID="viewController">
-                    <navigationItem key="navigationItem" id="Cbp-qI-0LD"/>
-                </hostingController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="LnT-eG-sIf" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-1858" y="489"/>
         </scene>
         <!--List Video Demo-->
         <scene sceneID="ufC-wZ-h7g">

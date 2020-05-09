@@ -22,11 +22,11 @@ struct DetailView: View {
                 Image("ic_keyboard_arrow_left")
                     .offset(x: 15, y: 44)
                 //TODO
-//                    .onTapGesture {
-//                        withAnimation {
-//                            self.showDetailIdx = nil
-//                        }
-//                }
+                    .onTapGesture {
+                        withAnimation {
+                            self.showDetailIdx = nil
+                        }
+                }
             }.frame(width: UIScreen.main.bounds.width,height: 200)
             .modifier(TransitionFramePreference())
             self.generateTopViewFromDownloadStatus().frame(height: 44)

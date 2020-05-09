@@ -23,6 +23,7 @@ class DemoListViewController: UITableViewController {
         
         if #available(iOS 13.0, *) {
             let host = UIHostingController.init(rootView: PlayerListView.init(vc: self))
+            host.modalPresentationStyle = .fullScreen
             self.present(host, animated: true, completion: nil)
         } else {
             let alert = UIAlertController(title: "Only avaiable on ios 13", message: "", preferredStyle: .alert)

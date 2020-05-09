@@ -47,8 +47,8 @@ struct PlayerListView: View {
                 DetailView(obj: self.playListViewModel.videoList[showDetailIdx!], showDetailIdx: $showDetailIdx)
                     .edgesIgnoringSafeArea(.all)
                 //TODO
-//                    .transition(.playerTransition(view: MMPlayerViewUI(control: control) ,from: fromFrame))
-//                    .zIndex(1)
+                    .transition(.playerTransition(view: MMPlayerViewUI(control: control) ,from: fromFrame))
+                    .zIndex(1)
             }
             
             NavigationView {
@@ -60,37 +60,37 @@ struct PlayerListView: View {
                             .environmentObject(self.control)
                             .environmentObject(self.playListViewModel)
                         //TODO
-//                            .onTapGesture {
-//                                if let obj = self.topInfo.first(where: { $0.idx == offset }) {
-//                                    withAnimation {
-//                                        self.fromFrame = obj.frame
-//                                        self.showDetailIdx = offset
-//                                    }
-//                                }
-//                        }
+                            .onTapGesture {
+                                if let obj = self.topInfo.first(where: { $0.idx == offset }) {
+                                    withAnimation {
+                                        self.fromFrame = obj.frame
+                                        self.showDetailIdx = offset
+                                    }
+                                }
+                        }
                     }
-//                    .listRowInsets(PlayerListView.listEdge)//todo
+                    .listRowInsets(PlayerListView.listEdge)//todo
                 }
                 .modifier(CellPlayerVisiblePreference(list: Binding<[CellPlayerFramePreference.Key.Info]>(get: {
                     self.topInfo
                 }) {
                     self.topInfo = $0
                 }))
-//                .navigationBarItems(leading: Image("ic_keyboard_arrow_left")
-//                .frame(width: 44, height: 44)
-//                    //TODO
-////                .onTapGesture {
-////                    self.presentVC.dismiss(animated: true, completion: nil)
-////                }
-//                )
+                .navigationBarItems(leading: Image("ic_keyboard_arrow_left")
+                .frame(width: 44, height: 44)
+                    //TODO
+                .onTapGesture {
+                    self.presentVC.dismiss(animated: true, completion: nil)
+                }
+                )
                 //TODO
-//                .navigationBarTitle("Swift UI Demo", displayMode: .inline)
-//                .alert(item: self.$control.error) { (err) -> Alert in
-//                        Alert(title: Text("Error"),
-//                              message: Text(err.localizedDescription),
-//                            dismissButton: .default(Text("OK"))
-//                    )
-//                }
+                .navigationBarTitle("Swift UI Demo", displayMode: .inline)
+                .alert(item: self.$control.error) { (err) -> Alert in
+                        Alert(title: Text("Error"),
+                              message: Text(err.localizedDescription),
+                            dismissButton: .default(Text("OK"))
+                    )
+                }
             }
         }
         .environmentObject(control)
