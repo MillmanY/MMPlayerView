@@ -17,12 +17,17 @@ public struct MMPlayerViewUI: View {
         
         return ZStack {
             bridge
-            self.cover?
-                .opacity(self.control.isCoverShow ? 1.0 : 0.0)
-                .animation(.easeOut(duration: control.coverAnimationInterval))
+//            Button.init(action: {
+//                self.control.coverViewGestureHandle()
+//            }) {
+                self.cover?
+                    .opacity(self.control.isCoverShow ? 1.0 : 0.0)
+                    .animation(.easeOut(duration: control.coverAnimationInterval))
+//            }
             self.progress
             self.landscapeView()
         }
+        
         .environmentObject(control)
         .gesture(self.coverTapGesture(), including: .all)
         .modifier(PlayerFramePreference())
