@@ -23,22 +23,26 @@ struct CoverAUI: View {
         return VStack {
             Spacer()
             Image(self.imageName)
-            //TODO
-//                .onTapGesture {
-//                self.playAction()
-//            }
-//        .foregroundColor(Color.white)
+            //**********Error (Demo will crash when ios 12 for "onTapGesture")
+                .onTapGesture {
+                self.playAction()
+            }
+            //***********
+            .foregroundColor(Color.white)
             Spacer()
             HStack {
-                Image("fullscreen").foregroundColor(.white).padding(.leading, 15)
-//                    .onTapGesture {
-//                    switch self.control.orientation {
-//                    case .landscapeLeft, .landscapeRight:
-//                        self.control.orientation = .protrait
-//                    case .protrait:
-//                        self.control.orientation = .landscapeRight
-//                    }
-//                }
+                Image("fullscreen")
+                    .foregroundColor(.white).padding(.leading, 15)
+                    //**********Error (Demo will crash when ios 12 for "onTapGesture")
+                    .onTapGesture {
+                        switch self.control.orientation {
+                        case .landscapeLeft, .landscapeRight:
+                            self.control.orientation = .protrait
+                        case .protrait:
+                            self.control.orientation = .landscapeRight
+                        }
+                    }
+                    //***********
 
                 Text(self.control.timeInfo.current.seconds.convertSecondString())
                     .font(Font.custom("Courier", size: 17))

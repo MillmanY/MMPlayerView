@@ -17,6 +17,13 @@ struct PlayCellView: View {
     let obj: DataObj
     let idx: Int
     let showDetailIdx: Int?
+    let tapAction: (()->Void)
+    init(obj: DataObj, idx: Int, showDetailIdx: Int?, tapAction: @escaping (()->Void)) {
+        self.obj = obj
+        self.idx = idx
+        self.showDetailIdx = showDetailIdx
+        self.tapAction = tapAction
+    }
     
     var isCurrent: Bool {
         idx == playListViewModel.currentViewIdx
@@ -40,6 +47,12 @@ struct PlayCellView: View {
                 Spacer()
                 self.generateTopViewFromDownloadStatus().frame(width: 50, height: 50).padding(10)
             }
+            //**********Error (Demo will crash when ios 12)
+            .onTapGesture {
+                self.tapAction()
+            }
+            //**********
+
         }
         .modifier(MMPlayerDownloaderModifier(url: obj.play_Url!, status: $downloadStatus))
     }

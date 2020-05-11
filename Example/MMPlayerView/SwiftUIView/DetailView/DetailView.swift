@@ -19,14 +19,14 @@ struct DetailView: View {
         VStack {
             ZStack(alignment: .topLeading) {
                 MMPlayerViewUI(control: control)
-                Image("ic_keyboard_arrow_left")
-                    .offset(x: 15, y: 44)
-                //TODO
-                    .onTapGesture {
-                        withAnimation {
-                            self.showDetailIdx = nil
-                        }
+                Button.init(action: {
+                    withAnimation {
+                        self.showDetailIdx = nil
+                    }
+                }) {
+                    Image("ic_keyboard_arrow_left").foregroundColor(Color.white)
                 }
+                .offset(x: 15, y: 44)
             }.frame(width: UIScreen.main.bounds.width,height: 200)
             .modifier(TransitionFramePreference())
             self.generateTopViewFromDownloadStatus().frame(height: 44)
