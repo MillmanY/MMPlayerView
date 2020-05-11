@@ -47,11 +47,9 @@ struct PlayCellView: View {
                 Spacer()
                 self.generateTopViewFromDownloadStatus().frame(width: 50, height: 50).padding(10)
             }
-            //**********Error (Demo will crash when ios 12)
             .onTapGesture {
                 self.tapAction()
             }
-            //**********
 
         }
         .modifier(MMPlayerDownloaderModifier(url: obj.play_Url!, status: $downloadStatus))

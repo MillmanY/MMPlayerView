@@ -23,17 +23,14 @@ struct CoverAUI: View {
         return VStack {
             Spacer()
             Image(self.imageName)
-            //**********Error (Demo will crash when ios 12 for "onTapGesture")
                 .onTapGesture {
                 self.playAction()
             }
-            //***********
             .foregroundColor(Color.white)
             Spacer()
             HStack {
                 Image("fullscreen")
                     .foregroundColor(.white).padding(.leading, 15)
-                    //**********Error (Demo will crash when ios 12 for "onTapGesture")
                     .onTapGesture {
                         switch self.control.orientation {
                         case .landscapeLeft, .landscapeRight:
@@ -42,7 +39,6 @@ struct CoverAUI: View {
                             self.control.orientation = .landscapeRight
                         }
                     }
-                    //***********
 
                 Text(self.control.timeInfo.current.seconds.convertSecondString())
                     .font(Font.custom("Courier", size: 17))

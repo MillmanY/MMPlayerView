@@ -47,10 +47,8 @@ struct PlayerListView: View {
             if showDetailIdx != nil {
                 DetailView(obj: self.playListViewModel.videoList[showDetailIdx!], showDetailIdx: $showDetailIdx)
                     .edgesIgnoringSafeArea(.all)
-                    //********** Error (Demo will crash when ios 12)
                     .transition(.playerTransition(view: MMPlayerViewUI(control: control) ,from: fromFrame))
                     .zIndex(1)
-                    //***********
             }
             
             NavigationView {
@@ -67,16 +65,13 @@ struct PlayerListView: View {
                         .environmentObject(self.control)
                         .environmentObject(self.playListViewModel)
                     }
-                    //**********Error (Demo will crash when ios 12)
                     .listRowInsets(PlayerListView.listEdge)
-                    //***********
                 }
                 .modifier(CellPlayerVisiblePreference(list: Binding<[CellPlayerFramePreference.Key.Info]>(get: {
                     self.topInfo
                 }) {
                     self.topInfo = $0
                 }))
-                //**********Error (Demo will crash when ios 12)
                 .navigationBarItems(leading: self.dismissView())
                 .navigationBarTitle("Swift UI Demo", displayMode: .inline)
                 .alert(item: self.$control.error) { (err) -> Alert in
@@ -85,7 +80,6 @@ struct PlayerListView: View {
                             dismissButton: .default(Text("OK"))
                     )
                 }
-                //***********
             }
         }
         .environmentObject(control)
