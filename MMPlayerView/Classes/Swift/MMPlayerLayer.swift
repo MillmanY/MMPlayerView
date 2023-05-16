@@ -604,22 +604,27 @@ extension MMPlayerLayer {
             self?.isBackgroundPause = false
         })
         
-        NotificationCenter.default.addObserver(forName: .AVPlayerItemDidPlayToEndTime, object: nil, queue: nil, using: { [weak self] (_) in
-          
-            if self?.repeatWhenEnd == true {
-                self?.player?.seek(to: CMTime.zero)
-                self?.player?.play()
-            } else if let s = self?.currentPlayStatus {
-                switch s {
+        NotificationCenter.default.addObserver(forName: .AVPlayerItemDidPlayToEndTime, object: nil, queue: nil, using: { [weak self] (notification) in
+			guard let self else { return }
+			
+            if repeatWhenEnd == true {
+				guard let player else { return }
+				guard let playItem = notification.object as? AVPlayerItem else { return }
+				guard playItem == player.currentItem else { return }
+                player.seek(to: .zero)
+                player.play()
+            } else {
+                switch currentPlayStatus {
                 case .playing, .pause:
-                    if let u = self?.asset?.url {
-                        self?.cahce.removeCache(key: u)
+                    if let u = asset?.url {
+                        cahce.removeCache(key: u)
                     }
-                    self?.currentPlayStatus = .end
+                    currentPlayStatus = .end
                 default: break
                 }
             }
         })
+		
         self.addObserver(self, forKeyPath: "videoRect", options: [.new, .old], context: nil)
         bgView.addObserver(self, forKeyPath: "frame", options: [.new, .old], context: nil)
         bgView.addObserver(self, forKeyPath: "bounds", options: [.new, .old], context: nil)
